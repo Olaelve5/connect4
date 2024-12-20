@@ -25,4 +25,8 @@ BACKGROUND = (36, 40, 51)
 TITLE_FONT = pygame.font.Font("assets/Symtext.ttf", 56)
 FONT = pygame.font.Font("assets/Symtext.ttf", 32)
 
+# Background image
+BACKGROUND_IMAGE = pygame.image.load("assets/background.jpg")
+BACKGROUND_IMAGE = pygame.transform.scale(BACKGROUND_IMAGE, (WINDOW_WIDTH, WINDOW_HEIGHT))
+
 
