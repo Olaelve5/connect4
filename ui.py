@@ -37,8 +37,8 @@ class ui:
     def initialize(self):
         self.add_text("Connect 4", (WINDOW_WIDTH // 2, 50), WHITE, TITLE_FONT)
         self.add_text(self.player1, (HORIZONTAL_GAP // 2, 200))
-        self.add_circle((HORIZONTAL_GAP // 2, 350), YELLOW)
+        self.add_circle((HORIZONTAL_GAP // 2, 320), YELLOW)
         self.add_text(self.player2, (WINDOW_WIDTH - HORIZONTAL_GAP // 2, 200))
-        self.add_circle((WINDOW_WIDTH - HORIZONTAL_GAP // 2, 350), RED)
+        self.add_circle((WINDOW_WIDTH - HORIZONTAL_GAP // 2, 320), RED)
 
         return self

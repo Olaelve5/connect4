@@ -2,6 +2,7 @@ import properties
 from slot import Slot
 import pygame
 import game_mechanics
+from game_over import game_over_screen
 
 
 class Board:
@@ -14,6 +15,7 @@ class Board:
             for slot in column.slots:
                 self.slots.append(slot)
         self.player = 1  # Player 1 starts
+        self.winner = None
 
     def draw(self, screen):
         pygame.draw.rect(
@@ -46,9 +48,8 @@ class Board:
 
     def check_winner(self):
         winnner = game_mechanics.check_winner(self)
-        print(winnner)
-        return winnner
-
+        if winnner:
+            self.winner = winnner
 
 
 class Column(pygame.sprite.Sprite):

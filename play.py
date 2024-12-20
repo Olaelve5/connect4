@@ -2,6 +2,7 @@ import pygame
 from board import Board
 from ui import ui
 from properties import BACKGROUND
+from game_over import game_over_screen
 
 # Create the board
 board = Board()
@@ -20,6 +21,11 @@ def play(screen):
 
         # Draw the board
         board.draw(screen)
+
+        winner = board.winner
+        if winner:
+            game_over_screen(screen, winner)
+            break
 
         # Draw the UI
         ui.draw(screen)

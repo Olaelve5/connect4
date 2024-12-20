@@ -3,7 +3,13 @@
 
 # Check winner
 def check_winner(board):
-    return vertical_winner(board) or horizontal_winner(board) or diagonal_winner(board)
+    if vertical_winner(board):
+        return vertical_winner(board)
+    if horizontal_winner(board):
+        return horizontal_winner(board)
+    if diagonal_winner(board):
+        return diagonal_winner(board)
+    return None
 
 
 def check_full(board):
@@ -30,8 +36,9 @@ def vertical_winner(board):
                 == get_slot_player(board, (column, row + 3))
                 != 0
             ):
-                return True
-    return False
+                player = get_slot_player(board, (column, row))
+                return player
+    return None
 
 
 # Check Horizontal winner
@@ -45,8 +52,9 @@ def horizontal_winner(board):
                 == get_slot_player(board, (column + 3, row))
                 != 0
             ):
-                return True
-    return False
+                player = get_slot_player(board, (column, row))
+                return player
+    return None
 
 
 # Check Diagonal winner
@@ -60,7 +68,8 @@ def diagonal_winner(board):
                 == get_slot_player(board, (column + 3, row + 3))
                 != 0
             ):
-                return True
+                player = get_slot_player(board, (column, row))
+                return player
     for column in range(3, 7):
         for row in range(3):
             if (
@@ -70,5 +79,6 @@ def diagonal_winner(board):
                 == get_slot_player(board, (column - 3, row + 3))
                 != 0
             ):
-                return True
-    return False
+                player = get_slot_player(board, (column, row))
+                return player
+    return None
