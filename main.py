@@ -1,6 +1,6 @@
 import pygame
 import properties
-from main_menu import menu
+from game_functions import menu
 
 pygame.init()
 
