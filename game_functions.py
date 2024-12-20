@@ -2,6 +2,7 @@ import pygame
 import properties
 from board import Board
 from ui import ui
+from button import Button
 
 
 # Create the main menu
@@ -16,19 +17,26 @@ def menu(screen):
         MENU_TITLE = properties.TITLE_FONT.render("Connect 4", True, properties.WHITE)
         MENU_TITLE_RECT = MENU_TITLE.get_rect(center=(properties.WINDOW_WIDTH / 2, 100))
 
-        PLAY_BUTTON = properties.TITLE_FONT.render("Play", True, properties.WHITE)
-        PLAY_BUTTON_RECT = PLAY_BUTTON.get_rect(
-            center=(properties.WINDOW_WIDTH / 2, 300)
+        PLAY_BUTTON = Button(
+            "Play",
+            properties.WINDOW_WIDTH / 2,
+            300,
+            properties.TITLE_FONT,
+            properties.WHITE,
+            screen,
         )
-
-        QUIT_BUTTON = properties.TITLE_FONT.render("Quit", True, properties.WHITE)
-        QUIT_BUTTON_RECT = QUIT_BUTTON.get_rect(
-            center=(properties.WINDOW_WIDTH / 2, 400)
+        QUIT_BUTTON = Button(
+            "Quit",
+            properties.WINDOW_WIDTH / 2,
+            400,
+            properties.TITLE_FONT,
+            properties.WHITE,
+            screen,
         )
 
         screen.blit(MENU_TITLE, MENU_TITLE_RECT)
-        screen.blit(PLAY_BUTTON, PLAY_BUTTON_RECT)
-        screen.blit(QUIT_BUTTON, QUIT_BUTTON_RECT)
+        PLAY_BUTTON.draw(MENU_MOUSE_POS)
+        QUIT_BUTTON.draw(MENU_MOUSE_POS)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (
@@ -38,10 +46,10 @@ def menu(screen):
                 quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BUTTON_RECT.collidepoint(MENU_MOUSE_POS):
+                if PLAY_BUTTON.is_clicked(MENU_MOUSE_POS):
                     play(screen)
 
-                if QUIT_BUTTON_RECT.collidepoint(MENU_MOUSE_POS):
+                if QUIT_BUTTON.is_clicked(MENU_MOUSE_POS):
                     pygame.quit()
                     quit()
 
@@ -104,6 +112,8 @@ def game_over_screen(screen, winner):
 
     while True:
 
+        GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
+
         GAME_OVER_TITLE = properties.TITLE_FONT.render(
             str(winner) + " wins!", True, properties.WHITE
         )
@@ -111,31 +121,37 @@ def game_over_screen(screen, winner):
             center=(properties.WINDOW_WIDTH / 2, 100)
         )
 
-        PLAY_AGAIN_BUTTON = properties.TITLE_FONT.render(
-            "Play Again", True, properties.WHITE
-        )
-        PLAY_AGAIN_BUTTON_RECT = PLAY_AGAIN_BUTTON.get_rect(
-            center=(properties.WINDOW_WIDTH / 2, 300)
-        )
-
-        MAIN_MENU_BUTTON = properties.TITLE_FONT.render(
-            "Main Menu", True, properties.WHITE
-        )
-        MAIN_MENU_BUTTON_RECT = MAIN_MENU_BUTTON.get_rect(
-            center=(properties.WINDOW_WIDTH / 2, 350)
+        PLAY_AGAIN_BUTTON = Button(
+            "Play Again",
+            properties.WINDOW_WIDTH / 2,
+            300,
+            properties.TITLE_FONT,
+            properties.WHITE,
+            screen,
         )
 
-        QUIT_BUTTON = properties.TITLE_FONT.render("Quit", True, properties.WHITE)
-        QUIT_BUTTON_RECT = QUIT_BUTTON.get_rect(
-            center=(properties.WINDOW_WIDTH / 2, 400)
+        MAIN_MENU_BUTTON = Button(
+            "Main Menu",
+            properties.WINDOW_WIDTH / 2,
+            400,
+            properties.TITLE_FONT,
+            properties.WHITE,
+            screen,
+        )
+
+        QUIT_BUTTON = Button(
+            "Quit",
+            properties.WINDOW_WIDTH / 2,
+            500,
+            properties.TITLE_FONT,
+            properties.WHITE,
+            screen,
         )
 
         screen.blit(GAME_OVER_TITLE, GAME_OVER_TITLE_RECT)
-        screen.blit(PLAY_AGAIN_BUTTON, PLAY_AGAIN_BUTTON_RECT)
-        screen.blit(MAIN_MENU_BUTTON, MAIN_MENU_BUTTON_RECT)
-        screen.blit(QUIT_BUTTON, QUIT_BUTTON_RECT)
-
-        GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
+        PLAY_AGAIN_BUTTON.draw(GAME_OVER_MOUSE_POS)
+        MAIN_MENU_BUTTON.draw(GAME_OVER_MOUSE_POS)
+        QUIT_BUTTON.draw(GAME_OVER_MOUSE_POS)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (
@@ -145,15 +161,15 @@ def game_over_screen(screen, winner):
                 quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_AGAIN_BUTTON_RECT.collidepoint(GAME_OVER_MOUSE_POS):
+                if PLAY_AGAIN_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
                     play(screen)
                     return True
 
-                if MAIN_MENU_BUTTON_RECT.collidepoint(GAME_OVER_MOUSE_POS):
+                if MAIN_MENU_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
                     menu(screen)
                     return True
 
-                if QUIT_BUTTON_RECT.collidepoint(GAME_OVER_MOUSE_POS):
+                if QUIT_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
                     pygame.quit()
                     quit()
 
