@@ -1,8 +1,10 @@
 import properties
 from slot import Slot
 import pygame
+import game_mechanics
 
-class Board: 
+
+class Board:
     def __init__(self):
         self.columns = []
         for i in range(7):
@@ -11,25 +13,41 @@ class Board:
         for column in self.columns:
             for slot in column.slots:
                 self.slots.append(slot)
-        self.player = 1 # Player 1 starts
-    
+        self.player = 1  # Player 1 starts
+
     def draw(self, screen):
-        pygame.draw.rect(screen, properties.BLUE, 
-                    ((properties.WINDOW_WIDTH - properties.BOARD_WIDTH) // 2, 
-                    (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2,
-                    properties.BOARD_WIDTH, properties.BOARD_HEIGHT), 0, 10)
+        pygame.draw.rect(
+            screen,
+            properties.BLUE,
+            (
+                (properties.WINDOW_WIDTH - properties.BOARD_WIDTH) // 2,
+                (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2,
+                properties.BOARD_WIDTH,
+                properties.BOARD_HEIGHT,
+            ),
+            0,
+            10,
+        )
         for column in self.columns:
             column.draw(screen)
-    
+
     def handle_click(self, mouse_pos):
         for column in self.columns:
-            if column.rect.collidepoint(mouse_pos):  # Check if mouse is inside the column
+            if column.rect.collidepoint(
+                mouse_pos
+            ):  # Check if mouse is inside the column
                 column.handle_click(self.player)
+                self.check_winner()
                 self.switch_player()
+                break
 
     def switch_player(self):
         self.player = 1 if self.player == 2 else 2
 
+    def check_winner(self):
+        winnner = game_mechanics.check_winner(self)
+        print(winnner)
+        return winnner
 
 
 
