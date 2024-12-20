@@ -1,8 +1,8 @@
 import pygame
-from properties import HORIZONTAL_GAP, WHITE, WINDOW_WIDTH, YELLOW, RED
+from properties import HORIZONTAL_GAP, WHITE, WINDOW_WIDTH, YELLOW, RED, FONT
 
 pygame.init()
-font = pygame.font.Font(None, 56)
+font = FONT
 
 
 class ui:

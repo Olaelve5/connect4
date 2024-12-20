@@ -21,3 +21,8 @@ RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 BACKGROUND = (36, 40, 51)
 
+# Font
+TITLE_FONT = pygame.font.Font("assets/Symtext.ttf", 56)
+FONT = pygame.font.Font("assets/Symtext.ttf", 32)
+
+

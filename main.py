@@ -11,8 +11,6 @@ screen = pygame.display.set_mode(
 screen.fill(properties.BACKGROUND)
 pygame.display.set_caption("Connect 4")
 
-font = pygame.font.Font(None, 56)
-
 
 def menu(screen):
     pygame.display.set_caption("Menu")
@@ -22,15 +20,15 @@ def menu(screen):
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TITLE = font.render("Connect 4", True, properties.WHITE)
+        MENU_TITLE = properties.TITLE_FONT.render("Connect 4", True, properties.WHITE)
         MENU_TITLE_RECT = MENU_TITLE.get_rect(center=(properties.WINDOW_WIDTH / 2, 100))
 
-        PLAY_BUTTON = font.render("Play", True, properties.WHITE)
+        PLAY_BUTTON = properties.TITLE_FONT.render("Play", True, properties.WHITE)
         PLAY_BUTTON_RECT = PLAY_BUTTON.get_rect(
             center=(properties.WINDOW_WIDTH / 2, 300)
         )
 
-        QUIT_BUTTON = font.render("Quit", True, properties.WHITE)
+        QUIT_BUTTON = properties.TITLE_FONT.render("Quit", True, properties.WHITE)
         QUIT_BUTTON_RECT = QUIT_BUTTON.get_rect(
             center=(properties.WINDOW_WIDTH / 2, 400)
         )
