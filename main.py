@@ -1,6 +1,7 @@
 import pygame
 from properties import WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND
 from board import Board
+from ui import ui
 
 pygame.init()
 
@@ -16,11 +17,17 @@ board = Board()
 clock = pygame.time.Clock()
 FPS = 60
 
+# ui
+ui = ui("Player 1", "Player 2")
+
 while True:
     screen.fill(BACKGROUND)
 
     # Draw the board
     board.draw(screen)
+
+    # Draw the UI
+    ui.draw(screen)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
