@@ -1,6 +1,6 @@
 import pygame
 from properties import WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND
-from graphics_board import Board
+from board import Board
 
 pygame.init()
 

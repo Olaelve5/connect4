@@ -1,4 +1,4 @@
-# A slot has a position (x, y) and a player (1 or 2)
+# A slot has a position (x, y) and a player (1 or 2 - 0 is empty)
 
 
 # Check winner

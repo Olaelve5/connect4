@@ -1,103 +1,86 @@
-board = [
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '], # 0
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '], # 1
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '], # 2
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '], # 3
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '], # 4
-    [' ', ' ', ' ', ' ', ' ', ' ', ' '], # 5
-]
+import properties
+from slot import Slot
+import pygame
+import game_mechanics
 
 
-# Board class
 class Board:
-    def __init__(self) -> None:
-        self.board = board
+    def __init__(self):
+        self.columns = []
+        for i in range(7):
+            self.columns.append(Column(i))
+        self.slots = []
+        for column in self.columns:
+            for slot in column.slots:
+                self.slots.append(slot)
+        self.player = 1  # Player 1 starts
+
+    def draw(self, screen):
+        pygame.draw.rect(
+            screen,
+            properties.BLUE,
+            (
+                (properties.WINDOW_WIDTH - properties.BOARD_WIDTH) // 2,
+                (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2,
+                properties.BOARD_WIDTH,
+                properties.BOARD_HEIGHT,
+            ),
+            0,
+            10,
+        )
+        for column in self.columns:
+            column.draw(screen)
+
+    def handle_click(self, mouse_pos):
+        for column in self.columns:
+            if column.rect.collidepoint(
+                mouse_pos
+            ):  # Check if mouse is inside the column
+                column.handle_click(self.player)
+                self.check_winner()
+                self.switch_player()
+                break
+
+    def switch_player(self):
+        self.player = 1 if self.player == 2 else 2
+
+    def check_winner(self):
+        winnner = game_mechanics.check_winner(self)
+        print(winnner)
+        return winnner
 
 
-    # Update the board with the player's move
-    def update(self, column, player) -> None:
-        if self.check_move(column):
-            for i in range(5, -1, -1):
-                if self.board[i][column] == ' ':
-                    if player == 1:
-                        self.board[i][column] = 'X'
-                    else:
-                        self.board[i][column] = 'O'
-                    break
-        else:
-            print('Invalid move')
-        
 
-    # Check if the move is valid
-    def check_move(self, column) -> bool:
-        if column < 0 or column > 6:
-            return False
-        
-        if self.board[0][column] == ' ':
-            return True
-        else:
-            return False
+class Column(pygame.sprite.Sprite):
+    def __init__(self, index):
+        super().__init__()
+        self.height = properties.BOARD_HEIGHT
+        self.width = properties.COLUMN_WIDTH
+        self.color = (0, 0, 0, 0)
+        self.slots = []
+        self.index = index
 
-    # Check if there is a winner
-    def check_winner(self) -> bool:
+        # Calculate position of the column
+        board_x = (properties.WINDOW_WIDTH - properties.BOARD_WIDTH) // 2
+        self.x = board_x + index * self.width
+        self.y = (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2
+
+        # Create a rect for collision detection
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+
+        # Create the slots
         for i in range(6):
-            for j in range(7):
-                if self.board[i][j] != ' ':
-                    if self.check_horizontal(i, j) or self.check_vertical(i, j) or self.check_diagonal(i, j):
-                        return True
-        return False
+            self.slots.append(Slot((index, i), 0))
 
-    # Check if there is a horizontal winner
-    def check_horizontal(self, i, j) -> bool:
-        if j < 4:
-            if self.board[i][j] == self.board[i][j+1] == self.board[i][j+2] == self.board[i][j+3]:
-                return True
-        return False
+    def update(self):
+        pass
 
+    def draw(self, screen):
+        for slot in self.slots:
+            slot.draw(screen)
 
-    # Check if there is a vertical winner
-    def check_vertical(self, i, j) -> bool:
-        if i < 3:
-            if self.board[i][j] == self.board[i+1][j] == self.board[i+2][j] == self.board[i+3][j]:
-                return True
-        return False
-    
-
-    # Check if there is a diagonal winner
-    def check_diagonal(self, i, j) -> bool:
-        if i < 3 and j < 4:
-            if self.board[i][j] == self.board[i+1][j+1] == self.board[i+2][j+2] == self.board[i+3][j+3]:
-                return True
-        if i < 3 and j > 2:
-            if self.board[i][j] == self.board[i+1][j-1] == self.board[i+2][j-2] == self.board[i+3][j-3]:
-                return True
-        return False
-
-    # Print the board
-    def print_board(self) -> None:
-        for i in range(6):
-            print(self.board[i])
-        print('---------------')
-        print('  0   1   2   3   4   5   6')
-        print('---------------')
-        print('')
-
-    
-    # Check if the board is full
-    def check_full(self) -> bool:
-        for i in range(6):
-            for j in range(7):
-                if self.board[i][j] == ' ':
-                    return False
-        return True
-    
-
-    # Reset the board
-    def reset(self) -> None:
-        for i in range(6):
-            for j in range(7):
-                self.board[i][j] = ' '
-        print('Board reset')
-        print('')
-
-
+    def handle_click(self, player):
+        for slot in self.slots:
+            if slot.player == 0:
+                slot.update(player)
+                break
