@@ -12,14 +12,23 @@ class Slot:
         self.coordinates = coordinates
         self.position = calculate_position(*coordinates)
         self.player = player
-        self.color = (115, 192, 255)
+        self.color = (115, 192, 255)  # Default color (e.g., empty slot)
         self.radius = properties.CHIP_RADIUS
-        if player == 1:
+        self.update_color()
+
+    def update_color(self):
+        """Update the slot's color based on the player."""
+        if self.player == 1:
             self.color = properties.YELLOW
-        elif player == 2:
+        elif self.player == 2:
             self.color = properties.RED
-        elif coordinates[1] == 0 and coordinates[0] == 3:
-            self.color = properties.RED
+        else:
+            self.color = (115, 192, 255)  # Default color for empty slot
+
+    def update(self, player):
+        """Update the player and the color."""
+        self.player = player
+        self.update_color()
     
     def draw(self, screen):
         # pygame.draw.circle(screen, self.color, self.position, self.radius)

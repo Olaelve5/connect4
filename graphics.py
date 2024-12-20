@@ -4,7 +4,6 @@ from graphics_board import Board
 
 pygame.init()
 
-
 # Create the screen with the size of the client's screen
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
 screen.fill(BACKGROUND)

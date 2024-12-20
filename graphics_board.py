@@ -2,12 +2,16 @@ import properties
 from slot import Slot
 import pygame
 
-
 class Board: 
     def __init__(self):
         self.columns = []
         for i in range(7):
             self.columns.append(Column(i))
+        self.slots = []
+        for column in self.columns:
+            for slot in column.slots:
+                self.slots.append(slot)
+        self.player = 1 # Player 1 starts
     
     def draw(self, screen):
         pygame.draw.rect(screen, properties.BLUE, 
@@ -20,7 +24,11 @@ class Board:
     def handle_click(self, mouse_pos):
         for column in self.columns:
             if column.rect.collidepoint(mouse_pos):  # Check if mouse is inside the column
-                column.handle_click()
+                column.handle_click(self.player)
+                self.switch_player()
+
+    def switch_player(self):
+        self.player = 1 if self.player == 2 else 2
 
 
 
@@ -53,5 +61,8 @@ class Column(pygame.sprite.Sprite):
         for slot in self.slots:
             slot.draw(screen)
 
-    def handle_click(self):
-        print('Clicked on column', self.index)
+    def handle_click(self, player):
+        for slot in self.slots:
+            if slot.player == 0:
+                slot.update(player)
+                break
