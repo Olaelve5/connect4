@@ -21,7 +21,7 @@ class Board:
             properties.BLUE,
             (
                 (properties.WINDOW_WIDTH - properties.BOARD_WIDTH) // 2,
-                (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2,
+                (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2 + properties.VERTICAL_GAP // 2,
                 properties.BOARD_WIDTH,
                 properties.BOARD_HEIGHT,
             ),
@@ -63,7 +63,7 @@ class Column(pygame.sprite.Sprite):
         # Calculate position of the column
         board_x = (properties.WINDOW_WIDTH - properties.BOARD_WIDTH) // 2
         self.x = board_x + index * self.width
-        self.y = (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2
+        self.y = (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2 + properties.VERTICAL_GAP // 2
 
         # Create a rect for collision detection
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -71,9 +71,6 @@ class Column(pygame.sprite.Sprite):
         # Create the slots
         for i in range(6):
             self.slots.append(Slot((index, i), 0))
-
-    def update(self):
-        pass
 
     def draw(self, screen):
         for slot in self.slots:

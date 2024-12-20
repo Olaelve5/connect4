@@ -4,7 +4,7 @@ import pygame.gfxdraw
 
 def calculate_position(x, y):
     x = properties.HORIZONTAL_START + properties.CHIP_RADIUS * 2 * x + properties.CHIP_GAP * x
-    y = properties.VERTICAL_START - properties.CHIP_RADIUS * 2 * y - properties.CHIP_GAP * y
+    y = properties.VERTICAL_START - properties.CHIP_RADIUS * 2 * y - properties.CHIP_GAP * y + properties.VERTICAL_GAP // 2
     return x, y
 
 class Slot:
