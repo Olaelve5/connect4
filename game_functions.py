@@ -93,6 +93,17 @@ def play(screen):
         # Draw the board
         board.draw(screen)
 
+        for column in board.columns:
+            if column.is_hovered(pygame.mouse.get_pos()):
+                if board.player_turn == 1:
+                    cursor.set_mode("drop_1")
+                else:
+                    cursor.set_mode("drop_2")
+                column.hovered_draw(screen)
+                break
+        else:
+            cursor.set_mode("default")
+
         winner = board.winner
         if winner:
             game_over_screen(screen, winner)

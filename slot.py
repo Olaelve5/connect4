@@ -2,10 +2,21 @@ import pygame
 import properties
 import pygame.gfxdraw
 
+
 def calculate_position(x, y):
-    x = properties.HORIZONTAL_START + properties.CHIP_RADIUS * 2 * x + properties.CHIP_GAP * x
-    y = properties.VERTICAL_START - properties.CHIP_RADIUS * 2 * y - properties.CHIP_GAP * y + properties.VERTICAL_GAP // 2
+    x = (
+        properties.HORIZONTAL_START
+        + properties.CHIP_RADIUS * 2 * x
+        + properties.CHIP_GAP * x
+    )
+    y = (
+        properties.VERTICAL_START
+        - properties.CHIP_RADIUS * 2 * y
+        - properties.CHIP_GAP * y
+        + properties.VERTICAL_GAP // 2
+    )
     return x, y
+
 
 class Slot:
     def __init__(self, coordinates, player):
@@ -14,6 +25,7 @@ class Slot:
         self.player = player
         self.color = (115, 192, 255)  # Default color (e.g., empty slot)
         self.radius = properties.CHIP_RADIUS
+        self.player_turn = 1
         self.update_color()
 
     def update_color(self):
@@ -29,8 +41,21 @@ class Slot:
         """Update the player and the color."""
         self.player = player
         self.update_color()
-    
+
     def draw(self, screen):
         # pygame.draw.circle(screen, self.color, self.position, self.radius)
-        pygame.gfxdraw.aacircle(screen, self.position[0], self.position[1], self.radius, self.color)
-        pygame.gfxdraw.filled_circle(screen, self.position[0], self.position[1], self.radius, self.color)
+        pygame.gfxdraw.aacircle(
+            screen, self.position[0], self.position[1], self.radius, self.color
+        )
+        pygame.gfxdraw.filled_circle(
+            screen, self.position[0], self.position[1], self.radius, self.color
+        )
+
+    def hovered_draw(self, screen):
+        color = properties.YELLOW if self.player_turn == 1 else properties.RED
+        pygame.gfxdraw.aacircle(
+            screen, self.position[0], self.position[1], self.radius, color
+        )
+        pygame.gfxdraw.filled_circle(
+            screen, self.position[0], self.position[1], self.radius, color
+        )

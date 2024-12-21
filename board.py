@@ -13,7 +13,7 @@ class Board:
         for column in self.columns:
             for slot in column.slots:
                 self.slots.append(slot)
-        self.player = 1  # Player 1 starts
+        self.player_turn = 1  # Player 1 starts
         self.winner = None
 
     def draw(self, screen):
@@ -22,7 +22,8 @@ class Board:
             properties.BLUE,
             (
                 (properties.WINDOW_WIDTH - properties.BOARD_WIDTH) // 2,
-                (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2 + properties.VERTICAL_GAP // 2,
+                (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2
+                + properties.VERTICAL_GAP // 2,
                 properties.BOARD_WIDTH,
                 properties.BOARD_HEIGHT,
             ),
@@ -37,13 +38,16 @@ class Board:
             if column.rect.collidepoint(
                 mouse_pos
             ):  # Check if mouse is inside the column
-                column.handle_click(self.player)
+                column.handle_click(self.player_turn)
                 self.check_winner()
                 self.switch_player()
                 break
 
+        for slot in self.slots:
+            slot.player_turn = self.player_turn
+
     def switch_player(self):
-        self.player = 1 if self.player == 2 else 2
+        self.player_turn = 1 if self.player_turn == 2 else 2
 
     def check_winner(self):
         winnner = game_mechanics.check_winner(self)
@@ -53,7 +57,7 @@ class Board:
     def reset(self):
         for slot in self.slots:
             slot.update(0)
-        self.player = 1
+        self.player_turn = 1
         self.winner = None
 
 
@@ -69,7 +73,9 @@ class Column(pygame.sprite.Sprite):
         # Calculate position of the column
         board_x = (properties.WINDOW_WIDTH - properties.BOARD_WIDTH) // 2
         self.x = board_x + index * self.width
-        self.y = (properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT) // 2 + properties.VERTICAL_GAP // 2
+        self.y = (
+            properties.WINDOW_HEIGHT - properties.BOARD_HEIGHT
+        ) // 2 + properties.VERTICAL_GAP // 2
 
         # Create a rect for collision detection
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -82,8 +88,17 @@ class Column(pygame.sprite.Sprite):
         for slot in self.slots:
             slot.draw(screen)
 
+    def hovered_draw(self, screen):
+        for slot in self.slots:
+            if slot.player == 0:
+                slot.hovered_draw(screen)
+                break
+
     def handle_click(self, player):
         for slot in self.slots:
             if slot.player == 0:
                 slot.update(player)
                 break
+
+    def is_hovered(self, mouse_pos):
+        return self.rect.collidepoint(mouse_pos)

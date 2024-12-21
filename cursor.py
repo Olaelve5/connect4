@@ -29,3 +29,13 @@ class Cursor:
             self.image = pygame.transform.scale(
                 pygame.image.load("assets/click_cursor.png"), self.scale
             )
+
+        elif mode == "drop_1":
+            self.image = pygame.transform.scale(
+                pygame.image.load("assets/1_drop_cursor.png"), self.scale
+            )
+
+        elif mode == "drop_2":
+            self.image = pygame.transform.scale(
+                pygame.image.load("assets/2_drop_cursor.png"), self.scale
+            )
