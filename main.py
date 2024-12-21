@@ -12,6 +12,5 @@ screen.fill(properties.BACKGROUND)
 pygame.display.set_caption("Connect 4")
 pygame.mouse.set_visible(False)
 
-
 menu(screen)
 
