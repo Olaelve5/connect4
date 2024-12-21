@@ -2,11 +2,13 @@ import pygame
 import properties
 from cursor import Cursor
 from menus.button import Button
+from menus.player_choice import Player_Choice
 
 
 # Create the main menu
 def main_menu(screen):
     pygame.display.set_caption("Menu")
+    player_choice = Player_Choice(screen)
 
     cursor = Cursor(screen)
 
@@ -38,6 +40,9 @@ def main_menu(screen):
         screen.blit(MENU_TITLE, MENU_TITLE_RECT)
         PLAY_BUTTON.draw(MENU_MOUSE_POS)
         QUIT_BUTTON.draw(MENU_MOUSE_POS)
+
+        # Draw player choice
+        player_choice.draw()
 
         for button in [PLAY_BUTTON, QUIT_BUTTON]:
             if button.is_clicked(MENU_MOUSE_POS):
