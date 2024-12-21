@@ -15,7 +15,6 @@ class Button:
     def draw(self, mouse_pos):
         self.change_color(mouse_pos)
         self.screen.blit(self.text_surface, self.rect)
-        
 
     def is_clicked(self, mouse_pos):
         return self.rect.collidepoint(mouse_pos)

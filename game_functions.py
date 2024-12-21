@@ -5,6 +5,7 @@ from ui import ui
 from button import Button
 from cursor import Cursor
 
+
 # Create the main menu
 def menu(screen):
     pygame.display.set_caption("Menu")
@@ -39,6 +40,14 @@ def menu(screen):
         screen.blit(MENU_TITLE, MENU_TITLE_RECT)
         PLAY_BUTTON.draw(MENU_MOUSE_POS)
         QUIT_BUTTON.draw(MENU_MOUSE_POS)
+
+        for button in [PLAY_BUTTON, QUIT_BUTTON]:
+            if button.is_clicked(MENU_MOUSE_POS):
+                cursor.set_mode("click")
+                break
+            else:
+                cursor.set_mode("default")
+
         cursor.draw(MENU_MOUSE_POS)
 
         for event in pygame.event.get():
@@ -76,6 +85,8 @@ def play(screen):
     board.reset()
     cursor = Cursor(screen)
 
+    pygame.mouse.set_visible(False)
+
     while True:
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
 
@@ -112,6 +123,7 @@ def play(screen):
 def game_over_screen(screen, winner):
     pygame.display.set_caption("Game Over Screen")
 
+    pygame.mouse.set_visible(False)
     cursor = Cursor(screen)
 
     while True:
@@ -157,6 +169,13 @@ def game_over_screen(screen, winner):
         PLAY_AGAIN_BUTTON.draw(GAME_OVER_MOUSE_POS)
         MAIN_MENU_BUTTON.draw(GAME_OVER_MOUSE_POS)
         QUIT_BUTTON.draw(GAME_OVER_MOUSE_POS)
+
+        for button in [PLAY_AGAIN_BUTTON, MAIN_MENU_BUTTON, QUIT_BUTTON]:
+            if button.is_clicked(GAME_OVER_MOUSE_POS):
+                cursor.set_mode("click")
+                break
+            else:
+                cursor.set_mode("default")
 
         cursor.draw(GAME_OVER_MOUSE_POS)
 
