@@ -52,7 +52,7 @@ class Slot:
         )
 
     def hovered_draw(self, screen):
-        color = properties.YELLOW if self.player_turn == 1 else properties.RED
+        color = properties.HOVER_YELLOW if self.player_turn == 1 else properties.HOVER_RED
         pygame.gfxdraw.aacircle(
             screen, self.position[0], self.position[1], self.radius, color
         )
