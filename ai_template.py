@@ -21,7 +21,7 @@ class AI:
     def get_move(self, board):
         moves = self.find_available_moves(board)
 
-        # Decide on which move, first available for now 
+        # Decide on which move, first available returned for now 
         return moves[0]
     
 

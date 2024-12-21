@@ -1,6 +1,6 @@
 import pygame
 import properties
-from game_functions import menu
+from menus.main_menu import main_menu
 
 pygame.init()
 
@@ -12,5 +12,5 @@ screen.fill(properties.BACKGROUND)
 pygame.display.set_caption("Connect 4")
 pygame.mouse.set_visible(False)
 
-menu(screen)
+main_menu(screen)
 
