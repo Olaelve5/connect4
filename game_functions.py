@@ -3,11 +3,13 @@ import properties
 from board import Board
 from ui import ui
 from button import Button
-
+from cursor import Cursor
 
 # Create the main menu
 def menu(screen):
     pygame.display.set_caption("Menu")
+
+    cursor = Cursor(screen)
 
     while True:
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
@@ -37,6 +39,7 @@ def menu(screen):
         screen.blit(MENU_TITLE, MENU_TITLE_RECT)
         PLAY_BUTTON.draw(MENU_MOUSE_POS)
         QUIT_BUTTON.draw(MENU_MOUSE_POS)
+        cursor.draw(MENU_MOUSE_POS)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (
@@ -71,6 +74,7 @@ ui = ui("Player 1", "Player 2")
 
 def play(screen):
     board.reset()
+    cursor = Cursor(screen)
 
     while True:
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
@@ -85,6 +89,9 @@ def play(screen):
 
         # Draw the UI
         ui.draw(screen)
+
+        # Draw the cursor
+        cursor.draw(pygame.mouse.get_pos())
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (
@@ -105,12 +112,10 @@ def play(screen):
 def game_over_screen(screen, winner):
     pygame.display.set_caption("Game Over Screen")
 
-    overlay = pygame.Surface(screen.get_size())  # Create an alpha-enabled surface
-    overlay.fill((0, 0, 0))  # Fill the surface with black
-    overlay.set_alpha(150)  # Set the transparency level
-    screen.blit(overlay, (0, 0))
+    cursor = Cursor(screen)
 
     while True:
+        screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
 
         GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -152,6 +157,8 @@ def game_over_screen(screen, winner):
         PLAY_AGAIN_BUTTON.draw(GAME_OVER_MOUSE_POS)
         MAIN_MENU_BUTTON.draw(GAME_OVER_MOUSE_POS)
         QUIT_BUTTON.draw(GAME_OVER_MOUSE_POS)
+
+        cursor.draw(GAME_OVER_MOUSE_POS)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (
