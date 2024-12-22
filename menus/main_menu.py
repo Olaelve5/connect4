@@ -8,7 +8,8 @@ from menus.player_choice import Player_Choice
 # Create the main menu
 def main_menu(screen):
     pygame.display.set_caption("Menu")
-    player_choice = Player_Choice(screen, (properties.WINDOW_WIDTH / 6, 250))
+    player_choice_1 = Player_Choice(screen, (properties.WINDOW_WIDTH / 5, 250), True)
+    player_choice_2 = Player_Choice(screen, (properties.WINDOW_WIDTH / 5 * 4 - 200, 250), False)
 
     cursor = Cursor(screen)
 
@@ -23,10 +24,20 @@ def main_menu(screen):
         properties.WHITE,
         screen,
     )
+
+    MODE_BUTTON = Button(
+        "Choose Mode",
+        properties.WINDOW_WIDTH / 2,
+        properties.WINDOW_HEIGHT - 200,
+        properties.TITLE_FONT,
+        properties.WHITE,
+        screen,
+    )
+
     QUIT_BUTTON = Button(
         "Quit",
         properties.WINDOW_WIDTH / 2,
-        properties.WINDOW_HEIGHT - 200,
+        properties.WINDOW_HEIGHT - 100,
         properties.TITLE_FONT,
         properties.WHITE,
         screen,
@@ -40,11 +51,13 @@ def main_menu(screen):
         screen.blit(MENU_TITLE, MENU_TITLE_RECT)
         PLAY_BUTTON.draw(MENU_MOUSE_POS)
         QUIT_BUTTON.draw(MENU_MOUSE_POS)
+        MODE_BUTTON.draw(MENU_MOUSE_POS)
 
         # Draw player choice
-        player_choice.draw()
+        player_choice_1.draw()
+        player_choice_2.draw()
 
-        for button in [PLAY_BUTTON, QUIT_BUTTON]:
+        for button in [PLAY_BUTTON, QUIT_BUTTON, MODE_BUTTON]:
             if button.is_clicked(MENU_MOUSE_POS):
                 cursor.set_mode("click")
                 break
@@ -70,6 +83,7 @@ def main_menu(screen):
                     pygame.quit()
                     quit()
 
-                player_choice.handle_click(MENU_MOUSE_POS)
+                player_choice_1.handle_click(MENU_MOUSE_POS)
+                player_choice_2.handle_click(MENU_MOUSE_POS)
 
         pygame.display.update()

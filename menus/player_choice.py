@@ -25,7 +25,11 @@ class Player_Choice:
             Player("Player", "assets/human.png"),
         ]
         self.bots = []
-        self.current_player = self.players[0]
+        self.current_player = (
+            self.players[0]
+            if player_1
+            else (self.players[1] if len(self.players) > 1 else None)
+        )
         self.screen = screen
         self.position = position
         self.rect = pygame.Rect(position, (200, 200))
@@ -60,7 +64,10 @@ class Player_Choice:
             self.current_player.name, True, properties.WHITE
         )
         name_rect = name.get_rect(
-            center=(self.position[0] + self.rect.width // 2, self.position[1] + self.rect.height + 40)
+            center=(
+                self.position[0] + self.rect.width // 2,
+                self.position[1] + self.rect.height + 40,
+            )
         )
         self.screen.blit(name, name_rect)
 
