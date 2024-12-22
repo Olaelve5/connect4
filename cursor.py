@@ -19,6 +19,9 @@ class Cursor:
         self.screen.blit(self.image, cursor_pos)
 
     def set_mode(self, mode):
+        if mode == self.mode:
+            return
+
         self.mode = mode
 
         if mode == "default":

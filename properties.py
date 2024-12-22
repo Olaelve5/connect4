@@ -32,4 +32,7 @@ SUB_FONT = pygame.font.Font("assets/Symtext.ttf", 24)
 BACKGROUND_IMAGE = pygame.image.load("assets/background.jpg")
 BACKGROUND_IMAGE = pygame.transform.scale(BACKGROUND_IMAGE, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
+# FPS
+FPS = 120
+
 

@@ -9,7 +9,9 @@ from menus.player_choice import Player_Choice
 def main_menu(screen):
     pygame.display.set_caption("Menu")
     player_choice_1 = Player_Choice(screen, (properties.WINDOW_WIDTH / 5, 250), True)
-    player_choice_2 = Player_Choice(screen, (properties.WINDOW_WIDTH / 5 * 4 - 200, 250), False)
+    player_choice_2 = Player_Choice(
+        screen, (properties.WINDOW_WIDTH / 5 * 4 - 200, 250), False
+    )
 
     cursor = Cursor(screen)
 
@@ -43,6 +45,8 @@ def main_menu(screen):
         screen,
     )
 
+    clock = pygame.time.Clock()
+
     while True:
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
 
@@ -57,7 +61,15 @@ def main_menu(screen):
         player_choice_1.draw()
         player_choice_2.draw()
 
-        for button in [PLAY_BUTTON, QUIT_BUTTON, MODE_BUTTON]:
+        for button in [
+            PLAY_BUTTON,
+            QUIT_BUTTON,
+            MODE_BUTTON,
+            player_choice_1.left_button,
+            player_choice_1.right_button,
+            player_choice_2.left_button,
+            player_choice_2.right_button,
+        ]:
             if button.is_clicked(MENU_MOUSE_POS):
                 cursor.set_mode("click")
                 break
@@ -85,5 +97,7 @@ def main_menu(screen):
 
                 player_choice_1.handle_click(MENU_MOUSE_POS)
                 player_choice_2.handle_click(MENU_MOUSE_POS)
+        
+        clock.tick(properties.FPS)
 
         pygame.display.update()

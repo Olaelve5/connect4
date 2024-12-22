@@ -10,6 +10,8 @@ def game_over_menu(screen, winner):
     pygame.mouse.set_visible(False)
     cursor = Cursor(screen)
 
+    clock = pygame.time.Clock()
+
     while True:
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
 
@@ -84,5 +86,7 @@ def game_over_menu(screen, winner):
                 if QUIT_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
                     pygame.quit()
                     quit()
+
+        clock.tick(properties.FPS)
 
         pygame.display.update()

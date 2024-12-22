@@ -9,7 +9,6 @@ board = Board()
 
 # Frame rate
 clock = pygame.time.Clock()
-FPS = 60
 
 # ui
 ui = ui("Player 1", "Player 2")
@@ -61,4 +60,4 @@ def play(screen):
                 board.handle_click(event.pos)
 
         pygame.display.update()
-        clock.tick(FPS)
+        clock.tick(properties.FPS)
