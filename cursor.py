@@ -7,7 +7,7 @@ class Cursor:
         self.screen = screen
         self.scale = (70, 70)
         self.image = pygame.transform.scale(
-            pygame.image.load("assets/default_cursor.png"), self.scale
+            pygame.image.load("assets/cursor/default_cursor.png"), self.scale
         )
         self.rect = self.image.get_rect()
 
@@ -23,19 +23,19 @@ class Cursor:
 
         if mode == "default":
             self.image = pygame.transform.scale(
-                pygame.image.load("assets/default_cursor.png"), self.scale
+                pygame.image.load("assets/cursor/default_cursor.png"), self.scale
             )
         elif mode == "click":
             self.image = pygame.transform.scale(
-                pygame.image.load("assets/click_cursor.png"), self.scale
+                pygame.image.load("assets/cursor/click_cursor.png"), self.scale
             )
 
         elif mode == "drop_1":
             self.image = pygame.transform.scale(
-                pygame.image.load("assets/1_drop_cursor.png"), self.scale
+                pygame.image.load("assets/cursor/1_drop_cursor.png"), self.scale
             )
 
         elif mode == "drop_2":
             self.image = pygame.transform.scale(
-                pygame.image.load("assets/2_drop_cursor.png"), self.scale
+                pygame.image.load("assets/cursor/2_drop_cursor.png"), self.scale
             )

@@ -25,7 +25,7 @@ HOVER_YELLOW = (255, 255, 200)
 
 # Font
 TITLE_FONT = pygame.font.Font("assets/Symtext.ttf", 56)
-FONT = pygame.font.Font("assets/Symtext.ttf", 32)
+FONT = pygame.font.Font("assets/Symtext.ttf", 40)
 SUB_FONT = pygame.font.Font("assets/Symtext.ttf", 24)
 
 # Background image

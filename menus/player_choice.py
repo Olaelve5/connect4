@@ -7,10 +7,16 @@ class Side_Button:
     def __init__(self, direction, position):
         self.direction = direction
         self.position = position
-        self.rect = pygame.Rect(position, (50, 50))
+        self.image = (
+            pygame.image.load("assets/left_arrow.png")
+            if direction == -1
+            else pygame.image.load("assets/right_arrow.png")
+        )
+        self.image = pygame.transform.scale(self.image, (100, 100))
+        self.rect = self.image.get_rect(center=position)
 
     def draw(self, screen):
-        pygame.draw.rect(screen, (255, 255, 255), self.rect)
+        screen.blit(self.image, self.rect)
 
     def is_clicked(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos):
@@ -21,8 +27,8 @@ class Side_Button:
 class Player_Choice:
     def __init__(self, screen, position=(0, 0), player_1=True):
         self.players = [
-            Player("Randobot", "assets/robot.png"),
-            Player("Player", "assets/human.png"),
+            Player("Randobot", "assets/player_images/robot.png"),
+            Player("Player", "assets/player_images/human.png"),
         ]
         self.bots = []
         self.current_player = (
@@ -37,10 +43,10 @@ class Player_Choice:
 
         # Side button width is 50
         self.left_button = Side_Button(
-            -1, (self.position[0] - 100, self.position[1] + 100)
+            -1, (self.position[0] - 75, self.position[1] + 100)
         )
         self.right_button = Side_Button(
-            1, (self.position[0] + self.rect.width + 50, self.position[1] + 100)
+            1, (self.position[0] + self.rect.width + 75, self.position[1] + 100)
         )
 
     def add_bot(self, bot):
@@ -55,7 +61,7 @@ class Player_Choice:
             "Player 1" if self.player_1 else "Player 2", True, properties.WHITE
         )
         title_rect = title.get_rect(
-            center=(self.position[0] + self.rect.width // 2, self.position[1] - 40)
+            center=(self.position[0] + self.rect.width // 2, self.position[1] - 25)
         )
         self.screen.blit(title, title_rect)
 

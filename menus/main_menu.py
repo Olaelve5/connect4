@@ -20,7 +20,7 @@ def main_menu(screen):
         "Play",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 300,
-        properties.TITLE_FONT,
+        properties.FONT,
         properties.WHITE,
         screen,
     )
@@ -29,7 +29,7 @@ def main_menu(screen):
         "Choose Mode",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 200,
-        properties.TITLE_FONT,
+        properties.FONT,
         properties.WHITE,
         screen,
     )
@@ -38,7 +38,7 @@ def main_menu(screen):
         "Quit",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 100,
-        properties.TITLE_FONT,
+        properties.FONT,
         properties.WHITE,
         screen,
     )
