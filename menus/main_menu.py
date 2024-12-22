@@ -68,5 +68,8 @@ def main_menu(screen):
                 if QUIT_BUTTON.is_clicked(MENU_MOUSE_POS):
                     pygame.quit()
                     quit()
+                
+                player_choice.handle_click(MENU_MOUSE_POS)
+
 
         pygame.display.update()
