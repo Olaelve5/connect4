@@ -1,12 +1,13 @@
 import pygame
 from enteties.player import Player
+import properties
+
 
 class Side_Button:
-    def __init__(self, direction, x, y):
+    def __init__(self, direction, position):
         self.direction = direction
-        self.x = x
-        self.y = y
-        self.rect = pygame.Rect(self.x, self.y, 50, 50)
+        self.position = position
+        self.rect = pygame.Rect(position, (50, 50))
 
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), self.rect)
@@ -18,17 +19,25 @@ class Side_Button:
 
 
 class Player_Choice:
-    def __init__(self, screen):
+    def __init__(self, screen, position=(0, 0), player_1=True):
         self.players = [
-            Player("Player 1", "assets/robot.png"),
-            Player("Player 2", "assets/human.png"),
+            Player("Randobot", "assets/robot.png"),
+            Player("Player", "assets/human.png"),
         ]
         self.bots = []
         self.current_player = self.players[0]
         self.screen = screen
+        self.position = position
+        self.rect = pygame.Rect(position, (200, 200))
+        self.player_1 = player_1
 
-        self.left_button = Side_Button(-1, 0, 0)
-        self.right_button = Side_Button(1, 750, 0)
+        # Side button width is 50
+        self.left_button = Side_Button(
+            -1, (self.position[0] - 100, self.position[1] + 100)
+        )
+        self.right_button = Side_Button(
+            1, (self.position[0] + self.rect.width + 50, self.position[1] + 100)
+        )
 
     def add_bot(self, bot):
         self.bots.append(bot)
@@ -37,8 +46,26 @@ class Player_Choice:
             self.image = bot.image
 
     def draw(self):
+        # The player choice title
+        title = properties.SUB_FONT.render(
+            "Player 1" if self.player_1 else "Player 2", True, properties.WHITE
+        )
+        title_rect = title.get_rect(
+            center=(self.position[0] + self.rect.width // 2, self.position[1] - 40)
+        )
+        self.screen.blit(title, title_rect)
+
+        # The player choice active player
+        name = properties.SUB_FONT.render(
+            self.current_player.name, True, properties.WHITE
+        )
+        name_rect = name.get_rect(
+            center=(self.position[0] + self.rect.width // 2, self.position[1] + self.rect.height + 40)
+        )
+        self.screen.blit(name, name_rect)
+
         if self.current_player:
-            self.current_player.draw(self.screen, (0, 0))
+            self.current_player.draw(self.screen, self.position)
 
         self.left_button.draw(self.screen)
         self.right_button.draw(self.screen)
@@ -52,7 +79,6 @@ class Player_Choice:
         elif new_index >= len(all_players):
             new_index = 0
         self.current_player = all_players[new_index]
-    
 
     def handle_click(self, mouse_pos):
         direction = self.left_button.is_clicked(mouse_pos)
