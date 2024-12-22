@@ -1,4 +1,4 @@
-import game_mechanics
+import gameplay.game_mechanics as game_mechanics
 
 class AI:
     def __init__(self, name, image=None):

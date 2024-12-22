@@ -87,7 +87,7 @@ def main_menu(screen):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.is_clicked(MENU_MOUSE_POS):
-                    from play import play
+                    from gameplay.play import play
 
                     play(screen)
 

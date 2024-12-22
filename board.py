@@ -1,7 +1,7 @@
 import properties
 from slot import Slot
 import pygame
-import game_mechanics
+import gameplay.game_mechanics as game_mechanics
 
 
 class Board:

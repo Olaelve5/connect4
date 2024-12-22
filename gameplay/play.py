@@ -1,7 +1,7 @@
 import pygame
 from board import Board
 from cursor import Cursor
-from ui import ui
+from gameplay.ui import ui
 import properties
 
 # Create the board

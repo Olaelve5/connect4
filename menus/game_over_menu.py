@@ -74,7 +74,7 @@ def game_over_menu(screen, winner):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_AGAIN_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
-                    from play import play
+                    from gameplay.play import play
                     play(screen)
                     return True
 
