@@ -6,6 +6,7 @@ class Ditto(Template_Bot):
     def __init__(self, name, image_url):
         super().__init__(name, image_url)
 
+    # This bot will always try to make the same move as the last move
     def get_move(self, board):
         available_columns = board.available_columns()
         last_move = board.last_move

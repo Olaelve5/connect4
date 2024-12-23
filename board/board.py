@@ -73,6 +73,9 @@ class Board:
         winnner = game_mechanics.check_winner(self)
         if winnner:
             self.winner = winnner
+    
+    def is_valid_move(self, column):
+        return self.columns[column].is_valid_move()
 
     def reset(self):
         for slot in self.slots:

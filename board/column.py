@@ -11,6 +11,7 @@ class Column(pygame.sprite.Sprite):
         self.color = (0, 0, 0, 0)
         self.slots = []
         self.index = index
+        self.top_slot = 0
 
         # Calculate position of the column
         board_x = (properties.WINDOW_WIDTH - properties.BOARD_WIDTH) // 2
@@ -37,14 +38,18 @@ class Column(pygame.sprite.Sprite):
                 break
 
     def handle_click(self, player):
-        if self.slots[5].player != 0:
+        if not self.is_valid_move():
             return False
 
         for slot in self.slots:
             if slot.player == 0:
                 slot.update(player)
+                self.top_slot = slot.player
                 break
         return True
 
     def is_hovered(self, mouse_pos):
         return self.rect.collidepoint(mouse_pos)
+    
+    def is_valid_move(self):
+        return self.slots[5].player == 0
