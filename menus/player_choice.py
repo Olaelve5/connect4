@@ -28,7 +28,7 @@ class Player_Choice:
     def __init__(self, screen, position=(0, 0), player_1=True):
         self.players = [
             Player("Randobot", "assets/player_images/robot.png"),
-            Player("Player", "assets/player_images/human.png"),
+            Player("Human", "assets/player_images/human.png"),
         ]
         self.bots = []
         self.current_player = self.players[0]
@@ -57,7 +57,7 @@ class Player_Choice:
             "Player 1" if self.player_1 else "Player 2", True, properties.WHITE
         )
         title_rect = title.get_rect(
-            center=(self.position[0] + self.rect.width // 2, self.position[1] - 25)
+            center=(self.position[0] + self.rect.width // 2, self.position[1] - 35)
         )
         self.screen.blit(title, title_rect)
 

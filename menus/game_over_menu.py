@@ -11,7 +11,7 @@ def game_over_menu(screen, winner, player_1, player_2):
     pygame.mouse.set_visible(False)
     cursor = Cursor(screen)
 
-    GAME_OVER_TITLE = properties.SUB_FONT.render("Winner is", True, properties.WHITE)
+    GAME_OVER_TITLE = properties.FONT.render("Winner is", True, properties.WHITE)
     GAME_OVER_TITLE_RECT = GAME_OVER_TITLE.get_rect(
         center=(properties.WINDOW_WIDTH / 2, 100)
     )
@@ -45,10 +45,13 @@ def game_over_menu(screen, winner, player_1, player_2):
 
     player_image = pygame.image.load(winner.image_url)
     player_image = pygame.transform.scale(player_image, (200, 200))
-    player_image_rect = player_image.get_rect(center=(properties.WINDOW_WIDTH / 2, 275))
+    player_image_rect = player_image.get_rect(center=(properties.WINDOW_WIDTH / 2, 350))
 
-    player_text = properties.FONT.render(winner.name, True, properties.WHITE)
-    player_text_rect = player_text.get_rect(center=(properties.WINDOW_WIDTH / 2, 425))
+    player_text = properties.SUB_FONT.render(winner.name, True, properties.WHITE)
+    player_text_rect = player_text.get_rect(center=(properties.WINDOW_WIDTH / 2, 490))
+
+    player_title = properties.SUB_FONT.render("Player 1", True, properties.WHITE)
+    player_title_rect = player_title.get_rect(center=(properties.WINDOW_WIDTH / 2, 220))
 
     clock = pygame.time.Clock()
 
@@ -63,6 +66,7 @@ def game_over_menu(screen, winner, player_1, player_2):
         QUIT_BUTTON.draw(GAME_OVER_MOUSE_POS)
         screen.blit(player_image, player_image_rect)
         screen.blit(player_text, player_text_rect)
+        screen.blit(player_title, player_title_rect)
 
         for button in [PLAY_AGAIN_BUTTON, MAIN_MENU_BUTTON, QUIT_BUTTON]:
             if button.is_clicked(GAME_OVER_MOUSE_POS):

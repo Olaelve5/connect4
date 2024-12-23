@@ -38,7 +38,10 @@ class Board:
             if column.rect.collidepoint(
                 mouse_pos
             ):  # Check if mouse is inside the column
-                column.handle_click(self.player_turn)
+                altered = column.handle_click(self.player_turn)
+                if not altered:
+                    return
+
                 self.check_winner()
                 self.switch_player()
                 break
@@ -95,10 +98,14 @@ class Column(pygame.sprite.Sprite):
                 break
 
     def handle_click(self, player):
+        if self.slots[5].player != 0:
+            return False
+
         for slot in self.slots:
             if slot.player == 0:
                 slot.update(player)
                 break
+        return True
 
     def is_hovered(self, mouse_pos):
         return self.rect.collidepoint(mouse_pos)
