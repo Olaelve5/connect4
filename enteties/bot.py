@@ -7,5 +7,5 @@ class Bot(Template_Bot):
         super().__init__(name, image_url)
 
     def get_move(self, board):
-        # Decide on which move, first available returned for now
+        # Decide on which move to make
         return random.choice(board.available_columns())

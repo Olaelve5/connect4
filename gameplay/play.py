@@ -33,8 +33,9 @@ def play(screen, player_1, player_2):
         # Draw the board
         board.draw(screen)
 
+        # Check if the cursor is hovering over a column
         for column in board.columns:
-            if column.is_hovered(pygame.mouse.get_pos()):
+            if column.is_hovered(pygame.mouse.get_pos()) and not player_is_bot(player_turn):
                 if board.player_turn == 1:
                     cursor.set_mode("drop_1")
                 else:
