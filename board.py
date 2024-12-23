@@ -38,16 +38,18 @@ class Board:
             if column.rect.collidepoint(
                 mouse_pos
             ):  # Check if mouse is inside the column
-                altered = column.handle_click(self.player_turn)
-                if not altered:
-                    return
-
-                self.check_winner()
-                self.switch_player()
-                break
+                self.make_move(column.index)
 
         for slot in self.slots:
             slot.player_turn = self.player_turn
+    
+    def make_move(self, column):
+        altered = self.columns[column].handle_click(self.player_turn)
+        if not altered:
+            return
+
+        self.check_winner()
+        self.switch_player()
 
     def switch_player(self):
         self.player_turn = 1 if self.player_turn == 2 else 2

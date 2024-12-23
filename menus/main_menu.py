@@ -3,14 +3,17 @@ import properties
 from cursor import Cursor
 from menus.button import Button
 from menus.player_choice import Player_Choice
+from players import players
 
 
 # Create the main menu
 def main_menu(screen):
     pygame.display.set_caption("Menu")
-    player_choice_1 = Player_Choice(screen, (properties.WINDOW_WIDTH / 5, 250), True)
+    player_choice_1 = Player_Choice(
+        screen, (properties.WINDOW_WIDTH / 5, 250), True, players
+    )
     player_choice_2 = Player_Choice(
-        screen, (properties.WINDOW_WIDTH / 5 * 4 - 200, 250), False
+        screen, (properties.WINDOW_WIDTH / 5 * 4 - 200, 250), False, players
     )
 
     cursor = Cursor(screen)

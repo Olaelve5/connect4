@@ -25,11 +25,8 @@ class Side_Button:
 
 
 class Player_Choice:
-    def __init__(self, screen, position=(0, 0), player_1=True):
-        self.players = [
-            Player("Randobot", "assets/player_images/robot.png"),
-            Player("Human", "assets/player_images/human.png"),
-        ]
+    def __init__(self, screen, position=(0, 0), player_1=True, players=[]):
+        self.players = players
         self.bots = []
         self.current_player = self.players[0]
         self.screen = screen

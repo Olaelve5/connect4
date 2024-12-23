@@ -10,14 +10,22 @@ board = Board()
 # Frame rate
 clock = pygame.time.Clock()
 
+def player_is_bot(player):
+    return player.type == "bot"
+
 
 def play(screen, player_1, player_2):
+
     board.reset()
     cursor = Cursor(screen)
-
     ui_instance = ui(player_1, player_2)
 
+    player_turn = player_1 if board.player_turn == 1 else player_2
+
     pygame.mouse.set_visible(False)
+
+    turn_taken = False
+    bot_move_start_time = None
 
     while True:
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
@@ -36,6 +44,7 @@ def play(screen, player_1, player_2):
         else:
             cursor.set_mode("default")
 
+        # Check if there is a winner, if so, show the game over menu
         winner = board.winner
         if winner:
             from menus.game_over_menu import game_over_menu
@@ -51,6 +60,19 @@ def play(screen, player_1, player_2):
         # Draw the cursor
         cursor.draw(pygame.mouse.get_pos())
 
+        # Handle bot move with delay
+        if player_is_bot(player_turn) and not turn_taken:
+            if bot_move_start_time is None:  # Start the timer
+                bot_move_start_time = pygame.time.get_ticks()
+
+            # Check if 0.5 seconds have passed
+            if pygame.time.get_ticks() - bot_move_start_time > 500:
+                column = player_turn.get_move(board)
+                board.make_move(column)
+                player_turn = player_1 if board.player_turn == 1 else player_2
+                turn_taken = True
+                bot_move_start_time = None  # Reset the timer
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (
                 event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
@@ -58,9 +80,15 @@ def play(screen, player_1, player_2):
                 pygame.quit()
                 quit()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            # Handle mouse click and human move 
+            if event.type == pygame.MOUSEBUTTONDOWN and player_turn.type == "human": 
                 # Handle mouse click on the board
                 board.handle_click(event.pos)
+                player_turn = player_1 if board.player_turn == 1 else player_2
+                turn_taken = True
 
         pygame.display.update()
         clock.tick(properties.FPS)
+
+        if turn_taken:
+            turn_taken = False
