@@ -32,9 +32,6 @@ class Board:
         )
         for column in self.columns:
             column.draw(screen)
-    
-    def scale_draw(self, screen):
-        pass
 
     def handle_click(self, mouse_pos):
         for column in self.columns:

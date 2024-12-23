@@ -89,7 +89,11 @@ def main_menu(screen):
                 if PLAY_BUTTON.is_clicked(MENU_MOUSE_POS):
                     from gameplay.play import play
 
-                    play(screen)
+                    play(
+                        screen,
+                        player_choice_1.current_player,
+                        player_choice_2.current_player,
+                    )
 
                 if QUIT_BUTTON.is_clicked(MENU_MOUSE_POS):
                     pygame.quit()
@@ -97,7 +101,7 @@ def main_menu(screen):
 
                 player_choice_1.handle_click(MENU_MOUSE_POS)
                 player_choice_2.handle_click(MENU_MOUSE_POS)
-        
+
         clock.tick(properties.FPS)
 
         pygame.display.update()

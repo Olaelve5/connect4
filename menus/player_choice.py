@@ -31,11 +31,7 @@ class Player_Choice:
             Player("Player", "assets/player_images/human.png"),
         ]
         self.bots = []
-        self.current_player = (
-            self.players[0]
-            if player_1
-            else (self.players[1] if len(self.players) > 1 else None)
-        )
+        self.current_player = self.players[0]
         self.screen = screen
         self.position = position
         self.rect = pygame.Rect(position, (200, 200))

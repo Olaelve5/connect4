@@ -10,12 +10,12 @@ board = Board()
 # Frame rate
 clock = pygame.time.Clock()
 
-# ui
-ui = ui("Player 1", "Player 2")
 
-def play(screen):
+def play(screen, player_1, player_2):
     board.reset()
     cursor = Cursor(screen)
+
+    ui_instance = ui(player_1, player_2)
 
     pygame.mouse.set_visible(False)
 
@@ -39,11 +39,14 @@ def play(screen):
         winner = board.winner
         if winner:
             from menus.game_over_menu import game_over_menu
-            game_over_menu(screen, winner)
+
+            game_over_menu(
+                screen, player_1 if winner == 1 else player_2, player_1, player_2
+            )
             break
 
         # Draw the UI
-        ui.draw(screen)
+        ui_instance.draw(screen)
 
         # Draw the cursor
         cursor.draw(pygame.mouse.get_pos())

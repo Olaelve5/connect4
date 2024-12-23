@@ -3,12 +3,52 @@ import properties
 from menus.button import Button
 from cursor import Cursor
 
+
 # Create the game over screen
-def game_over_menu(screen, winner):
+def game_over_menu(screen, winner, player_1, player_2):
     pygame.display.set_caption("Game Over Screen")
 
     pygame.mouse.set_visible(False)
     cursor = Cursor(screen)
+
+    GAME_OVER_TITLE = properties.SUB_FONT.render("Winner is", True, properties.WHITE)
+    GAME_OVER_TITLE_RECT = GAME_OVER_TITLE.get_rect(
+        center=(properties.WINDOW_WIDTH / 2, 100)
+    )
+
+    PLAY_AGAIN_BUTTON = Button(
+        "Play Again",
+        properties.WINDOW_WIDTH / 2,
+        properties.WINDOW_HEIGHT - 300,
+        properties.FONT,
+        properties.WHITE,
+        screen,
+    )
+
+    MAIN_MENU_BUTTON = Button(
+        "Main Menu",
+        properties.WINDOW_WIDTH / 2,
+        properties.WINDOW_HEIGHT - 200,
+        properties.FONT,
+        properties.WHITE,
+        screen,
+    )
+
+    QUIT_BUTTON = Button(
+        "Quit",
+        properties.WINDOW_WIDTH / 2,
+        properties.WINDOW_HEIGHT - 100,
+        properties.FONT,
+        properties.WHITE,
+        screen,
+    )
+
+    player_image = pygame.image.load(winner.image_url)
+    player_image = pygame.transform.scale(player_image, (200, 200))
+    player_image_rect = player_image.get_rect(center=(properties.WINDOW_WIDTH / 2, 275))
+
+    player_text = properties.FONT.render(winner.name, True, properties.WHITE)
+    player_text_rect = player_text.get_rect(center=(properties.WINDOW_WIDTH / 2, 425))
 
     clock = pygame.time.Clock()
 
@@ -17,44 +57,12 @@ def game_over_menu(screen, winner):
 
         GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
 
-        GAME_OVER_TITLE = properties.TITLE_FONT.render(
-            str(winner) + " wins!", True, properties.WHITE
-        )
-        GAME_OVER_TITLE_RECT = GAME_OVER_TITLE.get_rect(
-            center=(properties.WINDOW_WIDTH / 2, 100)
-        )
-
-        PLAY_AGAIN_BUTTON = Button(
-            "Play Again",
-            properties.WINDOW_WIDTH / 2,
-            300,
-            properties.TITLE_FONT,
-            properties.WHITE,
-            screen,
-        )
-
-        MAIN_MENU_BUTTON = Button(
-            "Main Menu",
-            properties.WINDOW_WIDTH / 2,
-            400,
-            properties.TITLE_FONT,
-            properties.WHITE,
-            screen,
-        )
-
-        QUIT_BUTTON = Button(
-            "Quit",
-            properties.WINDOW_WIDTH / 2,
-            500,
-            properties.TITLE_FONT,
-            properties.WHITE,
-            screen,
-        )
-
         screen.blit(GAME_OVER_TITLE, GAME_OVER_TITLE_RECT)
         PLAY_AGAIN_BUTTON.draw(GAME_OVER_MOUSE_POS)
         MAIN_MENU_BUTTON.draw(GAME_OVER_MOUSE_POS)
         QUIT_BUTTON.draw(GAME_OVER_MOUSE_POS)
+        screen.blit(player_image, player_image_rect)
+        screen.blit(player_text, player_text_rect)
 
         for button in [PLAY_AGAIN_BUTTON, MAIN_MENU_BUTTON, QUIT_BUTTON]:
             if button.is_clicked(GAME_OVER_MOUSE_POS):
@@ -75,11 +83,13 @@ def game_over_menu(screen, winner):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_AGAIN_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
                     from gameplay.play import play
-                    play(screen)
+
+                    play(screen, player_1, player_2)
                     return True
 
                 if MAIN_MENU_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
                     from menus.main_menu import main_menu
+
                     main_menu(screen)
                     return True
 
