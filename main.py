@@ -1,8 +1,6 @@
 import pygame
 import properties
 from menus.main_menu import main_menu
-from enteties.player import Player
-from enteties.bot import Bot
 
 pygame.init()
 

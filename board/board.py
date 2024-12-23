@@ -1,5 +1,5 @@
 import properties
-from slot import Slot
+from board.slot import Slot
 import pygame
 import gameplay.game_mechanics as game_mechanics
 
@@ -15,6 +15,7 @@ class Board:
                 self.slots.append(slot)
         self.player_turn = 1  # Player 1 starts
         self.winner = None
+        self.last_move = None
 
     def draw(self, screen):
         pygame.draw.rect(
@@ -42,7 +43,7 @@ class Board:
 
         for slot in self.slots:
             slot.player_turn = self.player_turn
-    
+
     def make_move(self, column):
         altered = self.columns[column].handle_click(self.player_turn)
         if not altered:
@@ -53,6 +54,19 @@ class Board:
 
     def switch_player(self):
         self.player_turn = 1 if self.player_turn == 2 else 2
+    
+    def available_columns(self):
+        if game_mechanics.check_full(self):
+            return []
+
+        moves = []
+        for column in self.columns:
+            for slot in column.slots:
+                if slot.player == 0:
+                    moves.append(column.index)
+                    break
+
+        return moves
 
     def check_winner(self):
         winnner = game_mechanics.check_winner(self)

@@ -1,5 +1,5 @@
 import pygame
-from board import Board
+from board.board import Board
 from cursor import Cursor
 from gameplay.ui import ui
 import properties
