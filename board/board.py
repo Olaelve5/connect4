@@ -47,6 +47,7 @@ class Board:
         if not altered:
             return
 
+        self.last_move = column
         self.check_winner()
         self.switch_player()
 
