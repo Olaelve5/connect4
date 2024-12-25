@@ -69,7 +69,7 @@ def game_over_menu(screen, winner, player_1, player_2):
         screen.blit(player_title, player_title_rect)
 
         for button in [PLAY_AGAIN_BUTTON, MAIN_MENU_BUTTON, QUIT_BUTTON]:
-            if button.is_clicked(GAME_OVER_MOUSE_POS):
+            if button.is_hovered(GAME_OVER_MOUSE_POS):
                 cursor.set_mode("click")
                 break
             else:
@@ -85,19 +85,19 @@ def game_over_menu(screen, winner, player_1, player_2):
                 quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_AGAIN_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
+                if PLAY_AGAIN_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from gameplay.play import play
 
                     play(screen, player_1, player_2)
                     return True
 
-                if MAIN_MENU_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
+                if MAIN_MENU_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from menus.main_menu import main_menu
 
                     main_menu(screen)
                     return True
 
-                if QUIT_BUTTON.is_clicked(GAME_OVER_MOUSE_POS):
+                if QUIT_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     pygame.quit()
                     quit()
 

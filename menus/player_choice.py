@@ -1,5 +1,4 @@
 import pygame
-from enteties.player import Player
 import properties
 
 
@@ -18,7 +17,7 @@ class Side_Button:
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-    def is_clicked(self, mouse_pos):
+    def is_hovered(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos):
             return self.direction
         return False
@@ -87,12 +86,12 @@ class Player_Choice:
         self.current_player = all_players[new_index]
 
     def handle_click(self, mouse_pos):
-        direction = self.left_button.is_clicked(mouse_pos)
+        direction = self.left_button.is_hovered(mouse_pos)
         if direction:
             self.switch_player(direction)
             return
 
-        direction = self.right_button.is_clicked(mouse_pos)
+        direction = self.right_button.is_hovered(mouse_pos)
         if direction:
             self.switch_player(direction)
             return

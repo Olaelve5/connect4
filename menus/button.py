@@ -15,8 +15,13 @@ class Button:
     def draw(self, mouse_pos):
         self.change_color(mouse_pos)
         self.screen.blit(self.text_surface, self.rect)
+    
+    def selected_draw(self):
+        self.color = properties.GREEN
+        self.text_surface = self.font.render(self.text, True, self.color)
+        self.screen.blit(self.text_surface, self.rect)
 
-    def is_clicked(self, mouse_pos):
+    def is_hovered(self, mouse_pos):
         return self.rect.collidepoint(mouse_pos)
 
     def change_color(self, mouse_pos):

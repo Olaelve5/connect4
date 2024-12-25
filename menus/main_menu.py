@@ -7,7 +7,7 @@ from players import players
 
 
 # Create the main menu
-def main_menu(screen):
+def main_menu(screen, selected_mode="single"):
     pygame.display.set_caption("Menu")
     player_choice_1 = Player_Choice(
         screen, (properties.WINDOW_WIDTH / 5, 250), True, players
@@ -48,6 +48,16 @@ def main_menu(screen):
         screen,
     )
 
+    buttons = [
+        PLAY_BUTTON,
+        QUIT_BUTTON,
+        MODE_BUTTON,
+        player_choice_1.left_button,
+        player_choice_1.right_button,
+        player_choice_2.left_button,
+        player_choice_2.right_button,
+    ]
+
     # Sounds
     hover_sound = pygame.mixer.Sound("assets/sounds/hover_button.mp3")
 
@@ -71,23 +81,15 @@ def main_menu(screen):
 
         hovered_button = None
 
-        for button in [
-            PLAY_BUTTON,
-            QUIT_BUTTON,
-            MODE_BUTTON,
-            player_choice_1.left_button,
-            player_choice_1.right_button,
-            player_choice_2.left_button,
-            player_choice_2.right_button,
-        ]:
-            if button.is_clicked(MENU_MOUSE_POS):
+        for button in buttons:
+            if button.is_hovered(MENU_MOUSE_POS):
                 hovered_button = button
                 cursor.set_mode("click")
                 break
             else:
                 cursor.set_mode("default")
 
-         # Play hover sound only if the hovered button changes
+        # Play hover sound only if the hovered button changes
         if hovered_button != last_hovered_button:
             if hovered_button is not None:  # Only play if hovering over a button
                 hover_sound.play()
@@ -103,15 +105,21 @@ def main_menu(screen):
                 quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BUTTON.is_clicked(MENU_MOUSE_POS):
+                if PLAY_BUTTON.is_hovered(MENU_MOUSE_POS):
                     from gameplay.play import play
+
                     play(
                         screen,
                         player_choice_1.current_player,
                         player_choice_2.current_player,
                     )
 
-                if QUIT_BUTTON.is_clicked(MENU_MOUSE_POS):
+                if MODE_BUTTON.is_hovered(MENU_MOUSE_POS):
+                    from menus.mode_menu import mode_menu
+
+                    mode_menu(screen)
+
+                if QUIT_BUTTON.is_hovered(MENU_MOUSE_POS):
                     pygame.quit()
                     quit()
 
