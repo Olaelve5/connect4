@@ -8,7 +8,8 @@ class Randotron(Template_Bot):
 
     def get_move(self, board):
         # Decide on which move to make
-        return random.choice(board.available_columns())
+        moves = board.available_columns()
+        return random.choice(moves[:4])
 
     def get_good_move(self, board):
         pass

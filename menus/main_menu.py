@@ -48,6 +48,11 @@ def main_menu(screen):
         screen,
     )
 
+    # Sounds
+    hover_sound = pygame.mixer.Sound("assets/sounds/hover_button.mp3")
+
+    last_hovered_button = None
+
     clock = pygame.time.Clock()
 
     while True:
@@ -64,6 +69,8 @@ def main_menu(screen):
         player_choice_1.draw()
         player_choice_2.draw()
 
+        hovered_button = None
+
         for button in [
             PLAY_BUTTON,
             QUIT_BUTTON,
@@ -74,10 +81,17 @@ def main_menu(screen):
             player_choice_2.right_button,
         ]:
             if button.is_clicked(MENU_MOUSE_POS):
+                hovered_button = button
                 cursor.set_mode("click")
                 break
             else:
                 cursor.set_mode("default")
+
+         # Play hover sound only if the hovered button changes
+        if hovered_button != last_hovered_button:
+            if hovered_button is not None:  # Only play if hovering over a button
+                hover_sound.play()
+            last_hovered_button = hovered_button
 
         cursor.draw(MENU_MOUSE_POS)
 
@@ -91,7 +105,6 @@ def main_menu(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.is_clicked(MENU_MOUSE_POS):
                     from gameplay.play import play
-
                     play(
                         screen,
                         player_choice_1.current_player,

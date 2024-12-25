@@ -13,8 +13,11 @@ clock = pygame.time.Clock()
 def player_is_bot(player):
     return player.type == "bot"
 
+game_start_sound = pygame.mixer.Sound("assets/sounds/game_start.mp3")
 
 def play(screen, player_1, player_2):
+
+    game_start_sound.play()
 
     board.reset()
     cursor = Cursor(screen)
