@@ -1,6 +1,8 @@
 import pygame
 import settings.properties as properties
 from menus.main_menu import main_menu
+from settings.game_settings import Game_Settings
+from players import players
 
 pygame.init()
 
@@ -15,4 +17,6 @@ screen.fill(properties.BACKGROUND)
 pygame.display.set_caption("Connect 4")
 pygame.mouse.set_visible(False)
 
-main_menu(screen)
+game_settings = Game_Settings(players[0], players[0])
+
+main_menu(screen, game_settings)

@@ -3,9 +3,10 @@ from menus.main_menu import main_menu
 from menus.button import Button
 import pygame
 from cursor import Cursor
+from settings.game_settings import Game_Settings
 
 
-def mode_menu(screen, selected_mode="Single Game"):
+def mode_menu(screen, game_settings: Game_Settings):
 
     title = properties.TITLE_FONT.render("Choose Mode", True, properties.WHITE)
     title_rect = title.get_rect(center=(properties.WINDOW_WIDTH / 2, 100))
@@ -75,7 +76,7 @@ def mode_menu(screen, selected_mode="Single Game"):
         screen.blit(title, title_rect)
 
         for button in buttons:
-            if button.text == selected_mode:
+            if button.text == game_settings.selected_mode:
                 button.selected_draw()
             else:
                 button.draw(mouse_pos)
@@ -93,18 +94,12 @@ def mode_menu(screen, selected_mode="Single Game"):
                 quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if single_button.is_hovered(mouse_pos):
-                    selected_mode = single_button.text
-                    print(selected_mode)
-                if continous_10_button.is_hovered(mouse_pos):
-                    selected_mode = continous_10_button.text
-                    print(selected_mode)
-                if continous_25_button.is_hovered(mouse_pos):
-                    selected_mode = continous_25_button.text
-                if continous_50_button.is_hovered(mouse_pos):
-                    selected_mode = continous_50_button.text
                 if back_button.is_hovered(mouse_pos):
-                    return main_menu(screen, selected_mode)
+                    return main_menu(screen, game_settings)
+
+                for button in buttons:
+                    if button.is_hovered(mouse_pos):
+                        game_settings.selected_mode = button.text
 
         cursor.draw(mouse_pos)
 

@@ -8,17 +8,15 @@ from settings.game_settings import Game_Settings
 
 continous_modes = ["Continous 10", "Continous 25", "Continous 50"]
 
-game_settings = Game_Settings(None, None)
-
 
 # Create the main menu
-def main_menu(screen, selected_mode="Single Game"):
-    pygame.display.set_caption("Menu")
+def main_menu(screen, game_settings: Game_Settings):
+    pygame.display.set_caption("Main Menu")
     player_choice_1 = Player_Choice(
-        screen, (properties.WINDOW_WIDTH / 5, 250), True, players
+        screen, game_settings, (properties.WINDOW_WIDTH / 5, 250), True
     )
     player_choice_2 = Player_Choice(
-        screen, (properties.WINDOW_WIDTH / 5 * 4 - 200, 250), False, players
+        screen, game_settings, (properties.WINDOW_WIDTH / 5 * 4 - 200, 250), False
     )
 
     cursor = Cursor(screen)
@@ -26,7 +24,9 @@ def main_menu(screen, selected_mode="Single Game"):
     MENU_TITLE = properties.TITLE_FONT.render("Connect 4", True, properties.WHITE)
     MENU_TITLE_RECT = MENU_TITLE.get_rect(center=(properties.WINDOW_WIDTH / 2, 100))
 
-    selected_text = properties.SUB_FONT.render(selected_mode, True, properties.YELLOW)
+    selected_text = properties.SUB_FONT.render(
+        game_settings.selected_mode, True, properties.YELLOW
+    )
     selected_text_rect = selected_text.get_rect(
         center=(properties.WINDOW_WIDTH / 2, 160)
     )
@@ -121,9 +121,9 @@ def main_menu(screen, selected_mode="Single Game"):
 
                     continous = False
 
-                    if selected_mode in continous_modes:
+                    if game_settings.selected_mode in continous_modes:
                         continous = True
-                        total_games = int(selected_mode.split()[-1])
+                        total_games = int(game_settings.selected_mode.split()[-1])
 
                     game_settings.set_settings(
                         player_choice_1.current_player,
@@ -138,7 +138,7 @@ def main_menu(screen, selected_mode="Single Game"):
                 if MODE_BUTTON.is_hovered(MENU_MOUSE_POS):
                     from menus.mode_menu import mode_menu
 
-                    mode_menu(screen, selected_mode)
+                    mode_menu(screen, game_settings)
 
                 if QUIT_BUTTON.is_hovered(MENU_MOUSE_POS):
                     pygame.quit()

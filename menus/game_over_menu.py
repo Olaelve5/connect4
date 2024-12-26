@@ -100,7 +100,7 @@ def game_over_menu(
                     from menus.main_menu import main_menu
 
                     game_settings.reset()
-                    main_menu(screen)
+                    main_menu(screen, game_settings)
 
                 if QUIT_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     pygame.quit()

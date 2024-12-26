@@ -1,6 +1,12 @@
 class Game_Settings:
     def __init__(
-        self, player_1, player_2, score=(0, 0), continuous=False, total_games=1
+        self,
+        player_1,
+        player_2,
+        score=(0, 0),
+        continuous=False,
+        total_games=1,
+        selected_mode="Single Game",
     ):
         self.player_1 = player_1
         self.player_2 = player_2
@@ -10,14 +16,24 @@ class Game_Settings:
         self.move_delay = 500
         self.played_games = 0
         self.games_left = total_games - self.played_games
+        self.selected_mode = selected_mode
 
-    def set_settings(self, player_1, player_2, score, continuous, total_games, played_games = 0):
+    def set_settings(
+        self,
+        player_1,
+        player_2,
+        score,
+        continuous,
+        total_games,
+        played_games=0
+    ):
         self.player_1 = player_1
         self.player_2 = player_2
         self.score = score
         self.continuous = continuous
         self.total_games = total_games
         self.played_games = played_games
+        self.games_left = total_games - played_games
 
         if self.total_games > 45:
             self.move_delay = 5
@@ -27,7 +43,7 @@ class Game_Settings:
             self.move_delay = 50
         else:
             self.move_delay = 500
-        
+
     def reset(self):
         self.score = (0, 0)
         self.played_games = 0

@@ -1,5 +1,7 @@
 import pygame
 import settings.properties as properties
+from settings.game_settings import Game_Settings
+from players import players
 
 
 class Side_Button:
@@ -24,10 +26,13 @@ class Side_Button:
 
 
 class Player_Choice:
-    def __init__(self, screen, position=(0, 0), player_1=True, players=[]):
+    def __init__(self, screen, game_settings: Game_Settings, position=(0, 0), player_1=True):
         self.players = players
+        self.game_settings = game_settings
         self.bots = []
-        self.current_player = self.players[0]
+        self.current_player = (
+            game_settings.player_1 if player_1 else game_settings.player_2
+        )
         self.screen = screen
         self.position = position
         self.rect = pygame.Rect(position, (200, 200))
@@ -40,12 +45,6 @@ class Player_Choice:
         self.right_button = Side_Button(
             1, (self.position[0] + self.rect.width + 75, self.position[1] + 100)
         )
-
-    def add_bot(self, bot):
-        self.bots.append(bot)
-        if not self.current_player:
-            self.current_player = bot
-            self.image = bot.image
 
     def draw(self):
         # The player choice title
@@ -84,6 +83,10 @@ class Player_Choice:
         elif new_index >= len(all_players):
             new_index = 0
         self.current_player = all_players[new_index]
+        if self.player_1:
+            self.game_settings.player_1 = self.current_player
+        else:
+            self.game_settings.player_2 = self.current_player
 
     def handle_click(self, mouse_pos):
         direction = self.left_button.is_hovered(mouse_pos)
