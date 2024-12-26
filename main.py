@@ -1,5 +1,5 @@
 import pygame
-import properties
+import settings.properties as properties
 from menus.main_menu import main_menu
 
 pygame.init()

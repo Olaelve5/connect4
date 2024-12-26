@@ -1,11 +1,14 @@
 import pygame
-import properties
+import settings.properties as properties
 from cursor import Cursor
 from menus.button import Button
 from menus.player_choice import Player_Choice
 from players import players
+from settings.game_settings import Game_Settings
 
 continous_modes = ["Continous 10", "Continous 25", "Continous 50"]
+
+game_settings = Game_Settings(None, None)
 
 
 # Create the main menu
@@ -120,19 +123,17 @@ def main_menu(screen, selected_mode="Single Game"):
 
                     if selected_mode in continous_modes:
                         continous = True
-                        max_count = int(selected_mode.split()[-1])
-                    else: 
-                        print(" Not continous", selected_mode)
+                        total_games = int(selected_mode.split()[-1])
 
-                    play(
-                        screen,
+                    game_settings.set_settings(
                         player_choice_1.current_player,
                         player_choice_2.current_player,
-                        continous,
                         (0, 0),
-                        0,
-                        max_count if continous else 0,
+                        continous,
+                        total_games if continous else 1,
                     )
+
+                    play(screen, game_settings)
 
                 if MODE_BUTTON.is_hovered(MENU_MOUSE_POS):
                     from menus.mode_menu import mode_menu

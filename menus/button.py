@@ -1,4 +1,4 @@
-import properties
+import settings.properties as properties
 
 
 class Button:

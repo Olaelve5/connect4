@@ -1,5 +1,5 @@
 import pygame
-from properties import (
+from settings.properties import (
     HORIZONTAL_GAP,
     WHITE,
     WINDOW_WIDTH,

@@ -1,5 +1,5 @@
 import pygame
-import properties
+import settings.properties as properties
 import pygame.gfxdraw
 
 

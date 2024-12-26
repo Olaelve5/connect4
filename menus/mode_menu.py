@@ -1,4 +1,4 @@
-import properties
+import settings.properties as properties
 from menus.main_menu import main_menu
 from menus.button import Button
 import pygame

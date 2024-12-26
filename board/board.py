@@ -1,4 +1,4 @@
-import properties
+import settings.properties as properties
 from board.slot import Slot
 import pygame
 import gameplay.game_mechanics as game_mechanics

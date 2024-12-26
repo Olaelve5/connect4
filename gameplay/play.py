@@ -2,7 +2,8 @@ import pygame
 from board.board import Board
 from cursor import Cursor
 from gameplay.ui import ui
-import properties
+import settings.properties as properties
+from settings.game_settings import Game_Settings
 
 # Create the board
 board = Board()
@@ -26,24 +27,20 @@ def play_sound(last_time, current_time, sound, move_delay=50):
     return last_time
 
 
-def play(
-    screen, player_1, player_2, continuous=True, score=(0, 0), count=0, max_count=9
-):
-
-    if max_count > 45:
-        move_delay = 5
-    elif max_count > 20:
-        move_delay = 15
-    elif max_count > 5:
-        move_delay = 50
-    else:
-        move_delay = 500
+def play(screen, game_settings: Game_Settings):
 
     board.reset()
     cursor = Cursor(screen)
-    ui_instance = ui(player_1, player_2, score, max_count - count)
+    ui_instance = ui(
+        game_settings.player_1,
+        game_settings.player_2,
+        game_settings.score,
+        game_settings.total_games - game_settings.played_games,
+    )
 
-    player_turn = player_1 if board.player_turn == 1 else player_2
+    player_turn = (
+        game_settings.player_1 if board.player_turn == 1 else game_settings.player_2
+    )
 
     pygame.mouse.set_visible(False)
 
@@ -73,75 +70,83 @@ def play(
 
         # Handle a draw
         if board.available_columns() == []:
-            if continuous and count < max_count - 1:
-                score = (score[0] + 0.5, score[1] + 0.5)
-                play(
-                    screen,
-                    player_1,
-                    player_2,
-                    continuous=True,
-                    score=score,
-                    count=count + 1,
-                    max_count=max_count,
+            if (
+                game_settings.continuous
+                and game_settings.played_games < game_settings.total_games - 1
+            ):
+                game_settings.score = (
+                    game_settings.score[0] + 0.5,
+                    game_settings.score[1] + 0.5,
                 )
+                game_settings.played_games += 1
+                play(screen, game_settings)
             else:
-                if continuous:
-                    winner = 1 if score[0] > score[1] else 2
+                if game_settings.continuous:
+                    winner = 1 if game_settings.score[0] > game_settings.score[1] else 2
 
                 # Final game over menu
                 from menus.game_over_menu import game_over_menu
 
-                winner = player_1 if winner == 1 else player_2
+                winner = (
+                    game_settings.player_1 if winner == 1 else game_settings.player_2
+                )
 
                 game_over_menu(
                     screen,
                     winner,
-                    player_1,
-                    player_2,
-                    continuous,
+                    game_settings.player_1,
+                    game_settings.player_2,
+                    game_settings.continuous,
                     0,
-                    max_count,
+                    game_settings.total_games,
                 )
             break
 
         # Check if there is a winner
         winner = board.winner
         if winner:
-            if continuous and count < max_count - 1:
+            if (
+                game_settings.continuous
+                and game_settings.played_games < game_settings.total_games - 1
+            ):
                 if winner == 1:
-                    score = (score[0] + 1, score[1])
+                    game_settings.score = (
+                        game_settings.score[0] + 1,
+                        game_settings.score[1],
+                    )
                 else:
-                    score = (score[0], score[1] + 1)
+                    game_settings.score = (
+                        game_settings.score[0],
+                        game_settings.score[1] + 1,
+                    )
 
-                ui_instance.update_score(score)
+                ui_instance.update_score(game_settings.score)
+                game_settings.played_games += 1
 
                 # Start a new game
                 play(
                     screen,
-                    player_1,
-                    player_2,
-                    continuous=True,
-                    score=score,
-                    count=count + 1,
-                    max_count=max_count,
+                    game_settings,
                 )
             else:
                 # Final game over menu
                 from menus.game_over_menu import game_over_menu
 
-                if continuous:
-                    winner = 1 if score[0] > score[1] else 2
+                if game_settings.continuous:
+                    winner = 1 if game_settings.score[0] > game_settings.score[1] else 2
 
-                winner = player_1 if winner == 1 else player_2
+                winner = (
+                    game_settings.player_1 if winner == 1 else game_settings.player_2
+                )
 
                 game_over_menu(
                     screen,
                     winner,
-                    player_1,
-                    player_2,
-                    continuous,
+                    game_settings.player_1,
+                    game_settings.player_2,
+                    game_settings.continuous,
                     0,
-                    max_count,
+                    game_settings.max_count,
                 )
             break
 
@@ -157,15 +162,22 @@ def play(
                 bot_move_start_time = pygame.time.get_ticks()
 
             # Check if 0.5 seconds have passed
-            if pygame.time.get_ticks() - bot_move_start_time > move_delay:
+            if pygame.time.get_ticks() - bot_move_start_time > game_settings.move_delay:
                 column = player_turn.get_move(board)
                 board.make_move(column)
-                player_turn = player_1 if board.player_turn == 1 else player_2
+                player_turn = (
+                    game_settings.player_1
+                    if board.player_turn == 1
+                    else game_settings.player_2
+                )
                 turn_taken = True
 
                 # Play the sound
                 last_sound_time = play_sound(
-                    last_sound_time, pygame.time.get_ticks(), move_sound, move_delay
+                    last_sound_time,
+                    pygame.time.get_ticks(),
+                    move_sound,
+                    game_settings.move_delay,
                 )
 
                 bot_move_start_time = None  # Reset the timer
@@ -181,13 +193,20 @@ def play(
             if event.type == pygame.MOUSEBUTTONDOWN and player_turn.type == "human":
                 # Handle mouse click on the board
                 board.handle_click(event.pos)
-                player_turn = player_1 if board.player_turn == 1 else player_2
+                player_turn = (
+                    game_settings.player_1
+                    if board.player_turn == 1
+                    else game_settings.player_2
+                )
                 move_sound.play()
                 turn_taken = True
 
                 # Play the sound
                 last_sound_time = play_sound(
-                    last_sound_time, pygame.time.get_ticks(), move_sound, move_delay
+                    last_sound_time,
+                    pygame.time.get_ticks(),
+                    move_sound,
+                    game_settings.move_delay,
                 )
 
         pygame.display.update()
