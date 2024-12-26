@@ -5,6 +5,8 @@ from menus.button import Button
 from menus.player_choice import Player_Choice
 from players import players
 
+continous_modes = ["Continous 10", "Continous 25", "Continous 50"]
+
 
 # Create the main menu
 def main_menu(screen, selected_mode="Single Game"):
@@ -27,7 +29,7 @@ def main_menu(screen, selected_mode="Single Game"):
     )
 
     PLAY_BUTTON = Button(
-        "Play",
+        "Start Game",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 300,
         properties.FONT,
@@ -114,10 +116,22 @@ def main_menu(screen, selected_mode="Single Game"):
                 if PLAY_BUTTON.is_hovered(MENU_MOUSE_POS):
                     from gameplay.play import play
 
+                    continous = False
+
+                    if selected_mode in continous_modes:
+                        continous = True
+                        max_count = int(selected_mode.split()[-1])
+                    else: 
+                        print(" Not continous", selected_mode)
+
                     play(
                         screen,
                         player_choice_1.current_player,
                         player_choice_2.current_player,
+                        continous,
+                        (0, 0),
+                        0,
+                        max_count if continous else 0,
                     )
 
                 if MODE_BUTTON.is_hovered(MENU_MOUSE_POS):

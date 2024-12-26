@@ -7,8 +7,6 @@ from cursor import Cursor
 
 def mode_menu(screen, selected_mode="Single Game"):
 
-    print("Selected: " + selected_mode)
-
     title = properties.TITLE_FONT.render("Choose Mode", True, properties.WHITE)
     title_rect = title.get_rect(center=(properties.WINDOW_WIDTH / 2, 100))
 
@@ -31,7 +29,7 @@ def mode_menu(screen, selected_mode="Single Game"):
     )
 
     continous_25_button = Button(
-        "Continous 20",
+        "Continous 25",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 400,
         properties.FONT,

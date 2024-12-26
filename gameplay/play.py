@@ -10,9 +10,6 @@ board = Board()
 # Frame rate
 clock = pygame.time.Clock()
 
-# Bot move delay
-MOVE_DELAY = 10
-
 
 def player_is_bot(player):
     return player.type == "bot"
@@ -22,20 +19,29 @@ game_start_sound = pygame.mixer.Sound("assets/sounds/game_start.mp3")
 move_sound = pygame.mixer.Sound("assets/sounds/slot.mp3")
 
 
-def play_sound(last_time, current_time, sound):
-    if current_time - last_time > MOVE_DELAY:  # Cooldown of 100ms
+def play_sound(last_time, current_time, sound, move_delay=50):
+    if current_time - last_time > move_delay:  # Cooldown of 100ms
         sound.play()
         return current_time
     return last_time
 
 
-def play(screen, player_1, player_2, continuous=True, score=(0, 0), count=0):
+def play(
+    screen, player_1, player_2, continuous=True, score=(0, 0), count=0, max_count=9
+):
 
-    # game_start_sound.play()
+    if max_count > 45:
+        move_delay = 5
+    elif max_count > 20:
+        move_delay = 15
+    elif max_count > 5:
+        move_delay = 50
+    else:
+        move_delay = 500
 
     board.reset()
     cursor = Cursor(screen)
-    ui_instance = ui(player_1, player_2, score)
+    ui_instance = ui(player_1, player_2, score, max_count - count)
 
     player_turn = player_1 if board.player_turn == 1 else player_2
 
@@ -67,7 +73,7 @@ def play(screen, player_1, player_2, continuous=True, score=(0, 0), count=0):
 
         # Handle a draw
         if board.available_columns() == []:
-            if continuous and count < 9:
+            if continuous and count < max_count - 1:
                 score = (score[0] + 0.5, score[1] + 0.5)
                 play(
                     screen,
@@ -76,22 +82,32 @@ def play(screen, player_1, player_2, continuous=True, score=(0, 0), count=0):
                     continuous=True,
                     score=score,
                     count=count + 1,
+                    max_count=max_count,
                 )
             else:
                 if continuous:
                     winner = 1 if score[0] > score[1] else 2
+
                 # Final game over menu
                 from menus.game_over_menu import game_over_menu
 
                 winner = player_1 if winner == 1 else player_2
 
-                game_over_menu(screen, winner, player_1, player_2)
+                game_over_menu(
+                    screen,
+                    winner,
+                    player_1,
+                    player_2,
+                    continuous,
+                    0,
+                    max_count,
+                )
             break
 
-        # Check if there is a winner, if so, show the game over menu
+        # Check if there is a winner
         winner = board.winner
         if winner:
-            if continuous and count < 9:
+            if continuous and count < max_count - 1:
                 if winner == 1:
                     score = (score[0] + 1, score[1])
                 else:
@@ -107,6 +123,7 @@ def play(screen, player_1, player_2, continuous=True, score=(0, 0), count=0):
                     continuous=True,
                     score=score,
                     count=count + 1,
+                    max_count=max_count,
                 )
             else:
                 # Final game over menu
@@ -115,8 +132,16 @@ def play(screen, player_1, player_2, continuous=True, score=(0, 0), count=0):
                 if continuous:
                     winner = 1 if score[0] > score[1] else 2
 
+                winner = player_1 if winner == 1 else player_2
+
                 game_over_menu(
-                    screen, player_1 if winner == 1 else player_2, player_1, player_2
+                    screen,
+                    winner,
+                    player_1,
+                    player_2,
+                    continuous,
+                    0,
+                    max_count,
                 )
             break
 
@@ -132,7 +157,7 @@ def play(screen, player_1, player_2, continuous=True, score=(0, 0), count=0):
                 bot_move_start_time = pygame.time.get_ticks()
 
             # Check if 0.5 seconds have passed
-            if pygame.time.get_ticks() - bot_move_start_time > MOVE_DELAY:
+            if pygame.time.get_ticks() - bot_move_start_time > move_delay:
                 column = player_turn.get_move(board)
                 board.make_move(column)
                 player_turn = player_1 if board.player_turn == 1 else player_2
@@ -140,7 +165,7 @@ def play(screen, player_1, player_2, continuous=True, score=(0, 0), count=0):
 
                 # Play the sound
                 last_sound_time = play_sound(
-                    last_sound_time, pygame.time.get_ticks(), move_sound
+                    last_sound_time, pygame.time.get_ticks(), move_sound, move_delay
                 )
 
                 bot_move_start_time = None  # Reset the timer
@@ -162,7 +187,7 @@ def play(screen, player_1, player_2, continuous=True, score=(0, 0), count=0):
 
                 # Play the sound
                 last_sound_time = play_sound(
-                    last_sound_time, pygame.time.get_ticks(), move_sound
+                    last_sound_time, pygame.time.get_ticks(), move_sound, move_delay
                 )
 
         pygame.display.update()

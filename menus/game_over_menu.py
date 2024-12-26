@@ -5,7 +5,15 @@ from cursor import Cursor
 
 
 # Create the game over screen
-def game_over_menu(screen, winner, player_1, player_2):
+def game_over_menu(
+    screen,
+    winner,
+    player_1,
+    player_2,
+    continuous=False,
+    count=0,
+    max_count=0,
+):
     pygame.display.set_caption("Game Over Screen")
 
     pygame.mouse.set_visible(False)
@@ -88,7 +96,7 @@ def game_over_menu(screen, winner, player_1, player_2):
                 if PLAY_AGAIN_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from gameplay.play import play
 
-                    play(screen, player_1, player_2)
+                    play(screen, player_1, player_2, continuous, (0, 0), count, max_count)
                     return True
 
                 if MAIN_MENU_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
