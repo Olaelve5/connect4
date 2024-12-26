@@ -90,6 +90,7 @@ def game_over_menu(
 
         GAME_OVER_MOUSE_POS = pygame.mouse.get_pos()
 
+        # Draw everything
         screen.blit(GAME_OVER_TITLE, GAME_OVER_TITLE_RECT)
         PLAY_AGAIN_BUTTON.draw(GAME_OVER_MOUSE_POS)
         PLAY_AGAIN_SWITCH_BUTTON.draw(GAME_OVER_MOUSE_POS)
@@ -102,6 +103,13 @@ def game_over_menu(
         game_settings.player_1.draw(screen, (properties.WINDOW_WIDTH / 4, 280))
         game_settings.player_2.draw(
             screen, (properties.WINDOW_WIDTH / 4 * 3 - 200, 280)
+        )
+
+        pygame.draw.circle(
+            screen, properties.YELLOW, (properties.WINDOW_WIDTH / 2 - 40, 380), 30
+        )
+        pygame.draw.circle(
+            screen, properties.RED, (properties.WINDOW_WIDTH / 2 + 40, 380), 30
         )
 
         for button in [PLAY_AGAIN_BUTTON, MAIN_MENU_BUTTON, PLAY_AGAIN_SWITCH_BUTTON]:
