@@ -17,7 +17,7 @@ class Button:
         self.screen.blit(self.text_surface, self.rect)
     
     def selected_draw(self):
-        self.color = properties.GREEN
+        self.color = properties.YELLOW
         self.text_surface = self.font.render(self.text, True, self.color)
         self.screen.blit(self.text_surface, self.rect)
 

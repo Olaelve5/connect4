@@ -7,7 +7,7 @@ from players import players
 
 
 # Create the main menu
-def main_menu(screen, selected_mode="single"):
+def main_menu(screen, selected_mode="Single Game"):
     pygame.display.set_caption("Menu")
     player_choice_1 = Player_Choice(
         screen, (properties.WINDOW_WIDTH / 5, 250), True, players
@@ -20,6 +20,11 @@ def main_menu(screen, selected_mode="single"):
 
     MENU_TITLE = properties.TITLE_FONT.render("Connect 4", True, properties.WHITE)
     MENU_TITLE_RECT = MENU_TITLE.get_rect(center=(properties.WINDOW_WIDTH / 2, 100))
+
+    selected_text = properties.SUB_FONT.render(selected_mode, True, properties.YELLOW)
+    selected_text_rect = selected_text.get_rect(
+        center=(properties.WINDOW_WIDTH / 2, 160)
+    )
 
     PLAY_BUTTON = Button(
         "Play",
@@ -71,6 +76,7 @@ def main_menu(screen, selected_mode="single"):
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
         screen.blit(MENU_TITLE, MENU_TITLE_RECT)
+        screen.blit(selected_text, selected_text_rect)
         PLAY_BUTTON.draw(MENU_MOUSE_POS)
         QUIT_BUTTON.draw(MENU_MOUSE_POS)
         MODE_BUTTON.draw(MENU_MOUSE_POS)
@@ -117,7 +123,7 @@ def main_menu(screen, selected_mode="single"):
                 if MODE_BUTTON.is_hovered(MENU_MOUSE_POS):
                     from menus.mode_menu import mode_menu
 
-                    mode_menu(screen)
+                    mode_menu(screen, selected_mode)
 
                 if QUIT_BUTTON.is_hovered(MENU_MOUSE_POS):
                     pygame.quit()

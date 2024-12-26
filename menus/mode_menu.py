@@ -5,8 +5,9 @@ import pygame
 from cursor import Cursor
 
 
-def mode_menu(screen, selected="Single Game"):
-    selected_mode = selected
+def mode_menu(screen, selected_mode="Single Game"):
+
+    print("Selected: " + selected_mode)
 
     title = properties.TITLE_FONT.render("Choose Mode", True, properties.WHITE)
     title_rect = title.get_rect(center=(properties.WINDOW_WIDTH / 2, 100))
@@ -96,8 +97,10 @@ def mode_menu(screen, selected="Single Game"):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if single_button.is_hovered(mouse_pos):
                     selected_mode = single_button.text
+                    print(selected_mode)
                 if continous_10_button.is_hovered(mouse_pos):
                     selected_mode = continous_10_button.text
+                    print(selected_mode)
                 if continous_25_button.is_hovered(mouse_pos):
                     selected_mode = continous_25_button.text
                 if continous_50_button.is_hovered(mouse_pos):
