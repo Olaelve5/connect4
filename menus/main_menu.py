@@ -13,10 +13,10 @@ continous_modes = ["Continous 10", "Continous 25", "Continous 50"]
 def main_menu(screen, game_settings: Game_Settings):
     pygame.display.set_caption("Main Menu")
     player_choice_1 = Player_Choice(
-        screen, game_settings, (properties.WINDOW_WIDTH / 5, 250), True
+        screen, game_settings, (properties.WINDOW_WIDTH / 4, 280), True
     )
     player_choice_2 = Player_Choice(
-        screen, game_settings, (properties.WINDOW_WIDTH / 5 * 4 - 200, 250), False
+        screen, game_settings, (properties.WINDOW_WIDTH / 4 * 3 - 200, 280), False
     )
 
     cursor = Cursor(screen)
@@ -34,7 +34,7 @@ def main_menu(screen, game_settings: Game_Settings):
     PLAY_BUTTON = Button(
         "Start Game",
         properties.WINDOW_WIDTH / 2,
-        properties.WINDOW_HEIGHT - 300,
+        properties.WINDOW_HEIGHT - 275,
         properties.FONT,
         properties.WHITE,
         screen,
@@ -43,7 +43,7 @@ def main_menu(screen, game_settings: Game_Settings):
     MODE_BUTTON = Button(
         "Choose Mode",
         properties.WINDOW_WIDTH / 2,
-        properties.WINDOW_HEIGHT - 200,
+        properties.WINDOW_HEIGHT - 175,
         properties.FONT,
         properties.WHITE,
         screen,
@@ -52,7 +52,7 @@ def main_menu(screen, game_settings: Game_Settings):
     QUIT_BUTTON = Button(
         "Quit",
         properties.WINDOW_WIDTH / 2,
-        properties.WINDOW_HEIGHT - 100,
+        properties.WINDOW_HEIGHT - 75,
         properties.FONT,
         properties.WHITE,
         screen,

@@ -16,7 +16,11 @@ def game_over_menu(
     pygame.mouse.set_visible(False)
     cursor = Cursor(screen)
 
-    GAME_OVER_TITLE = properties.FONT.render("Winner is", True, properties.WHITE)
+    GAME_OVER_TITLE = properties.FONT.render(
+        f"{winner.name} wins!" if winner != None else "It's a draw!",
+        True,
+        properties.WHITE,
+    )
     GAME_OVER_TITLE_RECT = GAME_OVER_TITLE.get_rect(
         center=(properties.WINDOW_WIDTH / 2, 100)
     )
@@ -24,7 +28,7 @@ def game_over_menu(
     PLAY_AGAIN_BUTTON = Button(
         "Play Again",
         properties.WINDOW_WIDTH / 2,
-        properties.WINDOW_HEIGHT - 300,
+        properties.WINDOW_HEIGHT - 275,
         properties.FONT,
         properties.WHITE,
         screen,
@@ -33,7 +37,7 @@ def game_over_menu(
     PLAY_AGAIN_SWITCH_BUTTON = Button(
         "Switch Sides",
         properties.WINDOW_WIDTH / 2,
-        properties.WINDOW_HEIGHT - 200,
+        properties.WINDOW_HEIGHT - 175,
         properties.FONT,
         properties.WHITE,
         screen,
@@ -42,21 +46,42 @@ def game_over_menu(
     MAIN_MENU_BUTTON = Button(
         "Main Menu",
         properties.WINDOW_WIDTH / 2,
-        properties.WINDOW_HEIGHT - 100,
+        properties.WINDOW_HEIGHT - 75,
         properties.FONT,
         properties.WHITE,
         screen,
     )
 
-    player_image = pygame.image.load(winner.image_url)
-    player_image = pygame.transform.scale(player_image, (200, 200))
-    player_image_rect = player_image.get_rect(center=(properties.WINDOW_WIDTH / 2, 350))
+    # Player 1 text
+    player_1_score = properties.SUB_FONT.render(
+        "Score: " + str(game_settings.score[0]), True, properties.WHITE
+    )
+    player_1_score_rect = player_1_score.get_rect(
+        center=(properties.WINDOW_WIDTH / 4 + 100, 520)
+    )
 
-    player_text = properties.SUB_FONT.render(winner.name, True, properties.WHITE)
-    player_text_rect = player_text.get_rect(center=(properties.WINDOW_WIDTH / 2, 490))
+    player_1_name = properties.SUB_FONT.render(
+        game_settings.player_1.name, True, properties.WHITE
+    )
+    player_1_name_rect = player_1_name.get_rect(
+        center=(properties.WINDOW_WIDTH / 4 + 100, 240)
+    )
 
-    player_title = properties.SUB_FONT.render("Player 1", True, properties.WHITE)
-    player_title_rect = player_title.get_rect(center=(properties.WINDOW_WIDTH / 2, 220))
+    # Player 2 text
+    player_2_score = properties.SUB_FONT.render(
+        "Score: " + str(game_settings.score[1]), True, properties.WHITE
+    )
+    player_2_score_rect = player_2_score.get_rect(
+        center=(properties.WINDOW_WIDTH / 4 * 3 - 200 + 100, 520)
+    )
+
+    player_2_name = properties.SUB_FONT.render(
+        game_settings.player_2.name, True, properties.WHITE
+    )
+
+    player_2_name_rect = player_2_name.get_rect(
+        center=(properties.WINDOW_WIDTH / 4 * 3 - 200 + 100, 240)
+    )
 
     clock = pygame.time.Clock()
 
@@ -69,9 +94,15 @@ def game_over_menu(
         PLAY_AGAIN_BUTTON.draw(GAME_OVER_MOUSE_POS)
         PLAY_AGAIN_SWITCH_BUTTON.draw(GAME_OVER_MOUSE_POS)
         MAIN_MENU_BUTTON.draw(GAME_OVER_MOUSE_POS)
-        screen.blit(player_image, player_image_rect)
-        screen.blit(player_text, player_text_rect)
-        screen.blit(player_title, player_title_rect)
+        screen.blit(player_1_score, player_1_score_rect)
+        screen.blit(player_1_name, player_1_name_rect)
+        screen.blit(player_2_score, player_2_score_rect)
+        screen.blit(player_2_name, player_2_name_rect)
+
+        game_settings.player_1.draw(screen, (properties.WINDOW_WIDTH / 4, 280))
+        game_settings.player_2.draw(
+            screen, (properties.WINDOW_WIDTH / 4 * 3 - 200, 280)
+        )
 
         for button in [PLAY_AGAIN_BUTTON, MAIN_MENU_BUTTON, PLAY_AGAIN_SWITCH_BUTTON]:
             if button.is_hovered(GAME_OVER_MOUSE_POS):
@@ -95,7 +126,7 @@ def game_over_menu(
 
                     game_settings.reset()
                     play(screen, game_settings)
-                
+
                 if PLAY_AGAIN_SWITCH_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from gameplay.play import play
 

@@ -65,14 +65,15 @@ def play(screen, game_settings: Game_Settings):
 
         # Handle a draw
         if board.available_columns() == []:
+            game_settings.score = (
+                game_settings.score[0] + 0.5,
+                game_settings.score[1] + 0.5,
+            )
+
             if (
                 game_settings.continuous
                 and game_settings.played_games < game_settings.total_games - 1
             ):
-                game_settings.score = (
-                    game_settings.score[0] + 0.5,
-                    game_settings.score[1] + 0.5,
-                )
                 game_settings.played_games += 1
                 play(screen, game_settings)
             else:
@@ -82,34 +83,35 @@ def play(screen, game_settings: Game_Settings):
                 # Final game over menu
                 from menus.game_over_menu import game_over_menu
 
+                # Check if there is a winner, set the winner to None if it's a draw
                 winner = (
                     game_settings.player_1 if winner == 1 else game_settings.player_2
                 )
 
-                game_over_menu(
-                    screen,
-                    winner,
-                    game_settings
-                )
+                if game_settings.score[0] == game_settings.score[1]:
+                    winner = None
+
+                game_over_menu(screen, winner, game_settings)
             break
 
         # Check if there is a winner
         winner = board.winner
         if winner:
+            if winner == 1:
+                game_settings.score = (
+                    game_settings.score[0] + 1,
+                    game_settings.score[1],
+                )
+            else:
+                game_settings.score = (
+                    game_settings.score[0],
+                    game_settings.score[1] + 1,
+                )
+
             if (
                 game_settings.continuous
                 and game_settings.played_games < game_settings.total_games - 1
             ):
-                if winner == 1:
-                    game_settings.score = (
-                        game_settings.score[0] + 1,
-                        game_settings.score[1],
-                    )
-                else:
-                    game_settings.score = (
-                        game_settings.score[0],
-                        game_settings.score[1] + 1,
-                    )
 
                 game_settings.played_games += 1
 
@@ -129,11 +131,10 @@ def play(screen, game_settings: Game_Settings):
                     game_settings.player_1 if winner == 1 else game_settings.player_2
                 )
 
-                game_over_menu(
-                    screen,
-                    winner,
-                    game_settings
-                )
+                if game_settings.score[0] == game_settings.score[1]:
+                    winner = None
+
+                game_over_menu(screen, winner, game_settings)
             break
 
         # Draw the UI

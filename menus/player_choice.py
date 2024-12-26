@@ -13,7 +13,7 @@ class Side_Button:
             if direction == -1
             else pygame.image.load("assets/right_arrow.png")
         )
-        self.image = pygame.transform.scale(self.image, (100, 100))
+        self.image = pygame.transform.scale(self.image, (75, 75))
         self.rect = self.image.get_rect(center=position)
 
     def draw(self, screen):
