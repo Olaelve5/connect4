@@ -6,7 +6,7 @@ class Game_Settings:
         score=(0, 0),
         continuous=False,
         total_games=1,
-        selected_mode="Single Game",
+        selected_mode="Continous 10",
     ):
         self.player_1 = player_1
         self.player_2 = player_2
@@ -48,3 +48,6 @@ class Game_Settings:
         self.score = (0, 0)
         self.played_games = 0
         self.games_left = self.total_games - self.played_games
+    
+    def switch_sides(self):
+        self.player_1, self.player_2 = self.player_2, self.player_1

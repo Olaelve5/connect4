@@ -30,8 +30,8 @@ def game_over_menu(
         screen,
     )
 
-    MAIN_MENU_BUTTON = Button(
-        "Main Menu",
+    PLAY_AGAIN_SWITCH_BUTTON = Button(
+        "Switch Sides",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 200,
         properties.FONT,
@@ -39,8 +39,8 @@ def game_over_menu(
         screen,
     )
 
-    QUIT_BUTTON = Button(
-        "Quit",
+    MAIN_MENU_BUTTON = Button(
+        "Main Menu",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 100,
         properties.FONT,
@@ -67,13 +67,13 @@ def game_over_menu(
 
         screen.blit(GAME_OVER_TITLE, GAME_OVER_TITLE_RECT)
         PLAY_AGAIN_BUTTON.draw(GAME_OVER_MOUSE_POS)
+        PLAY_AGAIN_SWITCH_BUTTON.draw(GAME_OVER_MOUSE_POS)
         MAIN_MENU_BUTTON.draw(GAME_OVER_MOUSE_POS)
-        QUIT_BUTTON.draw(GAME_OVER_MOUSE_POS)
         screen.blit(player_image, player_image_rect)
         screen.blit(player_text, player_text_rect)
         screen.blit(player_title, player_title_rect)
 
-        for button in [PLAY_AGAIN_BUTTON, MAIN_MENU_BUTTON, QUIT_BUTTON]:
+        for button in [PLAY_AGAIN_BUTTON, MAIN_MENU_BUTTON, PLAY_AGAIN_SWITCH_BUTTON]:
             if button.is_hovered(GAME_OVER_MOUSE_POS):
                 cursor.set_mode("click")
                 break
@@ -95,16 +95,19 @@ def game_over_menu(
 
                     game_settings.reset()
                     play(screen, game_settings)
+                
+                if PLAY_AGAIN_SWITCH_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
+                    from gameplay.play import play
+
+                    game_settings.switch_sides()
+                    game_settings.reset()
+                    play(screen, game_settings)
 
                 if MAIN_MENU_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from menus.main_menu import main_menu
 
                     game_settings.reset()
                     main_menu(screen, game_settings)
-
-                if QUIT_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
-                    pygame.quit()
-                    quit()
 
         clock.tick(properties.FPS)
 
