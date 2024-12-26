@@ -31,12 +31,7 @@ def play(screen, game_settings: Game_Settings):
 
     board.reset()
     cursor = Cursor(screen)
-    ui_instance = ui(
-        game_settings.player_1,
-        game_settings.player_2,
-        game_settings.score,
-        game_settings.total_games - game_settings.played_games,
-    )
+    ui_instance = ui(game_settings)
 
     player_turn = (
         game_settings.player_1 if board.player_turn == 1 else game_settings.player_2
@@ -94,11 +89,7 @@ def play(screen, game_settings: Game_Settings):
                 game_over_menu(
                     screen,
                     winner,
-                    game_settings.player_1,
-                    game_settings.player_2,
-                    game_settings.continuous,
-                    0,
-                    game_settings.total_games,
+                    game_settings
                 )
             break
 
@@ -120,7 +111,6 @@ def play(screen, game_settings: Game_Settings):
                         game_settings.score[1] + 1,
                     )
 
-                ui_instance.update_score(game_settings.score)
                 game_settings.played_games += 1
 
                 # Start a new game
@@ -142,11 +132,7 @@ def play(screen, game_settings: Game_Settings):
                 game_over_menu(
                     screen,
                     winner,
-                    game_settings.player_1,
-                    game_settings.player_2,
-                    game_settings.continuous,
-                    0,
-                    game_settings.max_count,
+                    game_settings
                 )
             break
 

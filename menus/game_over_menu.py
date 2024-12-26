@@ -2,17 +2,14 @@ import pygame
 import settings.properties as properties
 from menus.button import Button
 from cursor import Cursor
+from settings.game_settings import Game_Settings
 
 
 # Create the game over screen
 def game_over_menu(
     screen,
     winner,
-    player_1,
-    player_2,
-    continuous=False,
-    count=0,
-    max_count=0,
+    game_settings: Game_Settings,
 ):
     pygame.display.set_caption("Game Over Screen")
 
@@ -96,14 +93,14 @@ def game_over_menu(
                 if PLAY_AGAIN_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from gameplay.play import play
 
-                    play(screen, player_1, player_2, continuous, (0, 0), count, max_count)
-                    return True
+                    game_settings.reset()
+                    play(screen, game_settings)
 
                 if MAIN_MENU_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from menus.main_menu import main_menu
 
+                    game_settings.reset()
                     main_menu(screen)
-                    return True
 
                 if QUIT_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     pygame.quit()

@@ -10,19 +10,21 @@ from settings.properties import (
     TITLE_FONT,
     SUB_FONT,
 )
+from settings.game_settings import Game_Settings
 
 pygame.init()
 
 
 class ui:
-    def __init__(self, player1, player2, score=(0, 0), total_games=0):
+    def __init__(self, game_settings: Game_Settings):
+        self.game_settings = game_settings
         self.font = FONT
         self.text_elements = []
         self.circle_elements = []
-        self.player1 = player1
-        self.player2 = player2
-        self.score = score
-        self.total_games = total_games
+        self.player_1 = game_settings.player_1
+        self.player_2 = game_settings.player_2
+        self.score = game_settings.score
+        self.total_games = game_settings.total_games
         self.initialize()
 
     def add_circle(self, position, color):
@@ -48,16 +50,21 @@ class ui:
 
         # Draw the player image from the url
 
-        player_1_image = pygame.image.load(self.player1.image_url)
+        player_1_image = pygame.image.load(self.player_1.image_url)
         player_1_image = pygame.transform.scale(player_1_image, (150, 150))
-        player_2_image = pygame.image.load(self.player2.image_url)
+        player_2_image = pygame.image.load(self.player_2.image_url)
         player_2_image = pygame.transform.scale(player_2_image, (150, 150))
 
         screen.blit(player_1_image, (HORIZONTAL_GAP // 2 - 75, 275))
         screen.blit(player_2_image, (WINDOW_WIDTH - HORIZONTAL_GAP // 2 - 75, 275))
+    
+    @property
+    def games_left(self):
+        return self.game_settings.total_games - self.game_settings.played_games
 
-    def update_score(self, score):
-        self.score = score
+
+    def update_score(self):
+        self.score = self.game_settings.score
         self.text_elements[-2] = {
             "text": f"Score: {self.score[0]}",
             "position": (HORIZONTAL_GAP // 2, 600),
@@ -71,16 +78,23 @@ class ui:
             "font": SUB_FONT,
         }
 
+        self.text_elements[1] = {
+            "text": f"Games left: {self.games_left}",
+            "position": (WINDOW_WIDTH // 2, 160),
+            "color": GREEN,
+            "font": SUB_FONT,
+        }
+
     def initialize(self):
         self.add_text("Connect 4", (WINDOW_WIDTH // 2, 50), WHITE, TITLE_FONT)
         self.add_text(
-            f"Games left: {self.total_games}",
+            f"Games left: {self.games_left}",
             (WINDOW_WIDTH // 2, 160),
             GREEN,
         )
-        self.add_text(self.player1.name, (HORIZONTAL_GAP // 2, 200))
+        self.add_text(self.player_1.name, (HORIZONTAL_GAP // 2, 200))
         self.add_circle((HORIZONTAL_GAP // 2, 500), YELLOW)
-        self.add_text(self.player2.name, (WINDOW_WIDTH - HORIZONTAL_GAP // 2, 200))
+        self.add_text(self.player_2.name, (WINDOW_WIDTH - HORIZONTAL_GAP // 2, 200))
         self.add_circle((WINDOW_WIDTH - HORIZONTAL_GAP // 2, 500), RED)
         self.add_text(f"Score: {self.score[0]}", (HORIZONTAL_GAP // 2, 600))
         self.add_text(
