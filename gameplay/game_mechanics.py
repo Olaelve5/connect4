@@ -3,20 +3,17 @@
 
 # Check winner
 def check_winner(board):
-    if vertical_winner(board):
-        return vertical_winner(board)
-    if horizontal_winner(board):
-        return horizontal_winner(board)
-    if diagonal_winner(board):
-        return diagonal_winner(board)
-    return None
+    winner = vertical_winner(board)
+    if winner:
+        return winner
+    winner = horizontal_winner(board)
+    if winner:
+        return winner
+    return diagonal_winner(board)
 
 
 def check_full(board):
-    for slot in board.slots:
-        if slot.player == 0:
-            return False
-    return True
+    return all(slot.player != 0 for slot in board.slots)
 
 
 def get_slot_player(board, coordinates):

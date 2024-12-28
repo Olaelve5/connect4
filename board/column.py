@@ -53,3 +53,7 @@ class Column(pygame.sprite.Sprite):
     
     def is_valid_move(self):
         return self.slots[5].player == 0
+    
+    def __str__(self):
+        for slot in self.slots:
+            print(slot)

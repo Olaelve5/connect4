@@ -7,6 +7,7 @@ class Template_Bot(ABC):
         self.name = name
         self.image_url = image_url
         self.type = "bot"
+        self.player = None
 
     @abstractmethod
     def get_move(self, board):

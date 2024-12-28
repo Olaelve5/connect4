@@ -59,3 +59,6 @@ class Slot:
         pygame.gfxdraw.filled_circle(
             screen, self.position[0], self.position[1], self.radius, color
         )
+    
+    def __str__(self):
+        return str(self.player)

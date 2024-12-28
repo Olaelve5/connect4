@@ -1,8 +1,9 @@
 import settings.properties as properties
-from board.slot import Slot
 import pygame
 import gameplay.game_mechanics as game_mechanics
 from board.column import Column
+import copy 
+import random
 
 
 class Board:
@@ -43,6 +44,9 @@ class Board:
                 self.make_move(column.index)
 
     def make_move(self, column):
+        if column is None:
+            return random.choice(self.available_columns())
+
         altered = self.columns[column].handle_click(self.player_turn)
         if not altered:
             return
@@ -82,3 +86,6 @@ class Board:
             slot.update(0)
         self.player_turn = 1
         self.winner = None
+    
+    def copy(self):
+        return copy.deepcopy(self)

@@ -32,6 +32,8 @@ def play(screen, game_settings: Game_Settings):
     board.reset()
     cursor = Cursor(screen)
     ui_instance = ui(game_settings)
+    game_settings.player_1.player = 1
+    game_settings.player_2.player = 2
 
     player_turn = (
         game_settings.player_1 if board.player_turn == 1 else game_settings.player_2
