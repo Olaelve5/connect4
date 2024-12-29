@@ -1,3 +1,7 @@
+from board.board import Board
+from connect4Env import Connect4Env
+
+
 class Game_Settings:
     def __init__(
         self,
@@ -15,17 +19,13 @@ class Game_Settings:
         self.continuous = continuous
         self.move_delay = 500
         self.played_games = 0
+        self.board = Board()
         self.games_left = total_games - self.played_games
         self.selected_mode = selected_mode
+        self.env = Connect4Env(self.board)
 
     def set_settings(
-        self,
-        player_1,
-        player_2,
-        score,
-        continuous,
-        total_games,
-        played_games=0
+        self, player_1, player_2, score, continuous, total_games, played_games=0
     ):
         self.player_1 = player_1
         self.player_2 = player_2
@@ -48,6 +48,7 @@ class Game_Settings:
         self.score = (0, 0)
         self.played_games = 0
         self.games_left = self.total_games - self.played_games
-    
+        self.board.reset()
+
     def switch_sides(self):
         self.player_1, self.player_2 = self.player_2, self.player_1

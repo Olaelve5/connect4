@@ -1,7 +1,7 @@
 from enteties.template_bot import Template_Bot
 
 
-class Torres(Template_Bot):
+class El_Gato(Template_Bot):
     def __init__(self, name, image_url):
         super().__init__(name, image_url)
         self.last_index = 0

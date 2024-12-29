@@ -5,9 +5,6 @@ from gameplay.ui import ui
 import settings.properties as properties
 from settings.game_settings import Game_Settings
 
-# Create the board
-board = Board()
-
 # Frame rate
 clock = pygame.time.Clock()
 
@@ -29,14 +26,14 @@ def play_sound(last_time, current_time, sound, move_delay=50):
 
 def play(screen, game_settings: Game_Settings):
 
-    board.reset()
+    game_settings.board.reset()
     cursor = Cursor(screen)
     ui_instance = ui(game_settings)
     game_settings.player_1.player = 1
     game_settings.player_2.player = 2
 
     player_turn = (
-        game_settings.player_1 if board.player_turn == 1 else game_settings.player_2
+        game_settings.player_1 if game_settings.board.player_turn == 1 else game_settings.player_2
     )
 
     pygame.mouse.set_visible(False)
@@ -49,14 +46,14 @@ def play(screen, game_settings: Game_Settings):
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
 
         # Draw the board
-        board.draw(screen)
+        game_settings.board.draw(screen)
 
         # Check if the cursor is hovering over a column
-        for column in board.columns:
+        for column in game_settings.board.columns:
             if column.is_hovered(pygame.mouse.get_pos()) and not player_is_bot(
                 player_turn
             ):
-                if board.player_turn == 1:
+                if game_settings.board.player_turn == 1:
                     cursor.set_mode("drop_1")
                 else:
                     cursor.set_mode("drop_2")
@@ -66,7 +63,7 @@ def play(screen, game_settings: Game_Settings):
             cursor.set_mode("default")
 
         # Handle a draw
-        if board.available_columns() == []:
+        if game_settings.board.available_columns() == []:
             game_settings.score = (
                 game_settings.score[0] + 0.5,
                 game_settings.score[1] + 0.5,
@@ -97,7 +94,7 @@ def play(screen, game_settings: Game_Settings):
             break
 
         # Check if there is a winner
-        winner = board.winner
+        winner = game_settings.board.winner
         if winner:
             if winner == 1:
                 game_settings.score = (
@@ -152,11 +149,11 @@ def play(screen, game_settings: Game_Settings):
 
             # Check if 0.5 seconds have passed
             if pygame.time.get_ticks() - bot_move_start_time > game_settings.move_delay:
-                column = player_turn.get_move(board)
-                board.make_move(column)
+                column = player_turn.get_move(game_settings.board)
+                game_settings.board.make_move(column)
                 player_turn = (
                     game_settings.player_1
-                    if board.player_turn == 1
+                    if game_settings.board.player_turn == 1
                     else game_settings.player_2
                 )
                 turn_taken = True
@@ -181,10 +178,10 @@ def play(screen, game_settings: Game_Settings):
             # Handle mouse click and human move
             if event.type == pygame.MOUSEBUTTONDOWN and player_turn.type == "human":
                 # Handle mouse click on the board
-                board.handle_click(event.pos)
+                game_settings.board.handle_click(event.pos)
                 player_turn = (
                     game_settings.player_1
-                    if board.player_turn == 1
+                    if game_settings.board.player_turn == 1
                     else game_settings.player_2
                 )
                 move_sound.play()
