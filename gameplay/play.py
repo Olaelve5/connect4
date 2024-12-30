@@ -1,16 +1,16 @@
 import pygame
-from board.board import Board
 from cursor import Cursor
 from gameplay.ui import ui
 import settings.properties as properties
 from settings.game_settings import Game_Settings
+from board.board import Board
 
 # Frame rate
 clock = pygame.time.Clock()
 
 
 def player_is_bot(player):
-    return player.type == "bot"
+    return player.type != "human"
 
 
 game_start_sound = pygame.mixer.Sound("assets/sounds/game_start.mp3")
@@ -25,8 +25,9 @@ def play_sound(last_time, current_time, sound, move_delay=50):
 
 
 def play(screen, game_settings: Game_Settings):
-
-    game_settings.board.reset()
+    game_settings.board.reset()  # Reset the board for a new game
+    game_settings.env.board = game_settings.board
+    
     cursor = Cursor(screen)
     ui_instance = ui(game_settings)
     game_settings.player_1.player = 1
@@ -144,12 +145,27 @@ def play(screen, game_settings: Game_Settings):
 
         # Handle bot move with delay
         if player_is_bot(player_turn) and not turn_taken:
+
             if bot_move_start_time is None:  # Start the timer
                 bot_move_start_time = pygame.time.get_ticks()
 
             # Check if 0.5 seconds have passed
             if pygame.time.get_ticks() - bot_move_start_time > game_settings.move_delay:
                 column = player_turn.get_move(game_settings.board)
+                if not game_settings.board.is_valid_move(column):
+                    print(f"Invalid move by {player_turn.name}, skipping turn")
+                    
+                    # Skip the turn by switching to the next player
+                    game_settings.board.switch_player()  
+                    player_turn = (
+                        game_settings.player_1
+                        if game_settings.board.player_turn == 1
+                        else game_settings.player_2
+                    )
+                    turn_taken = True
+                    bot_move_start_time = None  # Reset the timer
+                    continue  # Skip the rest of the bot move logic
+                    
                 game_settings.board.make_move(column)
                 player_turn = (
                     game_settings.player_1

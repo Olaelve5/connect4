@@ -52,3 +52,4 @@ class Game_Settings:
 
     def switch_sides(self):
         self.player_1, self.player_2 = self.player_2, self.player_1
+

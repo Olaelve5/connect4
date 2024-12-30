@@ -3,10 +3,10 @@ import pygame
 
 
 class Template_Bot(ABC):
-    def __init__(self, name, image_url):
+    def __init__(self, name, image_url, type="bot"):
         self.name = name
         self.image_url = image_url
-        self.type = "bot"
+        self.type = type
         self.player = None
 
     @abstractmethod

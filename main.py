@@ -3,6 +3,10 @@ import settings.properties as properties
 from menus.main_menu import main_menu
 from settings.game_settings import Game_Settings
 from players import players
+from stable_baselines3 import DQN
+from stable_baselines3.common.env_checker import check_env
+from stable_baselines3.common.vec_env import DummyVecEnv
+from players import game_settings
 
 pygame.init()
 
@@ -17,6 +21,8 @@ screen.fill(properties.BACKGROUND)
 pygame.display.set_caption("Connect 4")
 pygame.mouse.set_visible(False)
 
-game_settings = Game_Settings(players[0], players[0])
+check_env(game_settings.env)
+
+env = DummyVecEnv([lambda: game_settings.env])
 
 main_menu(screen, game_settings)
