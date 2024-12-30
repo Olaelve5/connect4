@@ -27,14 +27,16 @@ def play_sound(last_time, current_time, sound, move_delay=50):
 def play(screen, game_settings: Game_Settings):
     game_settings.board.reset()  # Reset the board for a new game
     game_settings.env.board = game_settings.board
-    
+
     cursor = Cursor(screen)
     ui_instance = ui(game_settings)
     game_settings.player_1.player = 1
     game_settings.player_2.player = 2
 
     player_turn = (
-        game_settings.player_1 if game_settings.board.player_turn == 1 else game_settings.player_2
+        game_settings.player_1
+        if game_settings.board.player_turn == 1
+        else game_settings.player_2
     )
 
     pygame.mouse.set_visible(False)
@@ -75,6 +77,13 @@ def play(screen, game_settings: Game_Settings):
                 and game_settings.played_games < game_settings.total_games - 1
             ):
                 game_settings.played_games += 1
+
+                if game_settings.player_1.type == "rl_bot":
+                    game_settings.player_1.train()
+
+                if game_settings.player_2.type == "rl_bot":
+                    game_settings.player_2.train()
+
                 play(screen, game_settings)
             else:
                 if game_settings.continuous:
@@ -90,6 +99,12 @@ def play(screen, game_settings: Game_Settings):
 
                 if game_settings.score[0] == game_settings.score[1]:
                     winner = None
+
+                if game_settings.player_1.type == "rl_bot":
+                    game_settings.player_1.train()
+
+                if game_settings.player_2.type == "rl_bot":
+                    game_settings.player_2.train()
 
                 game_over_menu(screen, winner, game_settings)
             break
@@ -115,6 +130,12 @@ def play(screen, game_settings: Game_Settings):
 
                 game_settings.played_games += 1
 
+                if game_settings.player_1.type == "rl_bot":
+                    game_settings.player_1.train()
+
+                if game_settings.player_2.type == "rl_bot":
+                    game_settings.player_2.train()
+
                 # Start a new game
                 play(
                     screen,
@@ -133,6 +154,12 @@ def play(screen, game_settings: Game_Settings):
 
                 if game_settings.score[0] == game_settings.score[1]:
                     winner = None
+                
+                if game_settings.player_1.type == "rl_bot":
+                    game_settings.player_1.train()
+                
+                if game_settings.player_2.type == "rl_bot":
+                    game_settings.player_2.train()
 
                 game_over_menu(screen, winner, game_settings)
             break
@@ -154,9 +181,9 @@ def play(screen, game_settings: Game_Settings):
                 column = player_turn.get_move(game_settings.board)
                 if not game_settings.board.is_valid_move(column):
                     print(f"Invalid move by {player_turn.name}, skipping turn")
-                    
+
                     # Skip the turn by switching to the next player
-                    game_settings.board.switch_player()  
+                    game_settings.board.switch_player()
                     player_turn = (
                         game_settings.player_1
                         if game_settings.board.player_turn == 1
@@ -165,7 +192,7 @@ def play(screen, game_settings: Game_Settings):
                     turn_taken = True
                     bot_move_start_time = None  # Reset the timer
                     continue  # Skip the rest of the bot move logic
-                    
+
                 game_settings.board.make_move(column)
                 player_turn = (
                     game_settings.player_1

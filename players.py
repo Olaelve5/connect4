@@ -17,9 +17,14 @@ players = [
     Randotron("Randotron", "assets/player_images/randotron.png"),
     Georgian("Georgian", "assets/player_images/georgian.png"),
     El_Gato(
-        "El gato", "assets/player_images/torres.png", game_settings.env
+        "El Gato",
+        "assets/player_images/torres.png",
+        game_settings.env,
+        model_path="el_gato_dqn_agent.zip",  # Path to the saved model
     ),
 ]
+
+game_settings.env.agent = 2
 
 # Step 3: Update players in game_settings
 game_settings.player_1 = players[0]

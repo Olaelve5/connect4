@@ -35,12 +35,12 @@ class Game_Settings:
         self.played_games = played_games
         self.games_left = total_games - played_games
 
-        if self.total_games > 45:
-            self.move_delay = 5
+        if self.total_games > 55:
+            self.move_delay = 1
         elif self.total_games > 20:
-            self.move_delay = 15
+            self.move_delay = 5
         elif self.total_games > 5:
-            self.move_delay = 50
+            self.move_delay = 10
         else:
             self.move_delay = 500
 

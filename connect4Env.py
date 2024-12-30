@@ -6,9 +6,10 @@ from board.board import Board
 
 
 class Connect4Env(gym.Env):
-    def __init__(self, board: Board):
+    def __init__(self, board: Board, agent_number=1):
         super(Connect4Env, self).__init__()
         self.board = board
+        self.agent = agent_number
         self.action_space = spaces.Discrete(7)
         self.observation_space = spaces.Box(low=0, high=2, shape=(42,), dtype=np.int32)
 
@@ -19,7 +20,6 @@ class Connect4Env(gym.Env):
         if self.board is None:
             return self.get_observation(), 0, False, False, {}
 
-        
         valid = self.board.is_valid_move(action)
         if not valid:
             return self.get_observation(), -10, False, False, {"invalid_action": True}
@@ -32,7 +32,8 @@ class Connect4Env(gym.Env):
 
         if self.board.winner is not None:
             done = True
-            reward = 1 if self.board.winner == 1 else -1
+            reward = 1 if self.board.winner == self.agent else -1
+
         elif not self.board.available_columns():  # Check for a draw
             done = True
             reward = 0.5
@@ -46,8 +47,7 @@ class Connect4Env(gym.Env):
         # Flatten the 6x7 board into a 1D array of length 42
         if self.board is None:
             return np.zeros((42,), dtype=np.int32)
-        
-        print("Getting observation from board ID:", id(self.board))
+
         return np.array(
             [slot.player for column in self.board.columns for slot in column.slots],
             dtype=np.int32,
