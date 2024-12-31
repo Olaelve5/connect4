@@ -1,9 +1,6 @@
 import pygame
 import settings.properties as properties
 from menus.main_menu import main_menu
-from settings.game_settings import Game_Settings
-from players import players
-from stable_baselines3 import DQN
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import DummyVecEnv
 from players import game_settings

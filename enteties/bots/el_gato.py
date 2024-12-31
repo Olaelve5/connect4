@@ -17,12 +17,12 @@ class El_Gato(Template_Bot):
                 "MlpPolicy",
                 self.env,
                 verbose=1,
-                learning_rate=0.001,
-                buffer_size=10000,
+                learning_rate=0.01,
+                buffer_size=50000,
                 learning_starts=100,
                 batch_size=64,
                 gamma=0.99,
-                exploration_fraction=0.1,
+                exploration_fraction=0.2,
                 exploration_final_eps=0.02,
             )
 
@@ -33,9 +33,12 @@ class El_Gato(Template_Bot):
         # Use the model to predict the next action
         action, _ = self.model.predict(observation)
 
-        return action
+        next_obs, reward, done, truncated, info = self.env.step(action)
 
-    def train(self):
-        # Train the agent after each game
-        self.model.learn(total_timesteps=500)
-        self.model.save("el_gato_dqn_agent")
+        print(f"Predicted action: {action}")
+        print(f"Reward: {reward}")
+        
+        self.model.learn(total_timesteps=1, reset_num_timesteps=False)
+        self.model.save("dqn_model")
+
+        return action

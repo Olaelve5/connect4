@@ -39,7 +39,7 @@ def mode_menu(screen, game_settings: Game_Settings):
     )
 
     continous_50_button = Button(
-        "Continous 1500",
+        "Continous 2000",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 300,
         properties.FONT,

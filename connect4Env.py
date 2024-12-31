@@ -14,9 +14,11 @@ class Connect4Env(gym.Env):
         self.observation_space = spaces.Box(low=0, high=2, shape=(42,), dtype=np.int32)
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):
+        super().reset(seed=seed)
         return self.get_observation(), {}
 
     def step(self, action):
+
         if self.board is None:
             return self.get_observation(), 0, False, False, {}
 
@@ -24,15 +26,17 @@ class Connect4Env(gym.Env):
         if not valid:
             return self.get_observation(), -10, False, False, {"invalid_action": True}
 
-        # Assume the move has already been made externally
         reward = 0
         done = False
         truncated = False
         info = {}
 
-        if self.board.winner is not None:
+        if self.board.is_loosing_move(action):
+            reward = -1
+
+        if self.board.is_winning_move(action):
             done = True
-            reward = 1 if self.board.winner == self.agent else -1
+            reward = 1 
 
         elif not self.board.available_columns():  # Check for a draw
             done = True

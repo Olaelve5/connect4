@@ -78,12 +78,6 @@ def play(screen, game_settings: Game_Settings):
             ):
                 game_settings.played_games += 1
 
-                if game_settings.player_1.type == "rl_bot":
-                    game_settings.player_1.train()
-
-                if game_settings.player_2.type == "rl_bot":
-                    game_settings.player_2.train()
-
                 play(screen, game_settings)
             else:
                 if game_settings.continuous:
@@ -99,12 +93,6 @@ def play(screen, game_settings: Game_Settings):
 
                 if game_settings.score[0] == game_settings.score[1]:
                     winner = None
-
-                if game_settings.player_1.type == "rl_bot":
-                    game_settings.player_1.train()
-
-                if game_settings.player_2.type == "rl_bot":
-                    game_settings.player_2.train()
 
                 game_over_menu(screen, winner, game_settings)
             break
@@ -130,12 +118,6 @@ def play(screen, game_settings: Game_Settings):
 
                 game_settings.played_games += 1
 
-                if game_settings.player_1.type == "rl_bot":
-                    game_settings.player_1.train()
-
-                if game_settings.player_2.type == "rl_bot":
-                    game_settings.player_2.train()
-
                 # Start a new game
                 play(
                     screen,
@@ -154,12 +136,6 @@ def play(screen, game_settings: Game_Settings):
 
                 if game_settings.score[0] == game_settings.score[1]:
                     winner = None
-                
-                if game_settings.player_1.type == "rl_bot":
-                    game_settings.player_1.train()
-                
-                if game_settings.player_2.type == "rl_bot":
-                    game_settings.player_2.train()
 
                 game_over_menu(screen, winner, game_settings)
             break
@@ -178,9 +154,10 @@ def play(screen, game_settings: Game_Settings):
 
             # Check if 0.5 seconds have passed
             if pygame.time.get_ticks() - bot_move_start_time > game_settings.move_delay:
-                column = player_turn.get_move(game_settings.board)
-                if not game_settings.board.is_valid_move(column):
-                    print(f"Invalid move by {player_turn.name}, skipping turn")
+                move = player_turn.get_move(game_settings.board)
+
+                if not game_settings.board.is_valid_move(move):
+                    # print(f"Invalid move by {player_turn.name}, skipping turn")
 
                     # Skip the turn by switching to the next player
                     game_settings.board.switch_player()
@@ -193,7 +170,7 @@ def play(screen, game_settings: Game_Settings):
                     bot_move_start_time = None  # Reset the timer
                     continue  # Skip the rest of the bot move logic
 
-                game_settings.board.make_move(column)
+                game_settings.board.make_move(move)
                 player_turn = (
                     game_settings.player_1
                     if game_settings.board.player_turn == 1
@@ -243,3 +220,5 @@ def play(screen, game_settings: Game_Settings):
 
         if turn_taken:
             turn_taken = False
+
+

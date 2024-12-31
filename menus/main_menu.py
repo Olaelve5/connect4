@@ -6,7 +6,7 @@ from menus.player_choice import Player_Choice
 from players import players
 from settings.game_settings import Game_Settings
 
-continous_modes = ["Continous 25", "Continous 50", "Continous 1500"]
+continous_modes = ["Continous 25", "Continous 50", "Continous 2000"]
 
 
 # Create the main menu

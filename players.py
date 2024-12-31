@@ -20,11 +20,11 @@ players = [
         "El Gato",
         "assets/player_images/torres.png",
         game_settings.env,
-        model_path="el_gato_dqn_agent.zip",  # Path to the saved model
+        model_path="dqn_model.zip",  # Path to the saved model
     ),
 ]
 
-game_settings.env.agent = 2
+game_settings.env.agent = 1
 
 # Step 3: Update players in game_settings
 game_settings.player_1 = players[0]

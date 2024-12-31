@@ -2,7 +2,7 @@ import settings.properties as properties
 import pygame
 import gameplay.game_mechanics as game_mechanics
 from board.column import Column
-import copy 
+import copy
 import random
 
 
@@ -59,7 +59,7 @@ class Board:
         self.player_turn = 1 if self.player_turn == 2 else 2
         for slot in self.slots:
             slot.player_turn = self.player_turn
-    
+
     def available_columns(self):
         if game_mechanics.check_full(self):
             return []
@@ -77,7 +77,7 @@ class Board:
         winnner = game_mechanics.check_winner(self)
         if winnner:
             self.winner = winnner
-    
+
     def is_valid_move(self, column):
         return self.columns[column].is_valid_move()
 
@@ -86,6 +86,21 @@ class Board:
             slot.update(0)
         self.player_turn = 1
         self.winner = None
-    
+
     def copy(self):
         return copy.deepcopy(self)
+
+    def is_winning_move(self, move):
+        board = self.copy()
+        board.make_move(move)
+        return board.winner == self.player_turn
+
+    def is_loosing_move(self, move):
+        board = self.copy()
+        board.make_move(move)
+
+        for column in board.available_columns():
+            if board.is_winning_move(column):
+                return True
+
+        return False
