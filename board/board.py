@@ -73,11 +73,6 @@ class Board:
 
         return moves
 
-    def check_winner(self):
-        winnner = game_mechanics.check_winner(self)
-        if winnner:
-            self.winner = winnner
-
     def is_valid_move(self, column):
         return self.columns[column].is_valid_move()
 
@@ -89,18 +84,3 @@ class Board:
 
     def copy(self):
         return copy.deepcopy(self)
-
-    def is_winning_move(self, move):
-        board = self.copy()
-        board.make_move(move)
-        return board.winner == self.player_turn
-
-    def is_loosing_move(self, move):
-        board = self.copy()
-        board.make_move(move)
-
-        for column in board.available_columns():
-            if board.is_winning_move(column):
-                return True
-
-        return False

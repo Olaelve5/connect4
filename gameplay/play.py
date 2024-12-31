@@ -2,29 +2,14 @@ import pygame
 from cursor import Cursor
 from gameplay.ui import ui
 import settings.properties as properties
-from settings.game_settings import Game_Settings
-from board.board import Board
+from environment.connect4Env import Connect4Env
+from play_utils import player_is_bot, play_sound, move_sound
 
 # Frame rate
 clock = pygame.time.Clock()
 
 
-def player_is_bot(player):
-    return player.type != "human"
-
-
-game_start_sound = pygame.mixer.Sound("assets/sounds/game_start.mp3")
-move_sound = pygame.mixer.Sound("assets/sounds/slot.mp3")
-
-
-def play_sound(last_time, current_time, sound, move_delay=50):
-    if current_time - last_time > move_delay:  # Cooldown of 100ms
-        sound.play()
-        return current_time
-    return last_time
-
-
-def play(screen, game_settings: Game_Settings):
+def play(screen, env: Connect4Env):
     game_settings.board.reset()  # Reset the board for a new game
     game_settings.env.board = game_settings.board
 
@@ -49,10 +34,10 @@ def play(screen, game_settings: Game_Settings):
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
 
         # Draw the board
-        game_settings.board.draw(screen)
+        env.board.draw(screen)
 
         # Check if the cursor is hovering over a column
-        for column in game_settings.board.columns:
+        for column in env.board.columns:
             if column.is_hovered(pygame.mouse.get_pos()) and not player_is_bot(
                 player_turn
             ):

@@ -34,9 +34,6 @@ class El_Gato(Template_Bot):
         action, _ = self.model.predict(observation)
 
         next_obs, reward, done, truncated, info = self.env.step(action)
-
-        print(f"Predicted action: {action}")
-        print(f"Reward: {reward}")
         
         self.model.learn(total_timesteps=1, reset_num_timesteps=False)
         self.model.save("dqn_model")
