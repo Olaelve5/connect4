@@ -22,14 +22,14 @@ class Georgian(Template_Bot):
 
     def calculate_move(self, board: Board, move):
         board_copy = board.copy()
-        board_copy.make_move(move)
+        board_copy.make_move(move, player=self.player)
         score = 0
 
         if check_winner(board_copy) == self.player:
             return 1000000
 
         score += self.calculate_self_score(board_copy)
-        score -= self.calculate_oponent_score(board_copy)
+        score -= self.calculate_opponent_score(board_copy)
 
         return score
 
@@ -125,15 +125,15 @@ class Georgian(Template_Bot):
         # return the score with some randomness
         return score + random.randint(-5, 5)
 
-    # calculate the score of the oponent
-    def calculate_oponent_score(self, board: Board):
-        oponent = 1 if self.player == 2 else 2
+    # calculate the score of the opponent
+    def calculate_opponent_score(self, board: Board):
+        opponent = 1 if self.player == 2 else 2
         score = 0
 
         for column in board.available_columns():
             board_copy = board.copy()
-            board_copy.make_move(column)
-            if check_winner(board_copy) == oponent:
+            board_copy.make_move(column, opponent)
+            if check_winner(board_copy) == opponent:
                return 100000000
 
 
@@ -143,21 +143,21 @@ class Georgian(Template_Bot):
                     column.slots[row].player
                     == column.slots[row + 1].player
                     == column.slots[row + 2].player
-                    == oponent
+                    == opponent
                     and column.slots[row + 3].player == 0
                 ):
                     score += 100
                     continue
 
                 elif (
-                    column.slots[row].player == column.slots[row + 1].player == oponent
+                    column.slots[row].player == column.slots[row + 1].player == opponent
                     and column.slots[row + 2].player == 0
                 ):
                     score += 50
                     continue
 
                 elif (
-                    column.slots[row].player == oponent
+                    column.slots[row].player == opponent
                     and column.slots[row + 1].player == 0
                 ):
                     score += 10
@@ -170,7 +170,7 @@ class Georgian(Template_Bot):
                     board.columns[column].slots[row].player
                     == board.columns[column + 1].slots[row].player
                     == board.columns[column + 2].slots[row].player
-                    == oponent
+                    == opponent
                     and board.columns[column + 3].slots[row].player == 0
                 ):
                     score += 100
@@ -179,14 +179,14 @@ class Georgian(Template_Bot):
                 elif (
                     board.columns[column].slots[row].player
                     == board.columns[column + 1].slots[row].player
-                    == oponent
+                    == opponent
                     and board.columns[column + 2].slots[row].player == 0
                 ):
                     score += 50
                     continue
 
                 elif (
-                    board.columns[column].slots[row].player == oponent
+                    board.columns[column].slots[row].player == opponent
                     and board.columns[column + 1].slots[row].player == 0
                 ):
                     score += 10
@@ -199,7 +199,7 @@ class Georgian(Template_Bot):
                     board.columns[column].slots[row].player
                     == board.columns[column + 1].slots[row + 1].player
                     == board.columns[column + 2].slots[row + 2].player
-                    == oponent
+                    == opponent
                     and board.columns[column + 3].slots[row + 3].player == 0
                 ):
                     score += 100
@@ -208,14 +208,14 @@ class Georgian(Template_Bot):
                 elif (
                     board.columns[column].slots[row].player
                     == board.columns[column + 1].slots[row + 1].player
-                    == oponent
+                    == opponent
                     and board.columns[column + 2].slots[row + 2].player == 0
                 ):
                     score += 50
                     continue
 
                 elif (
-                    board.columns[column].slots[row].player == oponent
+                    board.columns[column].slots[row].player == opponent
                     and board.columns[column + 1].slots[row + 1].player == 0
                 ):
                     score += 10

@@ -38,7 +38,7 @@ def play(screen, env: Connect4Env):
                     cursor.set_mode("drop_1")
                 else:
                     cursor.set_mode("drop_2")
-                column.hovered_draw(screen)
+                column.hovered_draw(screen, 1 if env.player_turn == env.player_1 else 2)
                 break
         else:
             cursor.set_mode("default")
@@ -63,11 +63,11 @@ def play(screen, env: Connect4Env):
         # Handle a winner
         if env.winner:
             if env.continuous and env.played_games < env.total_games:
-                print(env.played_games, env.total_games)
                 return play(screen, env)
 
             # Show the game over menu
             from menus.game_over_menu import game_over_menu
+
             return game_over_menu(screen, env)
 
         # Handle bot move with delay

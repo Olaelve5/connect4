@@ -30,10 +30,10 @@ class Column(pygame.sprite.Sprite):
         for slot in self.slots:
             slot.draw(screen)
 
-    def hovered_draw(self, screen):
+    def hovered_draw(self, screen, player):
         for slot in self.slots:
             if slot.player == 0:
-                slot.hovered_draw(screen)
+                slot.hovered_draw(screen, player)
                 break
 
     def make_move(self, player):
