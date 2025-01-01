@@ -5,7 +5,7 @@ from menus.button import Button
 from menus.player_choice import Player_Choice
 from environment.connect4Env import Connect4Env
 
-continous_modes = ["Continous 25", "Continous 50", "Continous 2000"]
+continous_modes = ["Continous 25", "Continous 50", "Continous 100"]
 
 
 # Create the main menu

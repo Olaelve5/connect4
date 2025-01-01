@@ -53,6 +53,7 @@ class Board:
             return
 
         self.last_move = column
+
         for slot in self.slots:
             slot.player_turn = player
 

@@ -1,5 +1,7 @@
+import numpy as np
 from stable_baselines3 import DQN
 from enteties.template_bot import Template_Bot
+import copy
 
 
 class El_Gato(Template_Bot):
@@ -17,12 +19,12 @@ class El_Gato(Template_Bot):
                 "MlpPolicy",
                 self.env,
                 verbose=1,
-                learning_rate=0.01,
+                learning_rate=0.001,
                 buffer_size=50000,
                 learning_starts=100,
                 batch_size=64,
                 gamma=0.99,
-                exploration_fraction=0.2,
+                exploration_fraction=0.1,
                 exploration_final_eps=0.02,
             )
 
@@ -33,9 +35,20 @@ class El_Gato(Template_Bot):
         # Use the model to predict the next action
         action, _ = self.model.predict(observation)
 
-        next_obs, reward, done, truncated, info = self.env.step(action)
-        
-        self.model.learn(total_timesteps=1, reset_num_timesteps=False)
-        self.model.save("dqn_model")
-
+        # Return the action
         return action
+
+    def train_model(self, total_timesteps):
+        print(f"Training model for {total_timesteps} timesteps...")
+        
+        # Create a separate environment for training
+        training_env = copy.deepcopy(self.env)
+        self.model.set_env(training_env)
+
+        # Train the model
+        self.model.learn(total_timesteps=total_timesteps, reset_num_timesteps=False)
+        
+        print("Training complete. Model updated.")
+        self.model.save("el_gato_trained_model")
+
+

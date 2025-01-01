@@ -3,7 +3,7 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 from board.board import Board
-from environment.env_utils import handle_winner, calculate_move_delay
+from environment.env_utils import handle_winner, calculate_move_delay, is_loosing_move
 from gameplay.game_mechanics import check_winner, check_full
 from player_manager import Player_Manager
 
@@ -53,6 +53,8 @@ class Connect4Env(gym.Env):
     def step(self, action):
         if self.board is None:
             return self.get_observation(), 0, False, False, {}
+        
+        observation = self.get_observation()
 
         valid = self.board.is_valid_move(action)
         if not valid:
@@ -75,7 +77,6 @@ class Connect4Env(gym.Env):
             self.played_games += 1
             done = True
             reward, self.score = handle_winner(self, self.winner)
-
         # handle draw
         elif full:
             self.played_games += 1
@@ -88,6 +89,15 @@ class Connect4Env(gym.Env):
         # Switch the player turn
         self.change_player_turn()
 
+        # Get the next observation after the move
+        next_observation = self.get_observation()
+
+        # Add the transition to the replay buffer if using an RL agent
+        if self.player_turn.type == "rl_bot":
+            self.player_turn.model.replay_buffer.add(
+                observation, next_observation, np.array([action]), np.array([reward]), np.array([done]), [info]
+            )
+            
         return self.get_observation(), reward, done, truncated, info
 
     def render(self):

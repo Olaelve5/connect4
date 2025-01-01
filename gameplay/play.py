@@ -24,8 +24,6 @@ def play(screen, env: Connect4Env):
     while True:
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
 
-        turn_taken = False
-
         # Draw the board
         env.board.draw(screen)
 
@@ -54,6 +52,12 @@ def play(screen, env: Connect4Env):
 
             if env.continuous and env.played_games < env.total_games:
                 return play(screen, env)
+            
+            # Train agent if it is an agent
+            if env.player_1.type == "rl_bot":
+                env.player_1.train_model(10000)
+            if env.player_2.type == "rl_bot":
+                env.player_2.train_model(10000)
 
             # Show the game over menu
             from menus.game_over_menu import game_over_menu
@@ -64,11 +68,18 @@ def play(screen, env: Connect4Env):
         if env.winner:
             if env.continuous and env.played_games < env.total_games:
                 return play(screen, env)
+            
+            # Train agent if it is an agent
+            if env.player_1.type == "rl_bot":
+                env.player_1.train_model(10000)
+            if env.player_2.type == "rl_bot":
+                env.player_2.train_model(10000)
 
             # Show the game over menu
             from menus.game_over_menu import game_over_menu
 
             return game_over_menu(screen, env)
+
 
         # Handle bot move with delay
         if player_is_bot(env.player_turn) and not turn_taken:
@@ -120,3 +131,7 @@ def play(screen, env: Connect4Env):
 
         pygame.display.update()
         clock.tick(properties.FPS)
+
+        if turn_taken:
+            turn_taken = False
+            continue

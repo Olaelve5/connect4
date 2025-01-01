@@ -1,13 +1,16 @@
+from board.board import Board
+from gameplay.game_mechanics import check_winner
+
+
 def handle_winner(env, winning_player):
     reward = 0
     score = env.score
 
     if winning_player is not None:
-
         if winning_player.type == "rl_bot":
-            reward = 1
+            reward = 10
         else:
-            reward = -1
+            reward = -5
 
         if winning_player == env.player_1:
             score = (score[0] + 1, score[1])
