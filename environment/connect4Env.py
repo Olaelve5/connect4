@@ -26,6 +26,7 @@ class Connect4Env(gym.Env):
 
         # States for the game
         self.board = Board()
+        self.player_manager = player_manager
         self.player_1 = player_manager.players[0]
         self.player_2 = player_manager.players[1]
         self.winner = None

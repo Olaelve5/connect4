@@ -3,7 +3,6 @@ import settings.properties as properties
 from cursor import Cursor
 from menus.button import Button
 from menus.player_choice import Player_Choice
-from player_manager import players
 from environment.connect4Env import Connect4Env
 
 continous_modes = ["Continous 25", "Continous 50", "Continous 2000"]
@@ -12,6 +11,7 @@ continous_modes = ["Continous 25", "Continous 50", "Continous 2000"]
 # Create the main menu
 def main_menu(screen, env: Connect4Env):
     pygame.display.set_caption("Main Menu")
+
     player_choice_1 = Player_Choice(
         screen, env, (properties.WINDOW_WIDTH / 4, 280), True
     )

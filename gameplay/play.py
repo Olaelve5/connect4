@@ -3,7 +3,7 @@ from cursor import Cursor
 from gameplay.ui import ui
 import settings.properties as properties
 from environment.connect4Env import Connect4Env
-from play_utils import player_is_bot, play_sound, move_sound
+from gameplay.play_utils import player_is_bot, play_sound, move_sound
 
 # Frame rate
 clock = pygame.time.Clock()

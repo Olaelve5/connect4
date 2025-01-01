@@ -1,7 +1,4 @@
-from environment.connect4Env import Connect4Env
-
-
-def handle_winner(env: Connect4Env, winning_player):
+def handle_winner(env, winning_player):
     reward = 0
     score = (0, 0)
 

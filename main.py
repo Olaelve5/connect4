@@ -32,13 +32,10 @@ player_manager.add_player(Ditto("Ditto", "assets/player_images/ditto.png"))
 player_manager.add_player(Randotron("Randotron", "assets/player_images/randotron.png"))
 player_manager.add_player(Georgian("Georgian", "assets/player_images/georgian.png"))
 
-env = Connect4Env(
-    player_manager.players[0],
-    player_manager.players[1],
-    player_manager,
-)
+env = Connect4Env(player_manager)
 
 check_env(env)
-env = DummyVecEnv([lambda: env])
+vec_env = DummyVecEnv([lambda: env])
 
-main_menu(screen, env)
+# Pass the original environment to main_menu
+main_menu(screen, vec_env.envs[0])
