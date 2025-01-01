@@ -29,6 +29,7 @@ class Connect4Env(gym.Env):
         self.player_manager = player_manager
         self.player_1 = player_manager.players[0]
         self.player_2 = player_manager.players[1]
+        self.player_turn = self.player_1
         self.winner = None
         self.score = score
         self.total_games = total_games
@@ -57,7 +58,7 @@ class Connect4Env(gym.Env):
         valid = self.board.is_valid_move(action)
         if not valid:
             # Skip the turn if the move is invalid
-            self.board.player_turn = 1 if self.board.player_turn == 2 else 2
+            self.change_player_turn()
             return self.get_observation(), -10, False, False, {"invalid_action": True}
 
         reward = 0
@@ -65,7 +66,7 @@ class Connect4Env(gym.Env):
         truncated = False
         info = {}
 
-        self.board.make_move(action)
+        self.board.make_move(action, 1 if self.player_turn == self.player_1 else 2)
         winner = check_winner(self.board)
         full = check_full(self.board)
 
@@ -85,6 +86,9 @@ class Connect4Env(gym.Env):
         else:
             reward = 0
 
+        # Switch the player turn
+        self.change_player_turn()
+
         return self.get_observation(), reward, done, truncated, info
 
     def render(self):
@@ -98,6 +102,11 @@ class Connect4Env(gym.Env):
         return np.array(
             [slot.player for column in self.board.columns for slot in column.slots],
             dtype=np.int32,
+        )
+
+    def change_player_turn(self):
+        self.player_turn = (
+            self.player_1 if self.player_turn == self.player_2 else self.player_2
         )
 
     def switch_sides(self):

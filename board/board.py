@@ -15,8 +15,6 @@ class Board:
         for column in self.columns:
             for slot in column.slots:
                 self.slots.append(slot)
-        self.player_turn = 1  # Player 1 starts
-        self.winner = None
         self.last_move = None
 
     def draw(self, screen):
@@ -41,23 +39,22 @@ class Board:
             if column.rect.collidepoint(
                 mouse_pos
             ):  # Check if mouse is inside the column
-                self.make_move(column.index)
+                if column.handle_click(self.player_turn):
+                    self.last_move = column.index
+                    return column.index
+        return None
 
-    def make_move(self, column):
+    def make_move(self, column, player=0):
         if column is None:
             return random.choice(self.available_columns())
 
-        altered = self.columns[column].handle_click(self.player_turn)
+        altered = self.columns[column].handle_click(player)
         if not altered:
             return
 
         self.last_move = column
-        self.switch_player()
-
-    def switch_player(self):
-        self.player_turn = 1 if self.player_turn == 2 else 2
         for slot in self.slots:
-            slot.player_turn = self.player_turn
+            slot.player_turn = player
 
     def available_columns(self):
         if game_mechanics.check_full(self):

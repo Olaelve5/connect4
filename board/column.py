@@ -44,7 +44,7 @@ class Column(pygame.sprite.Sprite):
         for slot in self.slots:
             if slot.player == 0:
                 slot.update(player)
-                self.top_slot = slot.player
+                self.top_slot = slot
                 break
         return True
 

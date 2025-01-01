@@ -81,9 +81,9 @@ class Player_Choice:
             new_index = 0
         self.current_player = all_players[new_index]
         if self.player_1:
-            self.game_settings.player_1 = self.current_player
+            self.env.player_1 = self.current_player
         else:
-            self.game_settings.player_2 = self.current_player
+            self.env.player_2 = self.current_player
 
     def handle_click(self, mouse_pos):
         direction = self.left_button.is_hovered(mouse_pos)
