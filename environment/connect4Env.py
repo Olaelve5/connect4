@@ -43,9 +43,8 @@ class Connect4Env(gym.Env):
         # Reset the board and the game state
         super().reset(seed=seed)
         self.board.reset()
-        self.score = (0, 0)
         self.winner = None
-        self.played_games = 0
+        self.player_turn = self.player_1
         self.games_left = self.total_games - self.played_games
 
         # Return the initial observation
@@ -122,4 +121,4 @@ class Connect4Env(gym.Env):
         self.total_games = total_games
         self.played_games = played_games
         self.games_left = total_games - played_games
-        calculate_move_delay(self.total_games)
+        self.move_delay = calculate_move_delay(self.total_games)

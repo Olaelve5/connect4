@@ -129,20 +129,24 @@ def game_over_menu(
                 if PLAY_AGAIN_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from gameplay.play import play
 
-                    env.reset()
+                    env.played_games = 0
+                    env.score = (0, 0)
                     play(screen, env)
 
                 if PLAY_AGAIN_SWITCH_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from gameplay.play import play
 
                     env.switch_sides()
-                    env.reset()
+                    env.played_games = 0
+                    env.score = (0, 0)
                     play(screen, env)
 
                 if MAIN_MENU_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from menus.main_menu import main_menu
 
                     env.reset()
+                    env.played_games = 0
+                    env.score = (0, 0)
                     main_menu(screen, env)
 
         clock.tick(properties.FPS)

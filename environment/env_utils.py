@@ -1,6 +1,6 @@
 def handle_winner(env, winning_player):
     reward = 0
-    score = (0, 0)
+    score = env.score
 
     if winning_player is not None:
 
@@ -10,9 +10,9 @@ def handle_winner(env, winning_player):
             reward = -1
 
         if winning_player == env.player_1:
-            score = (env.score[0] + 1, env.score[1])
+            score = (score[0] + 1, score[1])
         else:
-            score = (env.score[0], env.score[1] + 1)
+            score = (score[0], score[1] + 1)
 
     return reward, score
 

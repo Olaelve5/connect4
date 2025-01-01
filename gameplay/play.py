@@ -52,7 +52,7 @@ def play(screen, env: Connect4Env):
         # Handle a draw
         if env.board.available_columns() == []:
 
-            if env.continuous and env.played_games < env.total_games - 1:
+            if env.continuous and env.played_games < env.total_games:
                 return play(screen, env)
 
             # Show the game over menu
@@ -62,12 +62,12 @@ def play(screen, env: Connect4Env):
 
         # Handle a winner
         if env.winner:
-            if env.continuous and env.played_games < env.total_games - 1:
+            if env.continuous and env.played_games < env.total_games:
+                print(env.played_games, env.total_games)
                 return play(screen, env)
 
             # Show the game over menu
             from menus.game_over_menu import game_over_menu
-
             return game_over_menu(screen, env)
 
         # Handle bot move with delay
