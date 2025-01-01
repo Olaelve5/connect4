@@ -3,7 +3,7 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 from board.board import Board
-from environment.env_utils import handle_winner
+from environment.env_utils import handle_winner, calculate_move_delay
 from gameplay.game_mechanics import check_winner, check_full
 
 
@@ -108,15 +108,4 @@ class Connect4Env(gym.Env):
         self.total_games = total_games
         self.played_games = played_games
         self.games_left = total_games - played_games
-        self.calculate_move_delay()
-
-    def calculate_move_delay(self):
-        if self.total_games > 55:
-            self.move_delay = 1
-        elif self.total_games > 20:
-            self.move_delay = 5
-        elif self.total_games > 5:
-            self.move_delay = 10
-        else:
-            self.move_delay = 500
-        return self.move_delay
+        calculate_move_delay(self.total_games)

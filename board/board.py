@@ -52,7 +52,6 @@ class Board:
             return
 
         self.last_move = column
-        self.check_winner()
         self.switch_player()
 
     def switch_player(self):

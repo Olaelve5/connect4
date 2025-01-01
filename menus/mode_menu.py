@@ -3,10 +3,10 @@ from menus.main_menu import main_menu
 from menus.button import Button
 import pygame
 from cursor import Cursor
-from settings.game_settings import Game_Settings
+from environment.connect4Env import Connect4Env
 
 
-def mode_menu(screen, game_settings: Game_Settings):
+def mode_menu(screen, env: Connect4Env):
 
     title = properties.TITLE_FONT.render("Choose Mode", True, properties.WHITE)
     title_rect = title.get_rect(center=(properties.WINDOW_WIDTH / 2, 100))
@@ -76,7 +76,7 @@ def mode_menu(screen, game_settings: Game_Settings):
         screen.blit(title, title_rect)
 
         for button in buttons:
-            if button.text == game_settings.selected_mode:
+            if button.text == env.selected_mode:
                 button.selected_draw()
             else:
                 button.draw(mouse_pos)
@@ -95,11 +95,11 @@ def mode_menu(screen, game_settings: Game_Settings):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.is_hovered(mouse_pos):
-                    return main_menu(screen, game_settings)
+                    return main_menu(screen, env)
 
                 for button in buttons:
                     if button.is_hovered(mouse_pos):
-                        game_settings.selected_mode = button.text
+                        env.selected_mode = button.text
 
         cursor.draw(mouse_pos)
 

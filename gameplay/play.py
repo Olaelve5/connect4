@@ -10,19 +10,12 @@ clock = pygame.time.Clock()
 
 
 def play(screen, env: Connect4Env):
-    game_settings.board.reset()  # Reset the board for a new game
-    game_settings.env.board = game_settings.board
+    env.reset()  # Reset the environment
 
     cursor = Cursor(screen)
-    ui_instance = ui(game_settings)
-    game_settings.player_1.player = 1
-    game_settings.player_2.player = 2
+    ui_instance = ui(env)
 
-    player_turn = (
-        game_settings.player_1
-        if game_settings.board.player_turn == 1
-        else game_settings.player_2
-    )
+    player_turn = env.player_1 if env.board.player_turn == 1 else env.player_2
 
     pygame.mouse.set_visible(False)
 
@@ -41,7 +34,7 @@ def play(screen, env: Connect4Env):
             if column.is_hovered(pygame.mouse.get_pos()) and not player_is_bot(
                 player_turn
             ):
-                if game_settings.board.player_turn == 1:
+                if env.board.player_turn == 1:
                     cursor.set_mode("drop_1")
                 else:
                     cursor.set_mode("drop_2")
@@ -51,35 +44,31 @@ def play(screen, env: Connect4Env):
             cursor.set_mode("default")
 
         # Handle a draw
-        if game_settings.board.available_columns() == []:
-            game_settings.score = (
-                game_settings.score[0] + 0.5,
-                game_settings.score[1] + 0.5,
-            )
+        if env.board.available_columns() == []:
 
             if (
-                game_settings.continuous
-                and game_settings.played_games < game_settings.total_games - 1
+                env.continuous
+                and env.played_games < env.total_games - 1
             ):
-                game_settings.played_games += 1
+                env.played_games += 1
 
-                play(screen, game_settings)
+                play(screen, env)
             else:
-                if game_settings.continuous:
-                    winner = 1 if game_settings.score[0] > game_settings.score[1] else 2
+                if env.continuous:
+                    winner = 1 if env.score[0] > env.score[1] else 2
 
                 # Final game over menu
                 from menus.game_over_menu import game_over_menu
 
                 # Check if there is a winner, set the winner to None if it's a draw
                 winner = (
-                    game_settings.player_1 if winner == 1 else game_settings.player_2
+                    env.player_1 if winner == 1 else env.player_2
                 )
 
-                if game_settings.score[0] == game_settings.score[1]:
+                if env.score[0] == env.score[1]:
                     winner = None
 
-                game_over_menu(screen, winner, game_settings)
+                game_over_menu(screen, winner, env)
             break
 
         # Check if there is a winner
@@ -205,5 +194,3 @@ def play(screen, env: Connect4Env):
 
         if turn_taken:
             turn_taken = False
-
-
