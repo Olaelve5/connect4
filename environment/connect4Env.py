@@ -3,7 +3,7 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 from board.board import Board
-from environment.env_utils import handle_winner, calculate_move_delay, is_loosing_move
+from environment.env_utils import handle_winner, calculate_move_delay
 from gameplay.game_mechanics import check_winner, check_full
 from player_manager import Player_Manager
 
