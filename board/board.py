@@ -39,7 +39,7 @@ class Board:
             if column.rect.collidepoint(
                 mouse_pos
             ):  # Check if mouse is inside the column
-                if column.handle_click(self.player_turn):
+                if column.handle_click():
                     self.last_move = column.index
                     return column.index
         return None
@@ -48,7 +48,7 @@ class Board:
         if column is None:
             return random.choice(self.available_columns())
 
-        altered = self.columns[column].handle_click(player)
+        altered = self.columns[column].make_move(player)
         if not altered:
             return
 
