@@ -2,14 +2,13 @@ import pygame
 import settings.properties as properties
 from menus.button import Button
 from cursor import Cursor
-from settings.game_settings import Game_Settings
+from environment.connect4Env import Connect4Env
 
 
 # Create the game over screen
 def game_over_menu(
     screen,
-    winner,
-    game_settings: Game_Settings,
+    env: Connect4Env,
 ):
     pygame.display.set_caption("Game Over Screen")
 
@@ -17,7 +16,7 @@ def game_over_menu(
     cursor = Cursor(screen)
 
     GAME_OVER_TITLE = properties.FONT.render(
-        f"{winner.name} wins!" if winner != None else "It's a draw!",
+        f"{env.winner.name} wins!" if env.winner != None else "It's a draw!",
         True,
         properties.WHITE,
     )
@@ -54,14 +53,14 @@ def game_over_menu(
 
     # Player 1 text
     player_1_score = properties.SUB_FONT.render(
-        "Score: " + str(game_settings.score[0]), True, properties.WHITE
+        "Score: " + str(env.score[0]), True, properties.WHITE
     )
     player_1_score_rect = player_1_score.get_rect(
         center=(properties.WINDOW_WIDTH / 4 + 100, 520)
     )
 
     player_1_name = properties.SUB_FONT.render(
-        game_settings.player_1.name, True, properties.WHITE
+        env.player_1.name, True, properties.WHITE
     )
     player_1_name_rect = player_1_name.get_rect(
         center=(properties.WINDOW_WIDTH / 4 + 100, 240)
@@ -69,14 +68,14 @@ def game_over_menu(
 
     # Player 2 text
     player_2_score = properties.SUB_FONT.render(
-        "Score: " + str(game_settings.score[1]), True, properties.WHITE
+        "Score: " + str(env.score[1]), True, properties.WHITE
     )
     player_2_score_rect = player_2_score.get_rect(
         center=(properties.WINDOW_WIDTH / 4 * 3 - 200 + 100, 520)
     )
 
     player_2_name = properties.SUB_FONT.render(
-        game_settings.player_2.name, True, properties.WHITE
+        env.player_2.name, True, properties.WHITE
     )
 
     player_2_name_rect = player_2_name.get_rect(
@@ -100,10 +99,8 @@ def game_over_menu(
         screen.blit(player_2_score, player_2_score_rect)
         screen.blit(player_2_name, player_2_name_rect)
 
-        game_settings.player_1.draw(screen, (properties.WINDOW_WIDTH / 4, 280))
-        game_settings.player_2.draw(
-            screen, (properties.WINDOW_WIDTH / 4 * 3 - 200, 280)
-        )
+        env.player_1.draw(screen, (properties.WINDOW_WIDTH / 4, 280))
+        env.player_2.draw(screen, (properties.WINDOW_WIDTH / 4 * 3 - 200, 280))
 
         pygame.draw.circle(
             screen, properties.YELLOW, (properties.WINDOW_WIDTH / 2 - 40, 380), 30
@@ -132,21 +129,25 @@ def game_over_menu(
                 if PLAY_AGAIN_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from gameplay.play import play
 
-                    game_settings.reset()
-                    play(screen, game_settings)
+                    env.played_games = 0
+                    env.score = (0, 0)
+                    play(screen, env)
 
                 if PLAY_AGAIN_SWITCH_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from gameplay.play import play
 
-                    game_settings.switch_sides()
-                    game_settings.reset()
-                    play(screen, game_settings)
+                    env.switch_sides()
+                    env.played_games = 0
+                    env.score = (0, 0)
+                    play(screen, env)
 
                 if MAIN_MENU_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
                     from menus.main_menu import main_menu
 
-                    game_settings.reset()
-                    main_menu(screen, game_settings)
+                    env.reset()
+                    env.played_games = 0
+                    env.score = (0, 0)
+                    main_menu(screen, env)
 
         clock.tick(properties.FPS)
 

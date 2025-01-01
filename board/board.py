@@ -15,8 +15,6 @@ class Board:
         for column in self.columns:
             for slot in column.slots:
                 self.slots.append(slot)
-        self.player_turn = 1  # Player 1 starts
-        self.winner = None
         self.last_move = None
 
     def draw(self, screen):
@@ -41,24 +39,23 @@ class Board:
             if column.rect.collidepoint(
                 mouse_pos
             ):  # Check if mouse is inside the column
-                self.make_move(column.index)
+                if column.handle_click():
+                    self.last_move = column.index
+                    return column.index
+        return None
 
-    def make_move(self, column):
+    def make_move(self, column, player=0):
         if column is None:
             return random.choice(self.available_columns())
 
-        altered = self.columns[column].handle_click(self.player_turn)
+        altered = self.columns[column].make_move(player)
         if not altered:
             return
 
         self.last_move = column
-        self.check_winner()
-        self.switch_player()
 
-    def switch_player(self):
-        self.player_turn = 1 if self.player_turn == 2 else 2
         for slot in self.slots:
-            slot.player_turn = self.player_turn
+            slot.player_turn = player
 
     def available_columns(self):
         if game_mechanics.check_full(self):
@@ -73,11 +70,6 @@ class Board:
 
         return moves
 
-    def check_winner(self):
-        winnner = game_mechanics.check_winner(self)
-        if winnner:
-            self.winner = winnner
-
     def is_valid_move(self, column):
         return self.columns[column].is_valid_move()
 
@@ -89,18 +81,3 @@ class Board:
 
     def copy(self):
         return copy.deepcopy(self)
-
-    def is_winning_move(self, move):
-        board = self.copy()
-        board.make_move(move)
-        return board.winner == self.player_turn
-
-    def is_loosing_move(self, move):
-        board = self.copy()
-        board.make_move(move)
-
-        for column in board.available_columns():
-            if board.is_winning_move(column):
-                return True
-
-        return False

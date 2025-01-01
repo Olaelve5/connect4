@@ -10,21 +10,21 @@ from settings.properties import (
     TITLE_FONT,
     SUB_FONT,
 )
-from settings.game_settings import Game_Settings
+from environment.connect4Env import Connect4Env
 
 pygame.init()
 
 
 class ui:
-    def __init__(self, game_settings: Game_Settings):
-        self.game_settings = game_settings
+    def __init__(self, env: Connect4Env):
+        self.env = env
         self.font = FONT
         self.text_elements = []
         self.circle_elements = []
-        self.player_1 = game_settings.player_1
-        self.player_2 = game_settings.player_2
-        self.score = game_settings.score
-        self.total_games = game_settings.total_games
+        self.player_1 = env.player_1
+        self.player_2 = env.player_2
+        self.score = env.score
+        self.total_games = env.total_games
         self.initialize()
 
     def add_circle(self, position, color):
@@ -60,11 +60,11 @@ class ui:
     
     @property
     def games_left(self):
-        return self.game_settings.total_games - self.game_settings.played_games
+        return self.env.total_games - self.env.played_games
 
 
     def update_score(self):
-        self.score = self.game_settings.score
+        self.score = self.env.score
         self.text_elements[-2] = {
             "text": f"Score: {self.score[0]}",
             "position": (HORIZONTAL_GAP // 2, 600),

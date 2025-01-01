@@ -1,7 +1,6 @@
 import pygame
 import settings.properties as properties
-from settings.game_settings import Game_Settings
-from players import players
+from environment.connect4Env import Connect4Env
 
 
 class Side_Button:
@@ -26,13 +25,11 @@ class Side_Button:
 
 
 class Player_Choice:
-    def __init__(self, screen, game_settings: Game_Settings, position=(0, 0), player_1=True):
-        self.players = players
-        self.game_settings = game_settings
+    def __init__(self, screen, env: Connect4Env, position=(0, 0), player_1=True):
+        self.players = env.player_manager.players
+        self.env = env
         self.bots = []
-        self.current_player = (
-            game_settings.player_1 if player_1 else game_settings.player_2
-        )
+        self.current_player = env.player_1 if player_1 else env.player_2
         self.screen = screen
         self.position = position
         self.rect = pygame.Rect(position, (200, 200))
@@ -84,9 +81,9 @@ class Player_Choice:
             new_index = 0
         self.current_player = all_players[new_index]
         if self.player_1:
-            self.game_settings.player_1 = self.current_player
+            self.env.player_1 = self.current_player
         else:
-            self.game_settings.player_2 = self.current_player
+            self.env.player_2 = self.current_player
 
     def handle_click(self, mouse_pos):
         direction = self.left_button.is_hovered(mouse_pos)

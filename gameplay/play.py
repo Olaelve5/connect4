@@ -2,42 +2,18 @@ import pygame
 from cursor import Cursor
 from gameplay.ui import ui
 import settings.properties as properties
-from settings.game_settings import Game_Settings
-from board.board import Board
-
-# Frame rate
-clock = pygame.time.Clock()
+from environment.connect4Env import Connect4Env
+from gameplay.play_utils import player_is_bot, play_sound, move_sound
 
 
-def player_is_bot(player):
-    return player.type != "human"
-
-
-game_start_sound = pygame.mixer.Sound("assets/sounds/game_start.mp3")
-move_sound = pygame.mixer.Sound("assets/sounds/slot.mp3")
-
-
-def play_sound(last_time, current_time, sound, move_delay=50):
-    if current_time - last_time > move_delay:  # Cooldown of 100ms
-        sound.play()
-        return current_time
-    return last_time
-
-
-def play(screen, game_settings: Game_Settings):
-    game_settings.board.reset()  # Reset the board for a new game
-    game_settings.env.board = game_settings.board
+def play(screen, env: Connect4Env):
+    env.reset()  # Reset the environment
 
     cursor = Cursor(screen)
-    ui_instance = ui(game_settings)
-    game_settings.player_1.player = 1
-    game_settings.player_2.player = 2
+    ui_instance = ui(env)
 
-    player_turn = (
-        game_settings.player_1
-        if game_settings.board.player_turn == 1
-        else game_settings.player_2
-    )
+    # Frame rate
+    clock = pygame.time.Clock()
 
     pygame.mouse.set_visible(False)
 
@@ -49,96 +25,21 @@ def play(screen, game_settings: Game_Settings):
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
 
         # Draw the board
-        game_settings.board.draw(screen)
+        env.board.draw(screen)
 
-        # Check if the cursor is hovering over a column
-        for column in game_settings.board.columns:
+        # Check if the cursor is hovering over a column and change the cursor mode
+        for column in env.board.columns:
             if column.is_hovered(pygame.mouse.get_pos()) and not player_is_bot(
-                player_turn
+                env.player_turn
             ):
-                if game_settings.board.player_turn == 1:
+                if env.player_turn == env.player_1:
                     cursor.set_mode("drop_1")
                 else:
                     cursor.set_mode("drop_2")
-                column.hovered_draw(screen)
+                column.hovered_draw(screen, 1 if env.player_turn == env.player_1 else 2)
                 break
         else:
             cursor.set_mode("default")
-
-        # Handle a draw
-        if game_settings.board.available_columns() == []:
-            game_settings.score = (
-                game_settings.score[0] + 0.5,
-                game_settings.score[1] + 0.5,
-            )
-
-            if (
-                game_settings.continuous
-                and game_settings.played_games < game_settings.total_games - 1
-            ):
-                game_settings.played_games += 1
-
-                play(screen, game_settings)
-            else:
-                if game_settings.continuous:
-                    winner = 1 if game_settings.score[0] > game_settings.score[1] else 2
-
-                # Final game over menu
-                from menus.game_over_menu import game_over_menu
-
-                # Check if there is a winner, set the winner to None if it's a draw
-                winner = (
-                    game_settings.player_1 if winner == 1 else game_settings.player_2
-                )
-
-                if game_settings.score[0] == game_settings.score[1]:
-                    winner = None
-
-                game_over_menu(screen, winner, game_settings)
-            break
-
-        # Check if there is a winner
-        winner = game_settings.board.winner
-        if winner:
-            if winner == 1:
-                game_settings.score = (
-                    game_settings.score[0] + 1,
-                    game_settings.score[1],
-                )
-            else:
-                game_settings.score = (
-                    game_settings.score[0],
-                    game_settings.score[1] + 1,
-                )
-
-            if (
-                game_settings.continuous
-                and game_settings.played_games < game_settings.total_games - 1
-            ):
-
-                game_settings.played_games += 1
-
-                # Start a new game
-                play(
-                    screen,
-                    game_settings,
-                )
-            else:
-                # Final game over menu
-                from menus.game_over_menu import game_over_menu
-
-                if game_settings.continuous:
-                    winner = 1 if game_settings.score[0] > game_settings.score[1] else 2
-
-                winner = (
-                    game_settings.player_1 if winner == 1 else game_settings.player_2
-                )
-
-                if game_settings.score[0] == game_settings.score[1]:
-                    winner = None
-
-                game_over_menu(screen, winner, game_settings)
-            break
 
         # Draw the UI
         ui_instance.draw(screen)
@@ -146,36 +47,50 @@ def play(screen, game_settings: Game_Settings):
         # Draw the cursor
         cursor.draw(pygame.mouse.get_pos())
 
+        # Handle a draw
+        if env.board.available_columns() == []:
+
+            if env.continuous and env.played_games < env.total_games:
+                return play(screen, env)
+            
+            # Train agent if it is an agent
+            if env.player_1.type == "rl_bot":
+                env.player_1.train_model(10000)
+            if env.player_2.type == "rl_bot":
+                env.player_2.train_model(10000)
+
+            # Show the game over menu
+            from menus.game_over_menu import game_over_menu
+
+            return game_over_menu(screen, env)
+
+        # Handle a winner
+        if env.winner:
+            if env.continuous and env.played_games < env.total_games:
+                return play(screen, env)
+            
+            # Train agent if it is an agent
+            if env.player_1.type == "rl_bot":
+                env.player_1.train_model(10000)
+            if env.player_2.type == "rl_bot":
+                env.player_2.train_model(10000)
+
+            # Show the game over menu
+            from menus.game_over_menu import game_over_menu
+
+            return game_over_menu(screen, env)
+
+
         # Handle bot move with delay
-        if player_is_bot(player_turn) and not turn_taken:
+        if player_is_bot(env.player_turn) and not turn_taken:
 
             if bot_move_start_time is None:  # Start the timer
                 bot_move_start_time = pygame.time.get_ticks()
 
-            # Check if 0.5 seconds have passed
-            if pygame.time.get_ticks() - bot_move_start_time > game_settings.move_delay:
-                move = player_turn.get_move(game_settings.board)
-
-                if not game_settings.board.is_valid_move(move):
-                    # print(f"Invalid move by {player_turn.name}, skipping turn")
-
-                    # Skip the turn by switching to the next player
-                    game_settings.board.switch_player()
-                    player_turn = (
-                        game_settings.player_1
-                        if game_settings.board.player_turn == 1
-                        else game_settings.player_2
-                    )
-                    turn_taken = True
-                    bot_move_start_time = None  # Reset the timer
-                    continue  # Skip the rest of the bot move logic
-
-                game_settings.board.make_move(move)
-                player_turn = (
-                    game_settings.player_1
-                    if game_settings.board.player_turn == 1
-                    else game_settings.player_2
-                )
+            # Check if move delay have passed
+            if pygame.time.get_ticks() - bot_move_start_time > env.move_delay:
+                move = env.player_turn.get_move(env.board)
+                env.step(move)
                 turn_taken = True
 
                 # Play the sound
@@ -183,7 +98,7 @@ def play(screen, game_settings: Game_Settings):
                     last_sound_time,
                     pygame.time.get_ticks(),
                     move_sound,
-                    game_settings.move_delay,
+                    env.move_delay,
                 )
 
                 bot_move_start_time = None  # Reset the timer
@@ -196,29 +111,27 @@ def play(screen, game_settings: Game_Settings):
                 quit()
 
             # Handle mouse click and human move
-            if event.type == pygame.MOUSEBUTTONDOWN and player_turn.type == "human":
+            if event.type == pygame.MOUSEBUTTONDOWN and not player_is_bot(
+                env.player_turn
+            ):
                 # Handle mouse click on the board
-                game_settings.board.handle_click(event.pos)
-                player_turn = (
-                    game_settings.player_1
-                    if game_settings.board.player_turn == 1
-                    else game_settings.player_2
-                )
-                move_sound.play()
-                turn_taken = True
+                move = env.board.handle_click(event.pos)
+                if move is not None:
+                    env.step(move)
+                    move_sound.play()
+                    turn_taken = True
 
-                # Play the sound
-                last_sound_time = play_sound(
-                    last_sound_time,
-                    pygame.time.get_ticks(),
-                    move_sound,
-                    game_settings.move_delay,
-                )
+                    # Play the sound
+                    last_sound_time = play_sound(
+                        last_sound_time,
+                        pygame.time.get_ticks(),
+                        move_sound,
+                        env.move_delay,
+                    )
 
         pygame.display.update()
         clock.tick(properties.FPS)
 
         if turn_taken:
             turn_taken = False
-
-
+            continue

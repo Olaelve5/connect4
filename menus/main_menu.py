@@ -3,20 +3,20 @@ import settings.properties as properties
 from cursor import Cursor
 from menus.button import Button
 from menus.player_choice import Player_Choice
-from players import players
-from settings.game_settings import Game_Settings
+from environment.connect4Env import Connect4Env
 
-continous_modes = ["Continous 25", "Continous 50", "Continous 2000"]
+continous_modes = ["Continous 25", "Continous 50", "Continous 100"]
 
 
 # Create the main menu
-def main_menu(screen, game_settings: Game_Settings):
+def main_menu(screen, env: Connect4Env):
     pygame.display.set_caption("Main Menu")
+
     player_choice_1 = Player_Choice(
-        screen, game_settings, (properties.WINDOW_WIDTH / 4, 280), True
+        screen, env, (properties.WINDOW_WIDTH / 4, 280), True
     )
     player_choice_2 = Player_Choice(
-        screen, game_settings, (properties.WINDOW_WIDTH / 4 * 3 - 200, 280), False
+        screen, env, (properties.WINDOW_WIDTH / 4 * 3 - 200, 280), False
     )
 
     cursor = Cursor(screen)
@@ -25,7 +25,7 @@ def main_menu(screen, game_settings: Game_Settings):
     MENU_TITLE_RECT = MENU_TITLE.get_rect(center=(properties.WINDOW_WIDTH / 2, 100))
 
     selected_text = properties.SUB_FONT.render(
-        game_settings.selected_mode, True, properties.YELLOW
+        env.selected_mode, True, properties.YELLOW
     )
     selected_text_rect = selected_text.get_rect(
         center=(properties.WINDOW_WIDTH / 2, 160)
@@ -121,11 +121,11 @@ def main_menu(screen, game_settings: Game_Settings):
 
                     continous = False
 
-                    if game_settings.selected_mode in continous_modes:
+                    if env.selected_mode in continous_modes:
                         continous = True
-                        total_games = int(game_settings.selected_mode.split()[-1])
+                        total_games = int(env.selected_mode.split()[-1])
 
-                    game_settings.set_settings(
+                    env.set_settings(
                         player_choice_1.current_player,
                         player_choice_2.current_player,
                         (0, 0),
@@ -133,12 +133,15 @@ def main_menu(screen, game_settings: Game_Settings):
                         total_games if continous else 1,
                     )
 
-                    play(screen, game_settings)
+                    env.player_1.player = 1
+                    env.player_2.player = 2
+
+                    play(screen, env)
 
                 if MODE_BUTTON.is_hovered(MENU_MOUSE_POS):
                     from menus.mode_menu import mode_menu
 
-                    mode_menu(screen, game_settings)
+                    mode_menu(screen, env)
 
                 if QUIT_BUTTON.is_hovered(MENU_MOUSE_POS):
                     pygame.quit()
