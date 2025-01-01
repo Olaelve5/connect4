@@ -8,7 +8,6 @@ from environment.connect4Env import Connect4Env
 # Create the game over screen
 def game_over_menu(
     screen,
-    winner,
     env: Connect4Env,
 ):
     pygame.display.set_caption("Game Over Screen")
@@ -17,7 +16,7 @@ def game_over_menu(
     cursor = Cursor(screen)
 
     GAME_OVER_TITLE = properties.FONT.render(
-        f"{winner.name} wins!" if winner != None else "It's a draw!",
+        f"{env.winner.name} wins!" if env.winner != None else "It's a draw!",
         True,
         properties.WHITE,
     )
@@ -101,9 +100,7 @@ def game_over_menu(
         screen.blit(player_2_name, player_2_name_rect)
 
         env.player_1.draw(screen, (properties.WINDOW_WIDTH / 4, 280))
-        env.player_2.draw(
-            screen, (properties.WINDOW_WIDTH / 4 * 3 - 200, 280)
-        )
+        env.player_2.draw(screen, (properties.WINDOW_WIDTH / 4 * 3 - 200, 280))
 
         pygame.draw.circle(
             screen, properties.YELLOW, (properties.WINDOW_WIDTH / 2 - 40, 380), 30

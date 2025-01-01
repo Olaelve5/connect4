@@ -26,10 +26,12 @@ def play(screen, env: Connect4Env):
     while True:
         screen.blit(properties.BACKGROUND_IMAGE, (0, 0))
 
+        turn_taken = False
+
         # Draw the board
         env.board.draw(screen)
 
-        # Check if the cursor is hovering over a column
+        # Check if the cursor is hovering over a column and change the cursor mode
         for column in env.board.columns:
             if column.is_hovered(pygame.mouse.get_pos()) and not player_is_bot(
                 player_turn
@@ -43,82 +45,32 @@ def play(screen, env: Connect4Env):
         else:
             cursor.set_mode("default")
 
-        # Handle a draw
-        if env.board.available_columns() == []:
-
-            if (
-                env.continuous
-                and env.played_games < env.total_games - 1
-            ):
-                env.played_games += 1
-
-                play(screen, env)
-            else:
-                if env.continuous:
-                    winner = 1 if env.score[0] > env.score[1] else 2
-
-                # Final game over menu
-                from menus.game_over_menu import game_over_menu
-
-                # Check if there is a winner, set the winner to None if it's a draw
-                winner = (
-                    env.player_1 if winner == 1 else env.player_2
-                )
-
-                if env.score[0] == env.score[1]:
-                    winner = None
-
-                game_over_menu(screen, winner, env)
-            break
-
-        # Check if there is a winner
-        winner = game_settings.board.winner
-        if winner:
-            if winner == 1:
-                game_settings.score = (
-                    game_settings.score[0] + 1,
-                    game_settings.score[1],
-                )
-            else:
-                game_settings.score = (
-                    game_settings.score[0],
-                    game_settings.score[1] + 1,
-                )
-
-            if (
-                game_settings.continuous
-                and game_settings.played_games < game_settings.total_games - 1
-            ):
-
-                game_settings.played_games += 1
-
-                # Start a new game
-                play(
-                    screen,
-                    game_settings,
-                )
-            else:
-                # Final game over menu
-                from menus.game_over_menu import game_over_menu
-
-                if game_settings.continuous:
-                    winner = 1 if game_settings.score[0] > game_settings.score[1] else 2
-
-                winner = (
-                    game_settings.player_1 if winner == 1 else game_settings.player_2
-                )
-
-                if game_settings.score[0] == game_settings.score[1]:
-                    winner = None
-
-                game_over_menu(screen, winner, game_settings)
-            break
-
         # Draw the UI
         ui_instance.draw(screen)
 
         # Draw the cursor
         cursor.draw(pygame.mouse.get_pos())
+
+        # Handle a draw
+        if env.board.available_columns() == []:
+
+            if env.continuous and env.played_games < env.total_games - 1:
+                return play(screen, env)
+
+            # Show the game over menu
+            from menus.game_over_menu import game_over_menu
+
+            return game_over_menu(screen, env)
+
+        # Handle a winner
+        if env.winner:
+            if env.continuous and env.played_games < env.total_games - 1:
+                return play(screen, env)
+
+            # Show the game over menu
+            from menus.game_over_menu import game_over_menu
+
+            return game_over_menu(screen, env)
 
         # Handle bot move with delay
         if player_is_bot(player_turn) and not turn_taken:
@@ -126,30 +78,10 @@ def play(screen, env: Connect4Env):
             if bot_move_start_time is None:  # Start the timer
                 bot_move_start_time = pygame.time.get_ticks()
 
-            # Check if 0.5 seconds have passed
-            if pygame.time.get_ticks() - bot_move_start_time > game_settings.move_delay:
-                move = player_turn.get_move(game_settings.board)
-
-                if not game_settings.board.is_valid_move(move):
-                    # print(f"Invalid move by {player_turn.name}, skipping turn")
-
-                    # Skip the turn by switching to the next player
-                    game_settings.board.switch_player()
-                    player_turn = (
-                        game_settings.player_1
-                        if game_settings.board.player_turn == 1
-                        else game_settings.player_2
-                    )
-                    turn_taken = True
-                    bot_move_start_time = None  # Reset the timer
-                    continue  # Skip the rest of the bot move logic
-
-                game_settings.board.make_move(move)
-                player_turn = (
-                    game_settings.player_1
-                    if game_settings.board.player_turn == 1
-                    else game_settings.player_2
-                )
+            # Check if move delay have passed
+            if pygame.time.get_ticks() - bot_move_start_time > env.move_delay:
+                move = player_turn.get_move(env.board)
+                env.step(move)
                 turn_taken = True
 
                 # Play the sound
@@ -157,7 +89,7 @@ def play(screen, env: Connect4Env):
                     last_sound_time,
                     pygame.time.get_ticks(),
                     move_sound,
-                    game_settings.move_delay,
+                    env.move_delay,
                 )
 
                 bot_move_start_time = None  # Reset the timer
@@ -172,11 +104,9 @@ def play(screen, env: Connect4Env):
             # Handle mouse click and human move
             if event.type == pygame.MOUSEBUTTONDOWN and player_turn.type == "human":
                 # Handle mouse click on the board
-                game_settings.board.handle_click(event.pos)
+                env.board.handle_click(event.pos)
                 player_turn = (
-                    game_settings.player_1
-                    if game_settings.board.player_turn == 1
-                    else game_settings.player_2
+                    env.player_1 if env.board.player_turn == 1 else env.player_2
                 )
                 move_sound.play()
                 turn_taken = True
@@ -186,11 +116,8 @@ def play(screen, env: Connect4Env):
                     last_sound_time,
                     pygame.time.get_ticks(),
                     move_sound,
-                    game_settings.move_delay,
+                    env.move_delay,
                 )
 
         pygame.display.update()
         clock.tick(properties.FPS)
-
-        if turn_taken:
-            turn_taken = False

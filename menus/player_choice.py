@@ -1,6 +1,5 @@
 import pygame
 import settings.properties as properties
-from players import players
 from environment.connect4Env import Connect4Env
 
 
@@ -27,7 +26,7 @@ class Side_Button:
 
 class Player_Choice:
     def __init__(self, screen, env: Connect4Env, position=(0, 0), player_1=True):
-        self.players = players
+        self.players = env.player_manager.players
         self.env = env
         self.bots = []
         self.current_player = env.player_1 if player_1 else env.player_2

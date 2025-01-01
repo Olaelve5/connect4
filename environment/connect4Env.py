@@ -5,15 +5,14 @@ import numpy as np
 from board.board import Board
 from environment.env_utils import handle_winner, calculate_move_delay
 from gameplay.game_mechanics import check_winner, check_full
+from player_manager import Player_Manager
 
 
 # Connect4Env class - Gym environment for the Connect4 game + handles the game logic
 class Connect4Env(gym.Env):
     def __init__(
         self,
-        board: Board,
-        player_1,
-        player_2,
+        player_manager: Player_Manager,
         score=(0, 0),
         continuous=False,
         total_games=1,
@@ -26,9 +25,9 @@ class Connect4Env(gym.Env):
         self.observation_space = spaces.Box(low=0, high=2, shape=(42,), dtype=np.int32)
 
         # States for the game
-        self.board = board
-        self.player_1 = player_1
-        self.player_2 = player_2
+        self.board = Board()
+        self.player_1 = player_manager.players[0]
+        self.player_2 = player_manager.players[1]
         self.winner = None
         self.score = score
         self.total_games = total_games
@@ -43,6 +42,7 @@ class Connect4Env(gym.Env):
         super().reset(seed=seed)
         self.board.reset()
         self.score = (0, 0)
+        self.winner = None
         self.played_games = 0
         self.games_left = self.total_games - self.played_games
 
@@ -55,6 +55,8 @@ class Connect4Env(gym.Env):
 
         valid = self.board.is_valid_move(action)
         if not valid:
+            # Skip the turn if the move is invalid
+            self.board.player_turn = 1 if self.board.player_turn == 2 else 2
             return self.get_observation(), -10, False, False, {"invalid_action": True}
 
         reward = 0
@@ -69,11 +71,13 @@ class Connect4Env(gym.Env):
         # handle winning move
         if winner:
             self.winner = self.player_1 if winner == 1 else self.player_2
+            self.played_games += 1
             done = True
             reward, self.score = handle_winner(self, self.winner)
 
         # handle draw
         elif full:
+            self.played_games += 1
             done = True
             reward = 0.5
             self.score = (self.score[0] + 0.5, self.score[1] + 0.5)

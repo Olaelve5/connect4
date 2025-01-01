@@ -12,3 +12,4 @@ def play_sound(last_time, current_time, sound, move_delay=50):
         sound.play()
         return current_time
     return last_time
+
