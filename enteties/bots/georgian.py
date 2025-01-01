@@ -21,7 +21,6 @@ class Georgian(Template_Bot):
         return top_move
 
     def calculate_move(self, board: Board, move):
-
         board_copy = board.copy()
         board_copy.make_move(move)
         score = 0

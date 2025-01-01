@@ -133,6 +133,9 @@ def main_menu(screen, env: Connect4Env):
                         total_games if continous else 1,
                     )
 
+                    env.player_1.player = 1
+                    env.player_2.player = 2
+
                     play(screen, env)
 
                 if MODE_BUTTON.is_hovered(MENU_MOUSE_POS):
