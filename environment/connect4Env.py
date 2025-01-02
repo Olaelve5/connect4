@@ -144,6 +144,7 @@ class Connect4Env(gym.Env):
         # Let the opponent bot take its move
         if self.player_turn.type != "rl_bot":
             action = self.player_turn.get_move(self.board)
+            print(f"{self.player_turn.name} played move: {action}")
 
             # Update the board for the opponent's move
             if self.board.is_valid_move(action):

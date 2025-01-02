@@ -40,7 +40,7 @@ class Slot:
     def update(self, player):
         """Update the player and the color."""
         if player == None:
-            raise ValueError("Player cannot be None")
+            player = 0
         self.player = player
         self.update_color()
 
