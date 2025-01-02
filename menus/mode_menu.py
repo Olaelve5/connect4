@@ -39,7 +39,7 @@ def mode_menu(screen, env: Connect4Env):
     )
 
     continous_50_button = Button(
-        "Continous 100",
+        "Continous 500",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 300,
         properties.FONT,

@@ -3,7 +3,7 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 from board.board import Board
-from environment.env_utils import handle_winner, calculate_move_delay
+from environment.env_utils import handle_winner, calculate_move_delay, get_move_score
 from gameplay.game_mechanics import check_winner, check_full
 from player_manager import Player_Manager
 
@@ -53,7 +53,7 @@ class Connect4Env(gym.Env):
     def step(self, action):
         if self.board is None:
             return self.get_observation(), 0, False, False, {}
-        
+
         observation = self.get_observation()
 
         valid = self.board.is_valid_move(action)
@@ -71,20 +71,24 @@ class Connect4Env(gym.Env):
         winner = check_winner(self.board)
         full = check_full(self.board)
 
+        reward = get_move_score(
+            self.board, action, 1 if self.player_turn == self.player_1 else 2
+        )
+
         # handle winning move
         if winner:
             self.winner = self.player_1 if winner == 1 else self.player_2
+            if self.winner.type == "rl_bot":
+                reward = 10
             self.played_games += 1
             done = True
-            reward, self.score = handle_winner(self, self.winner)
+            self.score = handle_winner(self, self.winner)
         # handle draw
         elif full:
             self.played_games += 1
             done = True
-            reward = 0.5
+            reward += 0.5
             self.score = (self.score[0] + 0.5, self.score[1] + 0.5)
-        else:
-            reward = 0
 
         # Switch the player turn
         self.change_player_turn()
@@ -95,9 +99,14 @@ class Connect4Env(gym.Env):
         # Add the transition to the replay buffer if using an RL agent
         if self.player_turn.type == "rl_bot":
             self.player_turn.model.replay_buffer.add(
-                observation, next_observation, np.array([action]), np.array([reward]), np.array([done]), [info]
+                observation,
+                next_observation,
+                np.array([action]),
+                np.array([reward]),
+                np.array([done]),
+                [info],
             )
-            
+
         return self.get_observation(), reward, done, truncated, info
 
     def render(self):

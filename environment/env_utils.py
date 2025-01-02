@@ -3,21 +3,14 @@ from gameplay.game_mechanics import check_winner
 
 
 def handle_winner(env, winning_player):
-    reward = 0
     score = env.score
-
     if winning_player is not None:
-        if winning_player.type == "rl_bot":
-            reward = 10
-        else:
-            reward = -5
-
         if winning_player == env.player_1:
             score = (score[0] + 1, score[1])
         else:
             score = (score[0], score[1] + 1)
 
-    return reward, score
+    return score
 
 
 def calculate_move_delay(total_games):
@@ -30,3 +23,11 @@ def calculate_move_delay(total_games):
     else:
         move_delay = 500
     return move_delay
+
+
+def get_move_score(board, move, player):
+    score = 0
+    
+    return score
+
+

@@ -36,6 +36,7 @@ class Georgian(Template_Bot):
     def calculate_self_score(self, board: Board):
         score = 0
 
+        # check vertical score
         for column in board.columns:
             for row in range(2):
                 if (
