@@ -19,7 +19,7 @@ def calculate_position(x, y):
 
 
 class Slot:
-    def __init__(self, coordinates, player):
+    def __init__(self, coordinates, player=0):
         self.coordinates = coordinates
         self.position = calculate_position(*coordinates)
         self.player = player
@@ -39,6 +39,8 @@ class Slot:
 
     def update(self, player):
         """Update the player and the color."""
+        if player == None:
+            raise ValueError("Player cannot be None")
         self.player = player
         self.update_color()
 

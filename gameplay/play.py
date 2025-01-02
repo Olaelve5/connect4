@@ -52,12 +52,6 @@ def play(screen, env: Connect4Env):
 
             if env.continuous and env.played_games < env.total_games:
                 return play(screen, env)
-            
-            # Train agent if it is an agent
-            if env.player_1.type == "rl_bot":
-                env.player_1.train_model(50000)
-            if env.player_2.type == "rl_bot":
-                env.player_2.train_model(50000)
 
             # Show the game over menu
             from menus.game_over_menu import game_over_menu
@@ -68,12 +62,6 @@ def play(screen, env: Connect4Env):
         if env.winner:
             if env.continuous and env.played_games < env.total_games:
                 return play(screen, env)
-            
-            # Train agent if it is an agent
-            if env.player_1.type == "rl_bot":
-                env.player_1.train_model(50000)
-            if env.player_2.type == "rl_bot":
-                env.player_2.train_model(50000)
 
             # Show the game over menu
             from menus.game_over_menu import game_over_menu

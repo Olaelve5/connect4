@@ -18,6 +18,7 @@ class Connect4Env(gym.Env):
         total_games=1,
         selected_mode="Continous 25",
         agent_number=1,
+        training_mode=False,
     ):
         super(Connect4Env, self).__init__()
         self.agent = agent_number
@@ -38,6 +39,7 @@ class Connect4Env(gym.Env):
         self.played_games = 0
         self.games_left = total_games - self.played_games
         self.selected_mode = selected_mode
+        self.training_mode = training_mode
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):
         # Reset the board and the game state
@@ -51,10 +53,9 @@ class Connect4Env(gym.Env):
         return self.get_observation(), {}
 
     def step(self, action):
+
         if self.board is None:
             return self.get_observation(), 0, False, False, {}
-
-        observation = self.get_observation()
 
         valid = self.board.is_valid_move(action)
         if not valid:
@@ -93,19 +94,10 @@ class Connect4Env(gym.Env):
         # Switch the player turn
         self.change_player_turn()
 
-        # Get the next observation after the move
-        next_observation = self.get_observation()
-
-        # Add the transition to the replay buffer if using an RL agent
-        if self.player_turn.type == "rl_bot":
-            self.player_turn.model.replay_buffer.add(
-                observation,
-                next_observation,
-                np.array([action]),
-                np.array([reward]),
-                np.array([done]),
-                [info],
-            )
+        # Execute bot mode if training mode is enabled
+        if self.training_mode:
+            if not done:  # Only proceed if the game isn't over
+                done, reward = self.execute_bot_mode()
 
         return self.get_observation(), reward, done, truncated, info
 
@@ -130,6 +122,10 @@ class Connect4Env(gym.Env):
     def switch_sides(self):
         self.player_1, self.player_2 = self.player_2, self.player_1
 
+    def set_players(self, player_1, player_2):
+        self.player_1 = player_1
+        self.player_2 = player_2
+
     def set_settings(
         self, player_1, player_2, score, continuous, total_games, played_games=0
     ):
@@ -141,3 +137,38 @@ class Connect4Env(gym.Env):
         self.played_games = played_games
         self.games_left = total_games - played_games
         self.move_delay = calculate_move_delay(self.total_games)
+
+    def execute_bot_mode(self):
+        done = False
+        reward = 0
+        # Let the opponent bot take its move
+        if self.player_turn.type != "rl_bot":
+            action = self.player_turn.get_move(self.board)
+
+            # Update the board for the opponent's move
+            if self.board.is_valid_move(action):
+                self.board.make_move(
+                    action, 2 if self.player_turn == self.player_2 else 1
+                )
+
+            # Check if the game ends after the bot's move
+            winner = check_winner(self.board)
+            full = check_full(self.board)
+
+            if winner:
+                self.winner = self.player_turn
+                self.played_games += 1
+                reward = -10
+                done = True
+            elif full:
+                self.played_games += 1
+                done = True
+                reward = 0.5
+
+            # Switch the player turn back to the RL agent
+            self.change_player_turn()
+
+            if done:
+                self.score = handle_winner(self, self.winner)
+
+        return done, reward

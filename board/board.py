@@ -81,3 +81,11 @@ class Board:
 
     def copy(self):
         return copy.deepcopy(self)
+
+    def __str__(self):
+        board = ""
+        for i in range(6):
+            for column in self.columns:  # Iterate over the columns in reverse order
+                board += str(column.slots[::-1][i].player) + " "
+            board += "\n"
+        return board
