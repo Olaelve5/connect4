@@ -1,6 +1,6 @@
 import pygame
 import settings.properties as properties
-from environment.connect4Env import Connect4Env
+from environments.connect4Env import Connect4Env
 
 
 class Side_Button:

@@ -3,7 +3,7 @@ import settings.properties as properties
 from menus.main_menu import main_menu
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import DummyVecEnv
-from environment.connect4Env import Connect4Env
+from environments.connect4Env import Connect4Env
 from player_manager import Player_Manager
 from enteties.player import Player
 from enteties.bots.randobot import Randobot

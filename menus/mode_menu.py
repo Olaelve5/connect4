@@ -3,7 +3,7 @@ from menus.main_menu import main_menu
 from menus.button import Button
 import pygame
 from cursor import Cursor
-from environment.connect4Env import Connect4Env
+from environments.connect4Env import Connect4Env
 
 
 def mode_menu(screen, env: Connect4Env):

@@ -10,7 +10,7 @@ from settings.properties import (
     TITLE_FONT,
     SUB_FONT,
 )
-from environment.connect4Env import Connect4Env
+from environments.connect4Env import Connect4Env
 
 pygame.init()
 

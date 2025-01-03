@@ -1,6 +1,6 @@
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import DummyVecEnv
-from environment.connect4Env import Connect4Env
+from environments.connect4Env import Connect4Env
 from player_manager import Player_Manager
 from enteties.bots.randobot import Randobot
 from enteties.bots.georgian import Georgian

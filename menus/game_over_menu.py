@@ -2,7 +2,7 @@ import pygame
 import settings.properties as properties
 from menus.button import Button
 from cursor import Cursor
-from environment.connect4Env import Connect4Env
+from environments.connect4Env import Connect4Env
 
 
 # Create the game over screen

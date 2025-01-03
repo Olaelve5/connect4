@@ -2,7 +2,7 @@ import pygame
 from cursor import Cursor
 from gameplay.ui import ui
 import settings.properties as properties
-from environment.connect4Env import Connect4Env
+from environments.connect4Env import Connect4Env
 from gameplay.play_utils import player_is_bot, play_sound, move_sound
 
 
