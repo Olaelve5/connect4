@@ -10,7 +10,7 @@ from enteties.bots.el_gato_2 import El_Gato_2
 # Add players to the player manager
 player_manager = Player_Manager()
 randobot = Randobot("Randobot", "assets/player_images/robot.png")
-georgian = Georgian("Georgian", "assets/player_images/georgian.png")
+georgian = Georgian("Georgian", "assets/player_images/georgian.png", 2)
 player_manager.add_player(randobot)
 player_manager.add_player(georgian)
 
@@ -38,6 +38,6 @@ def train_model(model, opponent, total_timesteps, agent_is_first=True):
     print("Training complete. Model updated.")
 
 
-train_model(el_gato_2, georgian, 100000, agent_is_first=True)
+train_model(el_gato_2, georgian, 50000, agent_is_first=False)
 
     

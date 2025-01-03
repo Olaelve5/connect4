@@ -5,31 +5,32 @@ import random
 
 
 class Georgian(Template_Bot):
-    def __init__(self, name, image_url):
+    def __init__(self, name, image_url, player=None):
         super().__init__(name, image_url)
+        self.player = player
 
     def get_move(self, board: Board):
         top_move = None
         top_score = -10000000000
 
         for move in board.available_columns():
-            score = self.calculate_move(board, move)
+            board.make_move(move, self.player)
+            score = self.calculate_move(board)
             if score > top_score:
                 top_score = score
                 top_move = move
+            board.revert_move()
 
         return top_move
 
-    def calculate_move(self, board: Board, move):
-        board_copy = board.copy()
-        board_copy.make_move(move, player=self.player)
+    def calculate_move(self, board: Board):
         score = 0
 
-        if check_winner(board_copy) == self.player:
+        if check_winner(board) == self.player:
             return 1000000
 
-        score += self.calculate_self_score(board_copy)
-        score -= self.calculate_opponent_score(board_copy)
+        score += self.calculate_self_score(board)
+        score -= self.calculate_opponent_score(board)
 
         return score
 
@@ -124,7 +125,7 @@ class Georgian(Template_Bot):
                     continue
 
         # return the score with some randomness
-        return score + random.randint(-5, 5)
+        return score
 
     # calculate the score of the opponent
     def calculate_opponent_score(self, board: Board):
@@ -132,11 +133,11 @@ class Georgian(Template_Bot):
         score = 0
 
         for column in board.available_columns():
-            board_copy = board.copy()
-            board_copy.make_move(column, opponent)
-            if check_winner(board_copy) == opponent:
-               return 100000000
-
+            board.make_move(column, opponent)
+            if check_winner(board) == opponent:
+                board.revert_move()
+                return 100000000
+            board.revert_move()
 
         for column in board.columns:
             for row in range(2):
@@ -222,4 +223,4 @@ class Georgian(Template_Bot):
                     score += 10
                     continue
 
-        return score + random.randint(-5, 5)
+        return score

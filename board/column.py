@@ -43,6 +43,12 @@ class Column(pygame.sprite.Sprite):
                 return True
         return False
 
+    def revert_move(self):
+        for slot in reversed(self.slots):
+            if slot.player != 0:
+                slot.update(0)
+                break
+
     def handle_click(self):
         for slot in self.slots:
             if slot.player == 0:

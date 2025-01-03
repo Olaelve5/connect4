@@ -15,7 +15,7 @@ class Board:
         for column in self.columns:
             for slot in column.slots:
                 self.slots.append(slot)
-        self.last_move = None
+        self.moves_made = []
 
     def draw(self, screen):
         pygame.draw.rect(
@@ -52,10 +52,21 @@ class Board:
         if not altered:
             return
 
-        self.last_move = column
+        self.moves_made.append(column)
 
         for slot in self.slots:
             slot.player_turn = player
+    
+    def revert_move(self):
+        if len(self.moves_made) == 0:
+            return
+
+        column = self.moves_made.pop()
+        self.columns[column].revert_move()
+
+        for slot in self.slots:
+            slot.player_turn = 1 if slot.player == 2 else 2
+
 
     def available_columns(self):
         if game_mechanics.check_full(self):
@@ -78,6 +89,7 @@ class Board:
             slot.update(0)
         self.player_turn = 1
         self.winner = None
+        self.moves_made = []
 
     def copy(self):
         return copy.deepcopy(self)
