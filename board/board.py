@@ -45,8 +45,9 @@ class Board:
         return None
 
     def make_move(self, column, player=0):
-        if column is None:
-            return random.choice(self.available_columns())
+        if not self.is_valid_move(column):
+            self.moves_made.append(None)
+            return
 
         altered = self.columns[column].make_move(player)
         if not altered:
@@ -82,6 +83,12 @@ class Board:
         return moves
 
     def is_valid_move(self, column):
+        if column is None:
+            return False
+        
+        if column < 0 or column > 6:
+            return False
+
         return self.columns[column].is_valid_move()
 
     def reset(self):

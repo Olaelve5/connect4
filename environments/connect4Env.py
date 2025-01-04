@@ -59,7 +59,8 @@ class Connect4Env(gym.Env):
 
         valid = self.board.is_valid_move(action)
         if not valid:
-            # Skip the turn if the move is invalid
+            # Skip the turn if the move is invalid, handled by the board
+            self.board.make_move(action, 1 if self.player_turn == self.player_1 else 2)
             self.change_player_turn()
             return self.get_observation(), -10, False, False, {"invalid_action": True}
 
