@@ -24,6 +24,7 @@ def env_wrapper(render_mode=None):
     # Provides a wide vareity of helpful user errors
     # Strongly recommended
     env = wrappers.OrderEnforcingWrapper(env)
+
     return env
 
 
@@ -31,7 +32,7 @@ class MA_env(AECEnv):
     metadata = {"render_modes": ["human"], "name": "rps_v2"}
 
     def __init__(self, render_mode=None):
-        self.possible_agents = ["player_1", "player_2"]
+        self.possible_agents = ["player_" + str(r) for r in range(1, 3)]
         self.render_mode = render_mode
 
         # optional: a mapping between agent name and ID
@@ -40,7 +41,7 @@ class MA_env(AECEnv):
         )
 
         self.board = Board()
-        self.score = {agent: 0 for agent in self.possible_agents}
+        self.score = {"player_1": 0, "player_2": 0}
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
@@ -54,6 +55,7 @@ class MA_env(AECEnv):
         return np.array(self.observations[agent])
 
     def reset(self, seed=None, options=None):
+        print("Resetting environment")
         self.agents = self.possible_agents[:]
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
@@ -61,7 +63,9 @@ class MA_env(AECEnv):
         self.truncations = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
         self.state = {agent: None for agent in self.agents}
-        self.observations = {agent: None for agent in self.agents}
+        self.observations = {
+            agent: np.zeros((42,), dtype=np.int32) for agent in self.agents
+        }
         self.num_moves = 0
 
         self._agent_selector = agent_selector(self.agents)
@@ -71,6 +75,7 @@ class MA_env(AECEnv):
 
     def step(self, action):
         agent = self.agent_selection
+        print(f"Agent {agent} is making the move: {action}")
 
         self._cumulative_rewards[agent] = 0
 

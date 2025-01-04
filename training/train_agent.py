@@ -5,7 +5,7 @@ from player_manager import Player_Manager
 from enteties.bots.randobot import Randobot
 from enteties.bots.georgian import Georgian
 from enteties.bots.el_gato import El_Gato
-from enteties.bots.el_gato_2 import El_Gato_2
+from enteties.bots.el_gato import El_Gato_2
 
 # Add players to the player manager
 player_manager = Player_Manager()

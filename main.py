@@ -11,7 +11,7 @@ from enteties.bots.ditto import Ditto
 from enteties.bots.randotron import Randotron
 from enteties.bots.georgian import Georgian
 from enteties.bots.el_gato import El_Gato
-from enteties.bots.el_gato_2 import El_Gato_2
+from enteties.bots.el_gato import El_Gato_2
 
 
 pygame.init()
