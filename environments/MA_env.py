@@ -32,7 +32,7 @@ class MA_env(AECEnv):
     metadata = {"render_modes": ["human"], "name": "rps_v2"}
 
     def __init__(self, render_mode=None):
-        self.possible_agents = ["player_" + str(r) for r in range(1, 3)]
+        self.possible_agents = ["player_1", "player_2"]
         self.render_mode = render_mode
 
         # optional: a mapping between agent name and ID
@@ -45,7 +45,7 @@ class MA_env(AECEnv):
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        return spaces.Box(low=0, high=2, shape=(42,), dtype=np.int32)
+        return spaces.Box(low=0.0, high=2.0, shape=(42,), dtype=np.float32)
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
@@ -55,16 +55,20 @@ class MA_env(AECEnv):
         return np.array(self.observations[agent])
 
     def reset(self, seed=None, options=None):
-        print("Resetting environment")
         self.agents = self.possible_agents[:]
+
+        print(f"Reset called. Possible agents: {self.possible_agents}")
+        print(f"Active agents: {self.agents}")
+
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.terminations = {agent: False for agent in self.agents}
         self.truncations = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
         self.state = {agent: None for agent in self.agents}
+        self.t = 0
         self.observations = {
-            agent: np.zeros((42,), dtype=np.int32) for agent in self.agents
+            agent: np.zeros((42,), dtype=np.float32) for agent in self.agents
         }
         self.num_moves = 0
 
@@ -73,7 +77,19 @@ class MA_env(AECEnv):
 
         self.board.reset()
 
+        return self.observe(self.agent_selection), {}
+
     def step(self, action):
+        # Handle the case where the environment is already done
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            self._was_dead_step(action)
+            return
+        
+        self.t += 1
+
         agent = self.agent_selection
         print(f"Agent {agent} is making the move: {action}")
 
@@ -118,7 +134,7 @@ class MA_env(AECEnv):
                         for column in self.board.columns
                         for slot in column.slots
                     ],
-                    dtype=np.int32,
+                    dtype=np.float32,
                 )
 
         else:
