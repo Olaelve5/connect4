@@ -1,3 +1,4 @@
+import random
 import sys
 import os
 from ray.rllib.env import PettingZooEnv
@@ -54,6 +55,7 @@ config = (
     )
     .framework("torch")
     .rollouts(rollout_fragment_length=42)
+    .exploration(explore=True)
     .training(
         replay_buffer_config={
             "type": "MultiAgentPrioritizedReplayBuffer",
@@ -73,24 +75,20 @@ config.api_stack(
 algorithm = config.build()
 
 # Create model instance
-el_gato_1 = El_Gato("El Gato", env, policy_id="player_1", algorithm=algorithm)
-el_gato_2 = El_Gato("El Gato", env, policy_id="player_2", algorithm=algorithm)
+el_gato_1 = El_Gato("El Gato", env, policy_id="player_2", algorithm=algorithm)
 
-checkpoint_path_1 = os.path.abspath("training/checkpoints/el_gato_1")  # Use a full path
-checkpoint_path_2 = os.path.abspath("training/checkpoints/el_gato_2")  # Use a full path
+# Define a single checkpoint path for the algorithm
+checkpoint_path = os.path.abspath("training/checkpoints/el_gato_algorithm")
 
-# Load models before training
-if os.path.exists(checkpoint_path_1):
-    el_gato_1.load(checkpoint_path_1)
+# Load models before training (if a checkpoint exists)
+if os.path.exists(checkpoint_path):
+    algorithm.restore(checkpoint_path)
+    print(f"Loaded checkpoint from {checkpoint_path}")
 
-if os.path.exists(checkpoint_path_2):
-    el_gato_2.load(checkpoint_path_2)
+# Train the models (both player_1 and player_2 policies are trained together)
+el_gato_1.train_model(50)
 
+# Save the algorithm checkpoint (includes both player_1 and player_2 policies)
+algorithm.save(checkpoint_path)
+print(f"Checkpoint saved to {checkpoint_path}")
 
-# Train the models
-el_gato_1.train_model(20)
-el_gato_2.train_model(20)
-
-# Save models after training
-el_gato_1.save(checkpoint_path_1)
-el_gato_2.save(checkpoint_path_2)
