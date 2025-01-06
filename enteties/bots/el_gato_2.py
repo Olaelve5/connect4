@@ -19,6 +19,9 @@ class El_Gato_2(Template_Bot):
                 "MlpPolicy",
                 self.env,
                 verbose=1,
+                ent_coef=0.01,
+                learning_rate=0.0001,
+                clip_range=0.25,
                 tensorboard_log="./logs/",
             )
 

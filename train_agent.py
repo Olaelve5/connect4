@@ -38,6 +38,6 @@ def train_model(model, opponent, total_timesteps, agent_is_first=True):
     print("Training complete. Model updated.")
 
 
-train_model(el_gato_2, georgian, 50000, agent_is_first=False)
+train_model(el_gato_2, georgian, 100000, agent_is_first=True)
 
     

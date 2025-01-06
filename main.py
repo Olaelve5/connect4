@@ -33,14 +33,14 @@ player_manager.add_player(Player("Human", "assets/player_images/human.png"))
 player_manager.add_player(Randobot("Randobot", "assets/player_images/robot.png"))
 player_manager.add_player(Ditto("Ditto", "assets/player_images/ditto.png"))
 player_manager.add_player(Randotron("Randotron", "assets/player_images/randotron.png"))
-player_manager.add_player(Georgian("Georgian", "assets/player_images/georgian.png"))
+player_manager.add_player(Georgian("Georgian", "assets/player_images/georgian.png", 1))
 
 env = Connect4Env(player_manager)
 
 check_env(env)
 
 #player_manager.add_player(El_Gato("El Gato", "assets/player_images/el_gato.png", env, "el_gato_trained_model.zip"))
-player_manager.add_player(El_Gato_2("El Gato 2", "assets/player_images/el_gato.png", env, "el_gato_2_trained_model"))
+player_manager.add_player(El_Gato_2("El Gato 2", "assets/player_images/el_gato.png", env, "el_gato_2_trained_model.zip"))
 
 vec_env = DummyVecEnv([lambda: env])
 

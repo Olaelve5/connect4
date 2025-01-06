@@ -53,7 +53,6 @@ class Connect4Env(gym.Env):
         return self.get_observation(), {}
 
     def step(self, action):
-
         if self.board is None:
             return self.get_observation(), 0, False, False, {}
 
@@ -61,7 +60,7 @@ class Connect4Env(gym.Env):
         if not valid:
             # Skip the turn if the move is invalid
             self.change_player_turn()
-            return self.get_observation(), -10, False, False, {"invalid_action": True}
+            return self.get_observation(), -1, False, False, {"invalid_action": True}
 
         reward = 0
         done = False
@@ -81,7 +80,7 @@ class Connect4Env(gym.Env):
             print(f"{self.player_turn.name} wins!")
             self.winner = self.player_1 if winner == 1 else self.player_2
             if self.winner.type == "rl_bot":
-                reward = 10
+                reward = 1
             self.played_games += 1
             done = True
             self.score = handle_winner(self, self.winner)
@@ -89,7 +88,7 @@ class Connect4Env(gym.Env):
         elif full:
             self.played_games += 1
             done = True
-            reward += 0.5
+            reward += 0.1
             self.score = (self.score[0] + 0.5, self.score[1] + 0.5)
 
         # Switch the player turn
@@ -160,12 +159,12 @@ class Connect4Env(gym.Env):
                 print(f"{self.player_turn.name} wins!")
                 self.winner = self.player_turn
                 self.played_games += 1
-                reward = -10
+                reward = -1
                 done = True
             elif full:
                 self.played_games += 1
                 done = True
-                reward = 0.5
+                reward = 0.1
 
             # Switch the player turn back to the RL agent
             self.change_player_turn()

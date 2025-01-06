@@ -10,18 +10,25 @@ class Georgian(Template_Bot):
         self.player = player
 
     def get_move(self, board: Board):
-        top_move = None
+        top_moves = []
         top_score = -10000000000
 
         for move in board.available_columns():
             board.make_move(move, self.player)
             score = self.calculate_move(board)
-            if score > top_score:
-                top_score = score
-                top_move = move
             board.revert_move()
 
-        return top_move
+            if score > top_score:
+                # New top score, reset the list
+                top_score = score
+                top_moves = [move]
+            elif score == top_score:
+                # Add to the list of top-scoring moves
+                top_moves.append(move)
+
+        # Randomly select one of the top-scoring moves
+        return random.choice(top_moves)
+
 
     def calculate_move(self, board: Board):
         score = 0
