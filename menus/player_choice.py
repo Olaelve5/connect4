@@ -75,11 +75,15 @@ class Player_Choice:
         all_players = self.players + self.bots
         current_index = all_players.index(self.current_player)
         new_index = current_index + direction
+
         if new_index < 0:
             new_index = len(all_players) - 1
         elif new_index >= len(all_players):
             new_index = 0
+
         self.current_player = all_players[new_index]
+        self.play_player_sound()
+
         if self.player_1:
             self.env.player_1 = self.current_player
         else:
@@ -97,3 +101,10 @@ class Player_Choice:
             return
 
         return self.current_player
+
+    def play_player_sound(self):
+        if self.current_player.sound:
+            pygame.mixer.music.load(self.current_player.sound)
+            pygame.mixer.music.play()
+        else:
+            pygame.mixer.music.stop()

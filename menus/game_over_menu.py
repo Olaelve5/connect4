@@ -12,6 +12,11 @@ def game_over_menu(
 ):
     pygame.display.set_caption("Game Over Screen")
 
+    # Play sound of winner if there is one
+    if env.winner != None and env.winner.sound != None:
+        pygame.mixer.music.load(env.winner.sound)
+        pygame.mixer.music.play()
+
     pygame.mouse.set_visible(False)
     cursor = Cursor(screen)
 
@@ -131,6 +136,7 @@ def game_over_menu(
 
                     env.played_games = 0
                     env.score = (0, 0)
+                    pygame.mixer.music.stop()
                     play(screen, env)
 
                 if PLAY_AGAIN_SWITCH_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
@@ -139,6 +145,7 @@ def game_over_menu(
                     env.switch_sides()
                     env.played_games = 0
                     env.score = (0, 0)
+                    pygame.mixer.music.stop()
                     play(screen, env)
 
                 if MAIN_MENU_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
@@ -147,6 +154,7 @@ def game_over_menu(
                     env.reset()
                     env.played_games = 0
                     env.score = (0, 0)
+                    pygame.mixer.music.stop()
                     main_menu(screen, env)
 
         clock.tick(properties.FPS)

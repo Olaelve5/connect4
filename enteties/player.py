@@ -6,6 +6,7 @@ class Player:
         self.name = "Human"
         self.image_url = "assets/player_images/human.png"
         self.type = "human"
+        self.sound = None
 
     def draw(self, screen, position):
         image = pygame.image.load(self.image_url)

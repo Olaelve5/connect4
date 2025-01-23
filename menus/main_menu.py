@@ -125,11 +125,13 @@ def main_menu(screen, env: Connect4Env):
                     env.player_1.player = 1
                     env.player_2.player = 2
 
+                    pygame.mixer.music.stop()
                     play(screen, env)
 
                 if MODE_BUTTON.is_hovered(MENU_MOUSE_POS):
                     from menus.mode_menu import mode_menu
 
+                    pygame.mixer.music.stop()
                     mode_menu(screen, env)
 
                 if QUIT_BUTTON.is_hovered(MENU_MOUSE_POS):
