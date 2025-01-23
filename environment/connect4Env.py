@@ -77,7 +77,6 @@ class Connect4Env(gym.Env):
 
         # handle winning move
         if winner:
-            print(f"{self.player_turn.name} wins!")
             self.winner = self.player_1 if winner == 1 else self.player_2
             if self.winner.type == "rl_bot":
                 reward = 1
@@ -156,7 +155,6 @@ class Connect4Env(gym.Env):
             full = check_full(self.board)
 
             if winner:
-                print(f"{self.player_turn.name} wins!")
                 self.winner = self.player_turn
                 self.played_games += 1
                 reward = -1

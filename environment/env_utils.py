@@ -1,7 +1,3 @@
-from board.board import Board
-from gameplay.game_mechanics import check_winner
-
-
 def handle_winner(env, winning_player):
     score = env.score
     if winning_player is not None:
