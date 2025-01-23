@@ -7,7 +7,7 @@ from environment.connect4Env import Connect4Env
 from menus.player_manager import Player_Manager
 from enteties.player import Player
 from Progg_Pils.ola.bots.randobot import Randobot
-from Progg_Pils.ola.bots.randotron import Randotron
+from Progg_Pils.ola.bots.dalejandro import Randotron
 
 
 pygame.init()

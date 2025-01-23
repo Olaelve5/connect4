@@ -6,7 +6,7 @@ class Template_Bot(ABC):
     def __init__(self, type="bot"):
         self.name = "Name undefined"
         self.image_url = "assets/player_images/robot.png"
-        self.sound = None
+        self.sound = "assets/sounds/faen-ikke-bra.mp3"
         self.player = None
         self.type = type
 
