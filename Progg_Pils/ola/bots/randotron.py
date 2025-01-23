@@ -3,13 +3,12 @@ from enteties.template_bot import Template_Bot
 
 
 class Randotron(Template_Bot):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self):
+        super().__init__()
+        self.image_url = "Progg_Pils/ola/assets/randotron.png"
+        self.name = "Randotron"
 
     def get_move(self, board):
-        # Decide on which move to make
+        # Returns a move in one of the first four columns
         moves = board.available_columns()
         return random.choice(moves[:4])
-
-    def get_good_move(self, board):
-        pass

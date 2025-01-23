@@ -3,8 +3,8 @@ import pygame
 
 
 class Template_Bot(ABC):
-    def __init__(self, name, type="bot"):
-        self.name = name
+    def __init__(self, type="bot"):
+        self.name = "Name undefined"
         self.image_url = "assets/player_images/robot.png"
         self.type = type
         self.player = None
