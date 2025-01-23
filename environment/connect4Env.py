@@ -5,7 +5,7 @@ import numpy as np
 from board.board import Board
 from environment.env_utils import handle_winner, calculate_move_delay, get_move_score
 from gameplay.game_mechanics import check_winner, check_full
-from player_manager import Player_Manager
+from menus.player_manager import Player_Manager
 
 
 # Connect4Env class - Gym environment for the Connect4 game + handles the game logic
@@ -16,7 +16,7 @@ class Connect4Env(gym.Env):
         score=(0, 0),
         continuous=False,
         total_games=1,
-        selected_mode="Continous 25",
+        selected_mode="Single Game",
         agent_number=1,
         training_mode=False,
     ):

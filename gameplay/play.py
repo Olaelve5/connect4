@@ -1,5 +1,5 @@
 import pygame
-from cursor import Cursor
+from menus.cursor import Cursor
 from gameplay.ui import ui
 import settings.properties as properties
 from environment.connect4Env import Connect4Env

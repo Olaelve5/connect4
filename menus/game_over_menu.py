@@ -1,7 +1,7 @@
 import pygame
 import settings.properties as properties
 from menus.button import Button
-from cursor import Cursor
+from menus.cursor import Cursor
 from environment.connect4Env import Connect4Env
 
 

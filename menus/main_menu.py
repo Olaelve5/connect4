@@ -1,11 +1,11 @@
 import pygame
 import settings.properties as properties
-from cursor import Cursor
+from menus.cursor import Cursor
 from menus.button import Button
 from menus.player_choice import Player_Choice
 from environment.connect4Env import Connect4Env
 
-continous_modes = ["Continous 25", "Continous 50", "Continous 100"]
+continous_modes = ["Continous 10", "Continous 25", "Continous 50"]
 
 
 # Create the main menu

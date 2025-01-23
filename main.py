@@ -4,10 +4,10 @@ from menus.main_menu import main_menu
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import DummyVecEnv
 from environment.connect4Env import Connect4Env
-from player_manager import Player_Manager
+from menus.player_manager import Player_Manager
 from enteties.player import Player
-from enteties.bots.randobot import Randobot
-from enteties.bots.randotron import Randotron
+from ola.bots.randobot import Randobot
+from ola.bots.randotron import Randotron
 
 
 pygame.init()
@@ -25,9 +25,9 @@ pygame.mouse.set_visible(False)
 
 # Add players to the player manager
 player_manager = Player_Manager()
-player_manager.add_player(Player("Human", "assets/player_images/human.png"))
-player_manager.add_player(Randobot("Randobot", "assets/player_images/robot.png"))
-player_manager.add_player(Randotron("Randotron", "assets/player_images/randotron.png"))
+player_manager.add_player(Player())
+player_manager.add_player(Randobot("Randobot"))
+player_manager.add_player(Randotron("Randotron"))
 
 env = Connect4Env(player_manager)
 check_env(env)

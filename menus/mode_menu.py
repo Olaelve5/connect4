@@ -2,7 +2,7 @@ import settings.properties as properties
 from menus.main_menu import main_menu
 from menus.button import Button
 import pygame
-from cursor import Cursor
+from menus.cursor import Cursor
 from environment.connect4Env import Connect4Env
 
 
@@ -21,7 +21,7 @@ def mode_menu(screen, env: Connect4Env):
     )
 
     continous_10_button = Button(
-        "Continous 25",
+        "Continous 10",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 500,
         properties.FONT,
@@ -30,7 +30,7 @@ def mode_menu(screen, env: Connect4Env):
     )
 
     continous_25_button = Button(
-        "Continous 50",
+        "Continous 25",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 400,
         properties.FONT,
@@ -39,7 +39,7 @@ def mode_menu(screen, env: Connect4Env):
     )
 
     continous_50_button = Button(
-        "Continous 100",
+        "Continous 50",
         properties.WINDOW_WIDTH / 2,
         properties.WINDOW_HEIGHT - 300,
         properties.FONT,
