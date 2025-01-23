@@ -1,8 +1,17 @@
 import pygame
 import settings.properties as properties
 from menus.button import Button
-from cursor import Cursor
+from menus.cursor import Cursor
 from environment.connect4Env import Connect4Env
+
+
+def calculate_winner(env: Connect4Env):
+    if env.score[0] > env.score[1]:
+        return env.player_1
+    elif env.score[1] > env.score[0]:
+        return env.player_2
+    else:
+        return None
 
 
 # Create the game over screen
@@ -12,11 +21,18 @@ def game_over_menu(
 ):
     pygame.display.set_caption("Game Over Screen")
 
+    winner = calculate_winner(env)
+
+    # Play sound of winner if there is one
+    if winner != None and winner.sound != None:
+        pygame.mixer.music.load(winner.sound)
+        pygame.mixer.music.play()
+
     pygame.mouse.set_visible(False)
     cursor = Cursor(screen)
 
     GAME_OVER_TITLE = properties.FONT.render(
-        f"{env.winner.name} wins!" if env.winner != None else "It's a draw!",
+        f"{winner.name} wins!" if winner != None else "It's a draw!",
         True,
         properties.WHITE,
     )
@@ -131,6 +147,7 @@ def game_over_menu(
 
                     env.played_games = 0
                     env.score = (0, 0)
+                    pygame.mixer.music.stop()
                     play(screen, env)
 
                 if PLAY_AGAIN_SWITCH_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
@@ -139,6 +156,7 @@ def game_over_menu(
                     env.switch_sides()
                     env.played_games = 0
                     env.score = (0, 0)
+                    pygame.mixer.music.stop()
                     play(screen, env)
 
                 if MAIN_MENU_BUTTON.is_hovered(GAME_OVER_MOUSE_POS):
@@ -147,6 +165,7 @@ def game_over_menu(
                     env.reset()
                     env.played_games = 0
                     env.score = (0, 0)
+                    pygame.mixer.music.stop()
                     main_menu(screen, env)
 
         clock.tick(properties.FPS)

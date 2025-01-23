@@ -3,9 +3,10 @@ from enteties.template_bot import Template_Bot
 
 
 class Randobot(Template_Bot):
-    def __init__(self, name, image_url):
-        super().__init__(name, image_url)
+    def __init__(self):
+        super().__init__()
+        self.name = "Randobot"
 
     def get_move(self, board):
-        # Decide on which move to make
+        # Returns a random move from the available columns
         return random.choice(board.available_columns())

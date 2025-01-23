@@ -1,7 +1,3 @@
-from board.board import Board
-from gameplay.game_mechanics import check_winner
-
-
 def handle_winner(env, winning_player):
     score = env.score
     if winning_player is not None:
@@ -14,9 +10,9 @@ def handle_winner(env, winning_player):
 
 
 def calculate_move_delay(total_games):
-    if total_games > 55:
+    if total_games > 45:
         move_delay = 1
-    elif total_games > 20:
+    elif total_games > 15:
         move_delay = 5
     elif total_games > 5:
         move_delay = 10

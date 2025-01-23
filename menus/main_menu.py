@@ -1,11 +1,11 @@
 import pygame
 import settings.properties as properties
-from cursor import Cursor
+from menus.cursor import Cursor
 from menus.button import Button
 from menus.player_choice import Player_Choice
 from environment.connect4Env import Connect4Env
 
-continous_modes = ["Continous 25", "Continous 50", "Continous 100"]
+continous_modes = ["Continous 10", "Continous 25", "Continous 50"]
 
 
 # Create the main menu
@@ -68,11 +68,6 @@ def main_menu(screen, env: Connect4Env):
         player_choice_2.right_button,
     ]
 
-    # Sounds
-    hover_sound = pygame.mixer.Sound("assets/sounds/hover_button.mp3")
-
-    last_hovered_button = None
-
     clock = pygame.time.Clock()
 
     while True:
@@ -99,12 +94,6 @@ def main_menu(screen, env: Connect4Env):
                 break
             else:
                 cursor.set_mode("default")
-
-        # Play hover sound only if the hovered button changes
-        if hovered_button != last_hovered_button:
-            if hovered_button is not None:  # Only play if hovering over a button
-                hover_sound.play()
-            last_hovered_button = hovered_button
 
         cursor.draw(MENU_MOUSE_POS)
 
@@ -136,11 +125,13 @@ def main_menu(screen, env: Connect4Env):
                     env.player_1.player = 1
                     env.player_2.player = 2
 
+                    pygame.mixer.music.stop()
                     play(screen, env)
 
                 if MODE_BUTTON.is_hovered(MENU_MOUSE_POS):
                     from menus.mode_menu import mode_menu
 
+                    pygame.mixer.music.stop()
                     mode_menu(screen, env)
 
                 if QUIT_BUTTON.is_hovered(MENU_MOUSE_POS):
